@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" version="0.2" math="SpaceEx">
+  <component id="projectile_template">
+    <param name="x1" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="v1" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="g" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="x2" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="v2" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <location id="1" name="always" x="385.5" y="237.5" width="399.0" height="165.0">
+      <invariant>x1 &gt;= 0</invariant>
+      <flow>x1' == v1 &amp; v1' == 0 &amp;&amp; x2' == v2 &amp;&amp; v2' == -g</flow>
+    </location>
+  </component>
+  <component id="system">
+    <note>A model of a projectile in the x1-x2 plane.</note>
+    <param name="x1" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" x="478.0" y="116.0" />
+    <param name="v1" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" x="553.0" y="138.0" />
+    <param name="g" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="x2" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" x="446.0" y="166.0" />
+    <param name="v2" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" x="479.0" y="186.0" />
+    <bind component="projectile_template" as="projectile_template_1" x="320.0" y="152.0">
+      <map key="x1">x1</map>
+      <map key="v1">v1</map>
+      <map key="g">9.81</map>
+      <map key="x2">x2</map>
+      <map key="v2">v2</map>
+    </bind>
+  </component>
+</sspaceex>
+

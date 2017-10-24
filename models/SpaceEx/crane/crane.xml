@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" version="0.2" math="SpaceEx">
+  <component id="crane">
+    <param name="x" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="v" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="y" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="w" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="yri" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="wri" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <!--<param name="mC" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="false" />
+    <param name="mH" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="false" />
+    <param name="l" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="false" />
+    <param name="g" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="false" />
+    <param name="r1" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="false" />
+    <param name="r2" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="false" />
+    <param name="r3" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="false" />
+    <param name="r4" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="false" />-->
+    <location id="1" name="l" x="439.0" y="362.0" width="742.0" height="304.0">
+      <invariant>x &gt;= -50 &amp; x &lt;= 50 &amp;
+	v &gt;= -100 &amp; v &lt;= 100 &amp;
+	y &gt;= -1 &amp; y &lt;= 1 &amp;
+	w &gt;= -1 &amp; w &lt;= 1 &amp;
+	yri &gt;= -1 &amp; yri &lt;= 1 &amp;
+	wri &gt;= -1 &amp; wri &lt;= 1</invariant>
+      <flow>x' == v &amp;
+	v' == - 0.417533 * x - 3.1931759963 * v + 39.24 * y - 14.825331 * yri + 11.123344 * wri &amp;
+	y' == w &amp;
+	w' == 0.0417533 * x + 0.31931759963 * v - 4.905 * y + 1.4825331 * yri - 1.1123344 * wri &amp;
+	yri' == - 3.7332068901 * yri - 0.7007592976 * wri + 0.0638407957 * x - 0.32473339016573 * v &amp;
+	wri' == - 5.9714023436 * yri - 2.2736115136 * wri + 0.0853437452 * x - 0.72366802635628 * v</flow>
+    </location>
+  </component>
+  <component id="clock">
+    <param name="t" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <location id="1" name="running" x="306.0" y="114.0">
+      <flow>t'==1</flow>
+    </location>
+  </component>
+  <component id="system">
+    <param name="x" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="v" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="y" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="w" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="yri" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="wri" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="t" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" x="607.0" y="217.0" />
+    <bind component="crane" as="crane_1" x="225.0" y="165.0">
+      <map key="x">x</map>
+      <map key="v">v</map>
+      <map key="y">y</map>
+      <map key="w">w</map>
+      <map key="yri">yri</map>
+      <map key="wri">wri</map>
+    </bind>
+    <bind component="clock" as="clock_1" x="457.0" y="252.0">
+      <map key="t">t</map>
+    </bind>
+  </component>
+</sspaceex>
+

@@ -10,7 +10,7 @@ by following the instruction in the [installation section](https://github.com/Ju
 The models are given as Julia scripts, which you can run by including them in Julia's REPL, e.g.
 
 ```julia
-julia> include("models/SLICOT/iss")
+julia> include("models/SLICOT/iss/iss.jl")
 ```
 
 The models stored in MAT files are loaded using the [MAT.jl](https://github.com/JuliaIO/MAT.jl) Julia package.

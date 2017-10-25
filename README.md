@@ -13,7 +13,9 @@ The models are given as Julia scripts, which you can run by including them in Ju
 julia> include("models/SLICOT/iss")
 ```
 
-There are also bash scripts to run SpaceEx for most of the models.
+The models stored in MAT files are loaded using the [MAT.jl](https://github.com/JuliaIO/MAT.jl) Julia package.
+
+There are also bash scripts to run [SpaceEx](http://spaceex.imag.fr/) for most of the models.
 These scripts assume that `spaceex` (and some other tools for creating plots) are added to the PATH.
 
 ## Usage
@@ -27,6 +29,7 @@ julia> compute()
 
 ## Running all the benchmarks
 
-This repository provides a bash script that will execute Julia on all existent SLICOT models. The results are stored in
-the folder of each model.
+This repository provides a bash script that will execute Julia on all existent
+[SLICOT](http://slicot.org/20-site/126-benchmark-examples-for-model-reduction) models.
+The results are stored in the folder of each model.
 The script can also be modified (by just uncommenting the respective parts) to run SpaceEx on all the models.

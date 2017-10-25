@@ -3,8 +3,6 @@ Model: toy.jl
 
 Toy model to test the implementation on certain cases.
 =#
-include("../../src/Reachability.jl")
-
 using Reachability, LazySets, MAT
 
 function compute(input_options::Pair{Symbol,<:Any}...)

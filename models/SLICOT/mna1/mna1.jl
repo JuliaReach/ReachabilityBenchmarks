@@ -3,8 +3,6 @@ Model: MNA_1.jl
 
 This is a 578-variable model.
 =#
-include("../../src/Reachability.jl")
-
 using Reachability, LazySets, MAT
 
 function compute(input_options::Pair{Symbol,<:Any}...)

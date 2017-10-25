@@ -6,8 +6,6 @@ Output variables are x1 and x2.
 
 [1] BakDuggirala2017cavrepeatability/arch_benchmarks/Motor/Motor.xml
 =#
-include("../../src/Reachability.jl")
-
 using Reachability, LazySets
 
 function compute(input_options::Pair{Symbol,<:Any}...)

@@ -9,8 +9,6 @@ See also Fig. 5.1. page 71 in the same thesis.
 [Gir05] -- Reachability of Linear Systems using support functions 
 [ColasLeGuernicThesis] -- Reachability of Linear Systems using support functions
 =#
-include("../../src/Reachability.jl")
-
 using Reachability, LazySets
 
 function compute(input_options::Pair{Symbol,<:Any}...)

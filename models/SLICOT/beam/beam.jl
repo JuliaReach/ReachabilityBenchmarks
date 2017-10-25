@@ -3,8 +3,6 @@ Model: beam.jl
 
 This is a 348-variable model.
 =#
-include("../../src/Reachability.jl")
-
 using Reachability, LazySets, MAT
 
 function compute(input_options::Pair{Symbol,<:Any}...)

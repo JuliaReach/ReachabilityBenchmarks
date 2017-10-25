@@ -6,8 +6,6 @@ International Space Station (ISS).
 
 The corresponding SpaceEx model and configuration file are iss.xml and iss.cfg.
 =#
-include("../../src/Reachability.jl")
-
 using Reachability, LazySets, MAT
 
 function compute(input_options::Pair{Symbol,<:Any}...)

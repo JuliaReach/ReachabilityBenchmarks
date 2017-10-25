@@ -3,8 +3,6 @@ Model: cdplayer.jl
 
 This is a 120-variable model.
 =#
-include("../../src/Reachability.jl")
-
 using Reachability, LazySets, MAT
 
 function compute(input_options::Pair{Symbol,<:Any}...)

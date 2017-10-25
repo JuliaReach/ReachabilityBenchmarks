@@ -2,8 +2,6 @@
 Model : crane.jl
 
 =#
-include("../../src/Reachability.jl")
-
 using Reachability, LazySets
 
 function compute(input_options::Pair{Symbol,<:Any}...)

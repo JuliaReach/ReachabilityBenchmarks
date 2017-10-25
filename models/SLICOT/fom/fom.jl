@@ -3,8 +3,6 @@ Model: fom.jl
 
 This is a 1006 x 1006 dimensional model with 1 input.
 =#
-include("../../src/Reachability.jl")
-
 using Reachability, LazySets, MAT
 
 function compute(input_options::Pair{Symbol,<:Any}...)

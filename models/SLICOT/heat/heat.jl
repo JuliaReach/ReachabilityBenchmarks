@@ -3,8 +3,6 @@ Model: heat.jl
 
 This is a 200-variable model.
 =#
-include("../../src/Reachability.jl")
-
 using Reachability, LazySets, MAT
 
 function compute(input_options::Pair{Symbol,<:Any}...)

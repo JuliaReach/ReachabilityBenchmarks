@@ -10,8 +10,6 @@ For the results and some scalability experiments, see also the Jupyter notebook
 [1] Multivariable Feedback Control: Analysis and Design. John Wiley & Sons, 2005.
 S. Skogestad and I. Postlethwaite.
 =#
-include("../../src/Reachability.jl")
-
 using Reachability, LazySets
 
 function compute(input_options::Pair{Symbol,<:Any}...)

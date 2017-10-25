@@ -5,8 +5,6 @@ See also:
 bak2017cav_repeatability or
 [Building example in Hylaa](https://github.com/stanleybak/hylaa/blob/master/examples/building/building.py)
 =#
-include("../../src/Reachability.jl")
-
 using Reachability, LazySets, MAT
 
 function compute(input_options::Pair{Symbol,<:Any}...)

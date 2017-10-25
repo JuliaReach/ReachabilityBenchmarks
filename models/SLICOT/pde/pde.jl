@@ -1,8 +1,6 @@
 #=
 Model: pde.jl
 =#
-include("../../src/Reachability.jl")
-
 using Reachability, LazySets, MAT
 
 function compute(input_options::Pair{Symbol,<:Any}...)

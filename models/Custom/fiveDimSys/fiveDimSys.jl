@@ -9,7 +9,7 @@ See also Fig. 5.1. page 71 in the same thesis.
 [Gir05] -- Reachability of Linear Systems using support functions 
 [ColasLeGuernicThesis] -- Reachability of Linear Systems using support functions
 =#
-using Reachability, LazySets
+using Reachability
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
@@ -18,12 +18,10 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     println("System construction...")
     tic()
 
-    D = sparse([-1 -4 0 0 0; 4 -1 0 0 0; 0 0 -3 1 0; 0 0 -1 -3 0; 0 0 0 0 -2.])
-    P = sparse([0.6 -0.1 0.1 0.7 -0.2; -0.5 0.7 -0.1 -0.8 0; 0.9 -0.5 0.3 -0.6 0.1;
-        0.5 -0.7 0.5 0.6 0.3; 0.8 0.7 0.6 -0.3 0.2])
-    A = P * D * inv(full(P))
-    A = sparse(A)
-    A = add_spare_dimension(A)
+    D = [-1 -4 0 0 0; 4 -1 0 0 0; 0 0 -3 1 0; 0 0 -1 -3 0; 0 0 0 0 -2.]
+    P = [0.6 -0.1 0.1 0.7 -0.2; -0.5 0.7 -0.1 -0.8 0; 0.9 -0.5 0.3 -0.6 0.1;
+        0.5 -0.7 0.5 0.6 0.3; 0.8 0.7 0.6 -0.3 0.2]
+    A = P * D * inv(P)
 
     # initial set
     X0 = BallInf(ones(size(A, 1)), 0.1)

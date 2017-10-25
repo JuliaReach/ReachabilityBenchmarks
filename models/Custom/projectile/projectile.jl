@@ -1,7 +1,7 @@
 #=
 Model: projectile.jl
 =#
-using Reachability, LazySets
+using Reachability
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
@@ -10,7 +10,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     println("System construction...")
     tic()
 
-    A = sparse([0. 0.5 0. 0. ; 0. 0. 0. 0. ; 0. 0. 0. 0.7 ; 0. 0. 0. 0.])
+    A = [0. 0.5 0. 0. ; 0. 0. 0. 0. ; 0. 0. 0. 0.7 ; 0. 0. 0. 0.]
 
     # initial set
     X0 = Singleton([0.,5.,100.,0])

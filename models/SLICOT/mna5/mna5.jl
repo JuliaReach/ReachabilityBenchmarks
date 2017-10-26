@@ -14,10 +14,9 @@ function compute(input_options::Pair{Symbol,<:Any}...)
 
     file = matopen("mna5.mat")
     A = sparse(read(file, "A"))
-    A = add_spare_dimension(A)
 
     # initial set:
-    X0 = Hyperrectangle([fill(0.000225, 10); zeros(10904)], [fill(0.000025, 10); zeros(10904)])
+    X0 = Hyperrectangle([fill(0.000225, 10); zeros(10903)], [fill(0.000025, 10); zeros(10903)])
 
     # input set
     B = sparse(19:27, 1:9, fill(-1., 9), size(A, 1), 9)

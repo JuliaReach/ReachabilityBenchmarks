@@ -3,7 +3,7 @@ Model: toy.jl
 
 Toy model to test the implementation on certain cases.
 =#
-using Reachability, MAT
+using Reachability
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================

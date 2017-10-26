@@ -7,6 +7,8 @@ Benchmark suite for reach set computations
 Clone this repository, and install the Julia package [Reachability.jl](https://github.com/JuliaReach/Reachability.jl),
 by following the instruction in the [installation section](https://github.com/JuliaReach/Reachability.jl#installing).
 
+The models stored in MAT files are loaded using the [MAT.jl](https://github.com/JuliaIO/MAT.jl) Julia package.
+
 There are also bash scripts to run [SpaceEx](http://spaceex.imag.fr/) for most of the models.
 These scripts assume that `spaceex` (and some other tools for creating plots) are added to the PATH.
 
@@ -17,8 +19,6 @@ The models are given as Julia scripts, which you can run by including them in Ju
 ```julia
 julia> include("models/SLICOT/iss/iss.jl")
 ```
-
-The models stored in MAT files are loaded using the [MAT.jl](https://github.com/JuliaIO/MAT.jl) Julia package.
 
 The scripts are accompanied by the `compute` function, which calculates reachable states, or checks a safety property,
 depending on the model's options. To use the default options, do

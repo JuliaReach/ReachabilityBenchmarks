@@ -12,7 +12,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     println("System construction...")
     tic()
 
-    file = matopen("fom.mat")
+    file = matopen(@relpath "fom.mat")
     A = sparse(read(file, "A"))*1.0  # this model provides a matrix with Int components
 
     # initial set
@@ -34,13 +34,13 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # define solver-specific options
     options = merge(Options(
         :mode => "reach",
-        :property => Property(read(matopen("out.mat"), "M")[1,:], 185.), # y < 185
+        :property => Property(read(matopen(@relpath "out.mat"), "M")[1,:], 185.), # y < 185
         :T => 20., # time horizon
         :N => 3, # number of time steps
 #       :δ => 0.005, # time step
 #       :blocks => [1],
         :assume_sparse => true,
-#       :projection_matrix => sparse(read(matopen("out.mat"), "M")),
+#       :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M")),
         :plot_vars => [0, 1]
         ), Options(Dict{Symbol,Any}(input_options)))
 

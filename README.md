@@ -1,6 +1,6 @@
 # ReachabilityBenchmarks
 
-Benchmark suite for reach set computations
+This is a benchmark suite for reach set computations. It includes the [SLICOT](http://slicot.org/20-site/126-benchmark-examples-for-model-reduction) models, which reflect real world applications with dimensions ranging from eight to over 10.000. 
 
 ## Installation
 

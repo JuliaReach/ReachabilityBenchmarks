@@ -12,7 +12,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     println("System construction...")
     tic()
 
-    file = matopen("heat.mat")
+    file = matopen(@relpath "heat.mat")
     A = sparse(read(file, "A"))
 
     # initial set

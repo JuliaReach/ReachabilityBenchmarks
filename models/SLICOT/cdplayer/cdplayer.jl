@@ -12,7 +12,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     println("System construction...")
     tic()
 
-    file = matopen("cdplayer.mat")
+    file = matopen(@relpath "cdplayer.mat")
     A = sparse(read(file, "A"))
 
     # initial set

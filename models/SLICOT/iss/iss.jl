@@ -15,7 +15,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     println("System construction...")
     tic()
 
-    file = matopen("iss.mat")
+    file = matopen(@relpath "iss.mat")
     A = sparse(read(file, "A"))
 
     # initial set
@@ -41,14 +41,14 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # define solver-specific options
     options = merge(Options(
         :mode => "reach",
-        :property => Property(read(matopen("out.mat"), "M")[1,:], 7e-4), # y < 7e-4
+        :property => Property(read(matopen(@relpath "out.mat"), "M")[1,:], 7e-4), # y < 7e-4
         :T => 20., # time horizon
         :N => 3, # number of time steps
 #       :δ => 0.01, # time step
 #       :blocks => [@block_id(182)],
         :blocks => 68:135, # blocks needed for property
         :assume_sparse => true,
-#       :projection_matrix => sparse(read(matopen("out.mat"), "M")),
+#       :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M")),
         :plot_vars => [0, 182]
         ), Options(Dict{Symbol,Any}(input_options)))
 

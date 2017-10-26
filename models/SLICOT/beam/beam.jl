@@ -12,7 +12,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     println("System construction...")
     tic()
 
-    file = matopen("beam.mat")
+    file = matopen(@relpath "beam.mat")
     A = sparse(read(file, "A"))
 
     # initial set

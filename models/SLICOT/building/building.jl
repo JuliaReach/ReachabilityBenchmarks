@@ -14,7 +14,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     println("System construction...")
     tic()
 
-    file = matopen("building.mat")
+    file = matopen(@relpath "building.mat")
     A = sparse(read(file, "A"))
 
     # initial set

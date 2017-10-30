@@ -58,8 +58,8 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     if options[:mode] == "reach"
         println("Plotting...")
         tic()
-        plot(result)
-        #Options(:name => @filename_to_png)
+        pl = plot(result)
+        Plots.savefig(pl, @filename_to_png)
         toc()
     end
 end # function

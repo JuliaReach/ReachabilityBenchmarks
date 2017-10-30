@@ -37,9 +37,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     options = merge(Options(
         :mode => "reach",
         :property => Property([1., 0.], 2100.), # x89 < 2100
-        :T => 20., # time horizon
-        :N => 3, # number of time steps
-#       :δ => 0.0005, # time step
         :blocks => [@block_id(89)],
         :plot_vars => [0, 89]
         ), Options(Dict{Symbol,Any}(input_options)))
@@ -52,13 +49,14 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     if options[:mode] == "reach"
         println("Plotting...")
         tic()
-        options_plot = Options(
-            :plot_vars => options[:plot_vars],
-            :plot_name => @filename_to_png
-#           :plot_indices => range_last_x_percent(length(result), 10, 3)
-            )
-        plot(result, options_plot)
+        pl = plot(result)
         toc()
+        pl
     end
 end # function
-nothing
+
+compute(:N => 10, :T => 1.0); # warm-up
+
+pl = compute(:δ => 0.0005, :T => 20.0)
+Plots.savefig(pl, @filename_to_png)
+

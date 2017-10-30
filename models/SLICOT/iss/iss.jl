@@ -6,7 +6,7 @@ International Space Station (ISS).
 
 The corresponding SpaceEx model and configuration file are iss.xml and iss.cfg.
 =#
-using Reachability, LazySets, MAT
+using Reachability, MAT, Plots
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
@@ -67,7 +67,9 @@ function compute(input_options::Pair{Symbol,<:Any}...)
             :plot_name => @filename_to_png
 #           :plot_indices => range_last_x_percent(length(result), 10, 3)
             )
-        plot(result, options_plot)
+        #$plot(result, options_plot)
+        println("prepared to plot")
+        plot(result)
         toc()
     end
 end # function

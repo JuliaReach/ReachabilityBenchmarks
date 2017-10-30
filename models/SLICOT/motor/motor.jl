@@ -43,9 +43,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         :mode => "reach",
         :property => Property(Clause([LinearConstraint([1.; zeros(7)], 0.35),
                               LinearConstraint([zeros(4); 1.; zeros(3)], 0.45)])), # x1 < 0.35 || x5 < 0.45
-        :T => 20., # time horizon
-        :N => 3, # number of time steps
-        :δ => 0.001, # time step
         :blocks => [1, 3], # blocks needed for property
         :plot_vars => [0, 5]
         ), Options(Dict{Symbol,Any}(input_options)))
@@ -59,8 +56,12 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         println("Plotting...")
         tic()
         pl = plot(result)
-        Plots.savefig(pl, @filename_to_png)
         toc()
+        pl
     end
 end # function
 
+compute(:N => 10, :T => 1.0); # warm-up
+
+pl = compute(:δ => 0.001, :T => 20.0)
+Plots.savefig(pl, @filename_to_png)

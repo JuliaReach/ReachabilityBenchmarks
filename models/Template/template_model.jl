@@ -37,7 +37,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
 #       :δ => 0.01, # time step
         :blocks => [1],
         :plot_vars => [0, 1]
-        ), Options(Dict{Symbol,Any}(input_options)))
+        ), Options(input_options...))
 
     result = solve(S, options)
 

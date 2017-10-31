@@ -1,9 +1,9 @@
 #=
-Model: beam.jl
+Model: toy.jl
 
-This is a 348-variable model.
+Toy model to test the implementation on certain cases.
 =#
-using Reachability, LazySets, MAT
+using Reachability
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
@@ -11,21 +11,14 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
     println("System construction...")
     tic()
-
-    file = matopen(@relpath "beam.mat")
-    A = sparse(read(file, "A"))
+    n = 10
+    A = randn(n, n)
 
     # initial set
-    # - x1-x300 are 0.0,
-    # - the rest is in [0.002, 0.0015]
-    X0 = Hyperrectangle([zeros(300); fill(0.00175, 48)], [zeros(300); fill(0.00025, 48)])
-
-    # input set
-    B = sparse(read(file, "B"))
-    U = B * BallInf([0.5], 0.3)
+    X0 = BallInf(ones(n), 0.1)
 
     # instantiate continuous LTI system
-    S = ContinuousSystem(A, X0, U)
+    S = ContinuousSystem(A, X0)
 
     toc()
 
@@ -36,9 +29,8 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # define solver-specific options
     options = merge(Options(
         :mode => "reach",
-        :property => Property([1., 0.], 2100.), # x89 < 2100
-        :blocks => [@block_id(89)],
-        :plot_vars => [0, 89]
+        :blocks => [1],
+        :plot_vars => [0, 1]
         ), Options(input_options...))
 
     result = solve(S, options)
@@ -56,4 +48,4 @@ function compute(input_options::Pair{Symbol,<:Any}...)
 end # function
 
 compute(:N => 10, :T => 20.0); # warm-up
-compute(:δ => 0.0005, :T => 20.0); # benchmark settings (long)
+compute(:δ => 0.01, :T => 20.0); # benchmark settings (long)

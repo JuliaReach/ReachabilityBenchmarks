@@ -52,7 +52,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         :blocks => [1],
         :assume_homogeneous => true,
         :plot_vars => [0, 1]
-        ), Options(Dict{Symbol,Any}(input_options)))
+        ), Options(input_options...))
 
     result = solve(S, options)
 

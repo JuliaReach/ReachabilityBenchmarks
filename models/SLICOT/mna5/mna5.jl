@@ -35,14 +35,11 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     options = merge(Options(
         :mode => "reach",
         :property => Property([Clause([LinearConstraint([1., 0.], 0.2)]), Clause([LinearConstraint([0., 1.], 0.15)])]), # x1 < 0.2 && x2 < 0.15
-        :T => 20., # time horizon
-        :N => 3, # number of time steps
-#       :δ => 0.05, # time step
         :blocks => [1],
         :assume_sparse => true,
         :lazy_expm => true,
         :plot_vars => [0, 1]
-        ), Options(Dict{Symbol,Any}(input_options)))
+        ), Options(input_options...))
 
     result = solve(S, options)
 
@@ -61,4 +58,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         toc()
     end
 end # function
-nothing
+
+compute(:N => 10, :T => 20.0); # warm-up
+compute(:δ => 0.05, :T => 20.0); # benchmark settings (long)

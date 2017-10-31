@@ -44,7 +44,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
                               LinearConstraint([zeros(4); 1.; zeros(3)], 0.45)])), # x1 < 0.35 || x5 < 0.45
         :blocks => [1, 3], # blocks needed for property
         :plot_vars => [0, 5]
-        ), Options(Dict{Symbol,Any}(input_options)))
+        ), Options(input_options...))
 
     result = solve(S, options)
 

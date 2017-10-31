@@ -38,7 +38,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         :mode => "reach",
         :blocks => [1],
         :plot_vars => [0, 1]
-        ), Options(Dict{Symbol,Any}(input_options)))
+        ), Options(input_options...))
     result = solve(S, options)
 
     # ========
@@ -48,7 +48,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         println("Plotting...")
         tic()
         plot(result)
-        @eval(savefig("fiveDimSys.png"))
+        @eval(savefig(@filename_to_png))
         toc()
     end
 end # function

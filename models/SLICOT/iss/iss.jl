@@ -42,15 +42,12 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     options = merge(Options(
         :mode => "reach",
         :property => Property(read(matopen(@relpath "out.mat"), "M")[1,:], 7e-4), # y < 7e-4
-        :T => 20., # time horizon
-        :N => 3, # number of time steps
-#       :δ => 0.01, # time step
 #       :blocks => [@block_id(182)],
         :blocks => 68:135, # blocks needed for property
         :assume_sparse => true,
 #       :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M")),
         :plot_vars => [0, 182]
-        ), Options(Dict{Symbol,Any}(input_options)))
+        ), Options(input_options...))
 
     result = solve(S, options)
 
@@ -60,17 +57,13 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     if options[:mode] == "reach"
         println("Plotting...")
         tic()
-        project_output = options[:projection_matrix] != nothing
-        options_plot = Options(
-            :plot_vars => options[:plot_vars],
-            :plot_labels => add_plot_labels(options[:plot_vars], project_output),
-            :plot_name => @filename_to_png
-#           :plot_indices => range_last_x_percent(length(result), 10, 3)
-            )
-        #$plot(result, options_plot)
-        println("prepared to plot")
-        plot(result)
+        #project_output = options[:projection_matrix] != nothing
+        #:plot_labels => add_plot_labels(options[:plot_vars], project_output)
+        plot(result) #TODO: labels, project output
+        @eval(savefig(@filename_to_png))
         toc()
     end
 end # function
-nothing
+
+compute(:N => 10, :T => 20.0); # warm-up
+compute(:δ => 0.01, :T => 20.0); # benchmark settings (long)

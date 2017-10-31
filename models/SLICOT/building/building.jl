@@ -45,7 +45,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         :property => Property([1., 0.], 6e-3), # x25 < 6e-3
         :blocks => [@block_id(25)],
         :plot_vars => [0, 25]
-        ), Options(Dict{Symbol,Any}(input_options)))
+        ), Options(input_options...))
 
     result = solve(S, options)
 
@@ -55,17 +55,11 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     if options[:mode] == "reach"
         println("Plotting...")
         tic()
-        options_plot = Options(
-            :plot_vars => options[:plot_vars],
-            :plot_name => @filename_to_png
-#           :plot_indices => range_last_x_percent(length(result), 10, 3)
-            )
-        plot(result, options_plot)
+        plot(result)
+        @eval(savefig(@filename_to_png))
         toc()
     end
 end # function
 
-compute(:N => 10, :T => 1.0); # warm-up
-
-pl = compute(:δ => 0.002, :T => 20.0)
-Plots.savefig(pl, @filename_to_png)
+compute(:N => 10, :T => 20.0); # warm-up
+compute(:δ => 0.002, :T => 20.0); # benchmark settings (long)

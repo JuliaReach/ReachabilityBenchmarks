@@ -3,7 +3,7 @@ Model: fom.jl
 
 This is a 1006 x 1006 dimensional model with 1 input.
 =#
-using Reachability, LazySets, MAT
+using Reachability, MAT
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
@@ -35,14 +35,11 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     options = merge(Options(
         :mode => "reach",
         :property => Property(read(matopen(@relpath "out.mat"), "M")[1,:], 185.), # y < 185
-        :T => 20., # time horizon
-        :N => 3, # number of time steps
-#       :δ => 0.005, # time step
 #       :blocks => [1],
         :assume_sparse => true,
 #       :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M")),
         :plot_vars => [0, 1]
-        ), Options(Dict{Symbol,Any}(input_options)))
+        ), Options(input_options...))
 
     result = solve(S, options)
 
@@ -52,15 +49,11 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     if options[:mode] == "reach"
         println("Plotting...")
         tic()
-        project_output = options[:projection_matrix] != nothing
-        options_plot = Options(
-            :plot_vars => options[:plot_vars],
-            :plot_labels => add_plot_labels(options[:plot_vars], project_output),
-            :plot_name => @filename_to_png
-#           :plot_indices => range_last_x_percent(length(result), 10, 3)
-            )
-        plot(result, options_plot)
+        plot(result) # TODO: project_output
+        @eval(savefig(@filename_to_png))
         toc()
     end
 end # function
-nothing
+
+compute(:N => 10, :T => 20.0); # warm-up
+compute(:δ => 0.05, :T => 20.0); # benchmark settings (long)

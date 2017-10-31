@@ -30,12 +30,9 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # define solver-specific options
     options = merge(Options(
         :mode => "reach",
-        :T => 20., # time horizon
-        :N => 3, # number of time steps
-#       :δ => 0.5, # time step
         :blocks => [1, 2],
         :plot_vars => [1, 3]
-        ), Options(Dict{Symbol,Any}(input_options)))
+        ), Options(input_options...))
 
     result = solve(S, options)
 
@@ -45,13 +42,11 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     if options[:mode] == "reach"
         println("Plotting...")
         tic()
-        options_plot = Options(
-            :plot_vars => options[:plot_vars],
-            :plot_name => @filename_to_png
-#           :plot_indices => range_last_x_percent(length(result), 10, 3)
-            )
-        plot(result, options_plot)
+        plot(result)
+        @eval(savefig(@filename_to_png))
         toc()
-    end
+    en
 end # function
-nothing
+
+compute(:N => 10, :T => 20.0); # warm-up
+compute(:δ => 0.5, :T => 20.0); # benchmark settings (long)

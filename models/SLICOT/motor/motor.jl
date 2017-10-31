@@ -37,7 +37,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # ===============
     # Problem solving
     # ===============
-
     # define solver-specific options
     options = merge(Options(
         :mode => "reach",
@@ -55,13 +54,11 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     if options[:mode] == "reach"
         println("Plotting...")
         tic()
-        pl = plot(result)
+        plot(result)
+        @eval(savefig(@filename_to_png))
         toc()
-        pl
     end
 end # function
 
-compute(:N => 10, :T => 1.0); # warm-up
-
-pl = compute(:δ => 0.001, :T => 20.0)
-Plots.savefig(pl, @filename_to_png)
+compute(:N => 100, :T => 1.0); # warm-up
+compute(:δ => 0.001, :T => 20.0); # benchmark settings (long)

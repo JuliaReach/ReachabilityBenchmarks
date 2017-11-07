@@ -12,9 +12,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
     # Problem specification
     # =====================
-    println("System construction...")
-    tic()
-
     I = [1, 2, 2, 3, 3, 3, 3, 4, 5, 6, 6, 7, 7, 7, 7, 8]
     J = [2, 3, 2, 1, 2, 3, 4, 1, 6, 7, 6, 5, 6, 7, 8, 5]
     vals = [1, 8487.2, -1.0865, -2592.1, -21.119, -698.91, -141399.0, 1.0, 1.0,
@@ -31,8 +28,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
 
     # instantiate continuous LTI system
     S = ContinuousSystem(A, X0, U)
-
-    toc()
 
     # ===============
     # Problem solving

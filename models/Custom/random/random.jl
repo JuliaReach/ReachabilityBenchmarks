@@ -9,8 +9,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
     # Problem specification
     # =====================
-    println("System construction...")
-    tic()
     n = 10
     A = randn(n, n)
 
@@ -19,8 +17,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
 
     # instantiate continuous LTI system
     S = ContinuousSystem(A, X0)
-
-    toc()
 
     # ===============
     # Problem solving

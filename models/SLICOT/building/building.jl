@@ -11,9 +11,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
     # Problem specification
     # =====================
-    println("System construction...")
-    tic()
-
     file = matopen(@relpath "building.mat")
     A = sparse(read(file, "A"))
 
@@ -32,8 +29,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
 
     # instantiate continuous LTI system
     S = ContinuousSystem(A, X0, U)
-
-    toc()
 
     # ===============
     # Problem solving

@@ -15,8 +15,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
     # Problem specification
     # =====================
-    println("System construction...")
-    tic()
     D = [-1 -4 0 0 0; 4 -1 0 0 0; 0 0 -3 1 0; 0 0 -1 -3 0; 0 0 0 0 -2.]
     P = [0.6 -0.1 0.1 0.7 -0.2; -0.5 0.7 -0.1 -0.8 0; 0.9 -0.5 0.3 -0.6 0.1;
         0.5 -0.7 0.5 0.6 0.3; 0.8 0.7 0.6 -0.3 0.2]
@@ -27,8 +25,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
 
     # instantiate continuous LTI system
     S = ContinuousSystem(A, X0)
-
-    toc()
 
     # ===============
     # Problem solving

@@ -7,9 +7,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
     # Problem specification
     # =====================
-    println("System construction...")
-    tic()
-
     A = [0. 0.5 0. 0. ; 0. 0. 0. 0. ; 0. 0. 0. 0.7 ; 0. 0. 0. 0.]
 
     # initial set
@@ -20,8 +17,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
 
     # instantiate continuous LTI system
     S = ContinuousSystem(A, X0, U)
-
-    toc()
 
     # ===============
     # Problem solving

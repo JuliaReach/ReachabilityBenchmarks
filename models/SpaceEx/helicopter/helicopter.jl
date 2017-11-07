@@ -16,9 +16,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
     # Problem specification
     # =====================
-    println("System construction...")
-    tic()
-
     A = helicopter_A()
 
     case = "single"
@@ -35,8 +32,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
 
     # instantiate continuous LTI system
     S = ContinuousSystem(A, X0)
-
-    toc()
 
     # ===============
     # Problem solving

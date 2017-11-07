@@ -9,9 +9,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
     # Problem specification
     # =====================
-    println("System construction...")
-    tic()
-
     A = sparse([1, 2], [1, 2], [0.1, 0.1])
 
     # initial set
@@ -19,8 +16,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
 
     # instantiate continuous LTI system
     S = ContinuousSystem(A, X0)
-
-    toc()
 
     # ===============
     # Problem solving

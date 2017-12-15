@@ -52,8 +52,7 @@ es mejor..
 =======================================================
 =======================================================
 algorithm="no_wrapping_effect"
-# the input set is empty, but given explicitly as a single void set
-D = ContinuousSystem(A, X0, VoidSet(6))
+D = ContinuousSystem(A, X0)
 
 julia> @time compute(400)
 System Construction...
@@ -82,9 +81,7 @@ BenchmarkTools.Trial:
 =======================================================
 =======================================================
 algorithm="no_wrapping_effect"
-# the input set is empty, but given explicitly as a time-varying input
-U = [VoidSet(6) for i in 1:N]
-D = ContinuousSystem(A, X0, U)
+D = ContinuousSystem(A, X0)
 
 julia> @time compute(400)
 System Construction...

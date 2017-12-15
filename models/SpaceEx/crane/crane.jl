@@ -19,11 +19,8 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     X0 = CartesianProductArray([BallInf([2.5], 2.5),
         Singleton([0.]), BallInf([0.], 0.2), BallInf([0.], 0.1), Singleton([0.,0.])])
 
-    # input set
-    U = VoidSet(6)
-
     # instantiate continuous LTI system
-    S = ContinuousSystem(A, X0, U)
+    S = ContinuousSystem(A, X0)
 
     # ===============
     # Problem solving

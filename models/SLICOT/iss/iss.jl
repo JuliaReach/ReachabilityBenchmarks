@@ -36,7 +36,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # define solver-specific options
     options = merge(Options(
         :mode => "reach",
-        :property => Property(read(matopen(@relpath "out.mat"), "M")[1,:], 7e-4), # y < 7e-4
+        :property => LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 7e-4), # y < 7e-4
 #       :blocks => [@block_id(182)],
         :blocks => 68:135, # blocks needed for property
         :assume_sparse => true,

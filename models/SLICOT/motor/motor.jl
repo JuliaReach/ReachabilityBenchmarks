@@ -35,8 +35,10 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # define solver-specific options
     options = merge(Options(
         :mode => "reach",
-        :property => Property(Clause([LinearConstraint([1.; zeros(7)], 0.35),
-                              LinearConstraint([zeros(4); 1.; zeros(3)], 0.45)])), # x1 < 0.35 || x5 < 0.45
+        :property => LinearConstraintProperty(Clause([
+            LinearConstraint([1.; zeros(7)], 0.35),
+            LinearConstraint([zeros(4); 1.; zeros(3)], 0.45)
+            ])), # x1 < 0.35 || x5 < 0.45
         :blocks => [1, 3], # blocks needed for property
         :plot_vars => [0, 5]
         ), Options(input_options...))

@@ -32,7 +32,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # define solver-specific options
     options = merge(Options(
         :mode => "reach",
-        :property => Property([-1., 0.], 1.8), # -x1 < 1.8 == x1 > -1.8
+        :property => LinearConstraintProperty([-1., 0.], 1.8), # -x1 < 1.8 == x1 > -1.8
         :T => 15., # time horizon
         :N => 3, # number of time steps
 #       :δ => 0.01, # time step

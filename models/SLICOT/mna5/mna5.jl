@@ -54,5 +54,5 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     end
 end # function
 
-compute(:N => 10, :T => 20.0); # warm-up
+compute(:δ => 0.05, :T => 0.1); # warm-up
 compute(:δ => 0.05, :T => 20.0); # benchmark settings (long)

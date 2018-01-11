@@ -3,7 +3,7 @@ Model: MNA_1.jl
 
 This is a 578-variable model.
 =#
-using Reachability, LazySets, MAT
+using Reachability, LazySets, MAT, Plots
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
@@ -49,5 +49,5 @@ function compute(input_options::Pair{Symbol,<:Any}...)
 end # function
 
 
-compute(:N => 10, :T => 20.0); # warm-up
+compute(:δ => 0.001, :T => 0.1); # warm-up
 compute(:δ => 0.001, :T => 20.0); # benchmark settings (long)

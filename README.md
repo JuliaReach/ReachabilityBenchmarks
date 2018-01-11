@@ -33,6 +33,12 @@ depending on the model's options. To use the default options, do
 julia> compute()
 ```
 
+The models can also be executed as a script, e.g.
+
+```julia
+$ julia -e 'include("models/SLICOT/iss/iss.jl")'
+```
+
 ## Running all the benchmarks
 
 This repository provides a bash script that will execute Julia on all existent

@@ -29,7 +29,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # define solver-specific options
     options = merge(Options(
         :mode => "reach",
-        :property => Property([2., -3.], 450.8), # 2*x1 -3*x2 < 450.8
+        :property => LinearConstraintProperty([2., -3.], 450.8), # 2*x1 -3*x2 < 450.8
         :blocks => [1],
         :assume_sparse => true,
         :plot_vars => [0, 1]

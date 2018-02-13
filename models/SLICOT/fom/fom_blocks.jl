@@ -160,7 +160,7 @@ function defaultModelOptions(N::Int64, K::Int64)::Options
         :δ=>0.01,
         :block=>@block_id(1),
         :blocks=>1:K,
-        :property=>Property(ones(2*K), 20.), # sum_i x_i < 20
+        :property=>LinearConstraintProperty(ones(2*K), 20.), # sum_i x_i < 20
         :project_output=>true,
         :plot_vars=>[0, 1],
         :plot_name=>@filename_to_png,

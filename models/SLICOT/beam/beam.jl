@@ -31,7 +31,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # define solver-specific options
     options = merge(Options(
         :mode => "reach",
-        :property => Property([1., 0.], 2100.), # x89 < 2100
+        :property => LinearConstraintProperty([1., 0.], 2100.), # x89 < 2100
         :blocks => [@block_id(89)],
         :plot_vars => [0, 89]
         ), Options(input_options...))

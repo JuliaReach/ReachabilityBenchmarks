@@ -34,7 +34,9 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     options = merge(Options(
         :mode => "reach",
         :property => LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 12.), # y < 12
-#       :blocks => [1],
+#       :vars => [1], # variable for single block analysis
+        :vars => 1:42, # variables needed for property
+        :partition=> [(2*i-1:2*i) for i in 1:42], # 2D blocks
 #       :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M")),
         :plot_vars => [0, 1]
         ), Options(input_options...))
@@ -55,5 +57,5 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     end
 end # function
 
-compute(:N => 100, :T => 1.0); # warm-up
+compute(:δ => 0.003, :N => 3); # warm-up
 compute(:δ => 0.003, :T => 20.0); # benchmark settings (long)

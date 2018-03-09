@@ -32,7 +32,8 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     options = merge(Options(
         :mode => "reach",
         :property => LinearConstraintProperty([1., 0.], 2100.), # x89 < 2100
-        :blocks => [@block_id(89)],
+        :vars => [89], # variable needed for property
+        :partition => [(2*i-1:2*i) for i in 1:174], # 2D blocks
         :plot_vars => [0, 89]
         ), Options(input_options...))
 
@@ -47,8 +48,8 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         plot(result)
         @eval(savefig(@filename_to_png))
         toc()
-    en
+    end
 end # function
 
-compute(:N => 10, :T => 20.0); # warm-up
+compute(:δ => 0.0005, :N => 3); # warm-up
 compute(:δ => 0.0005, :T => 20.0); # benchmark settings (long)

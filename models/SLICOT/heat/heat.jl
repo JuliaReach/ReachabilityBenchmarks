@@ -32,7 +32,8 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     options = merge(Options(
         :mode => "reach",
         :property => LinearConstraintProperty([1., 0.], 0.1), # x133 < 0.1
-        :blocks => [@block_id(133)],
+        :vars => [133], # variable needed for property
+        :partition=> [(2*i-1:2*i) for i in 1:100], # 2D blocks
         :plot_vars => [0, 133]
         ), Options(input_options...))
 
@@ -50,5 +51,5 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     end
 end # function
 
-compute(:N => 10, :T => 20.0); # warm-up
+compute(:δ => 0.001, :N => 3); # warm-up
 compute(:δ => 0.001, :T => 20.0); # benchmark settings (long)

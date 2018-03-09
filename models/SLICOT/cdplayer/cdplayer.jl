@@ -30,7 +30,9 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     options = merge(Options(
         :mode => "reach",
         :property => LinearConstraintProperty([2., -3.], 450.8), # 2*x1 -3*x2 < 450.8
-        :blocks => [1],
+#       :vars => [1], # variable for single block analysis
+        :vars => [1, 2], # variables needed for property
+        :partition=> [(2*i-1:2*i) for i in 1:60], # 2D blocks
         :assume_sparse => true,
         :plot_vars => [0, 1]
         ), Options(input_options...))
@@ -49,6 +51,6 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     end
 end # function
 
-compute(:N => 10, :T => 20.0); # warm-up
+compute(:δ => 0.0001, :N => 3); # warm-up
 compute(:δ => 0.0001, :T => 20.0); # benchmark settings (long)
 

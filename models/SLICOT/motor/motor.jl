@@ -39,7 +39,9 @@ function compute(input_options::Pair{Symbol,<:Any}...)
                          Clause([LinearConstraint([1.; zeros(7)], 0.35),
                                  LinearConstraint([zeros(4); 1.; zeros(3)], 0.45)])),
                                  # x1 < 0.35 || x5 < 0.45
-        :blocks => [1, 3], # blocks needed for property
+#       :vars => [5], # variable for single block analysis
+        :vars => [1, 5], # variables needed for property
+        :partition=> [(2*i-1:2*i) for i in 1:4], # 2D blocks
         :plot_vars => [0, 5]
         ), Options(input_options...))
 
@@ -57,5 +59,5 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     end
 end # function
 
-compute(:N => 100, :T => 1.0); # warm-up
+compute(:δ => 0.001, :N => 3); # warm-up
 compute(:δ => 0.001, :T => 20.0); # benchmark settings (long)

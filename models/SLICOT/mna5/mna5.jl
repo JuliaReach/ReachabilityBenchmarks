@@ -3,7 +3,7 @@ Model: MNA_5.jl
 
 This is a 10913-variable model.
 =#
-using Reachability, LazySets, MAT
+using Reachability, MAT, Plots
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================

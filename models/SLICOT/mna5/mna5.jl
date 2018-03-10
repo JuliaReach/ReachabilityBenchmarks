@@ -32,7 +32,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         :property => LinearConstraintProperty([Clause([LinearConstraint([1., 0.], 0.2)]), Clause([LinearConstraint([0., 1.], 0.15)])]), # x1 < 0.2 && x2 < 0.15
 #       :vars => [1], # variable for single block analysis
         :vars => 1:2, # variables needed for property
-        :partition=> [(2*i-1:2*i) for i in 1:5457], # 2D blocks
+        :partition => vcat([(2*i-1:2*i) for i in 1:5456], [10913:10913]), # 2D blocks except last (1D)
         :assume_sparse => true,
         :lazy_expm => true,
         :plot_vars => [0, 1]

@@ -32,7 +32,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         :property => LinearConstraintProperty([2., -3.], 450.8), # 2*x1 -3*x2 < 450.8
 #       :vars => [1], # variable for single block analysis
         :vars => [1, 2], # variables needed for property
-        :partition=> [(2*i-1:2*i) for i in 1:60], # 2D blocks
+        :partition => [(2*i-1:2*i) for i in 1:60], # 2D blocks
         :assume_sparse => true,
         :plot_vars => [0, 1]
         ), Options(input_options...))

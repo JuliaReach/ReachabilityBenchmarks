@@ -39,7 +39,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         :property => LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 7e-4), # y < 7e-4
 #       :vars => [182], # variable for single block analysis
         :vars => 136:270, # variables needed for property
-        :partition=> [(2*i-1:2*i) for i in 1:135], # 2D blocks
+        :partition => [(2*i-1:2*i) for i in 1:135], # 2D blocks
         :assume_sparse => true,
 #       :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M")),
         :plot_vars => [0, 182]

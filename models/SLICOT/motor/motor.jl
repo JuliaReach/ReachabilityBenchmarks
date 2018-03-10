@@ -41,7 +41,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
                                  # x1 < 0.35 || x5 < 0.45
 #       :vars => [5], # variable for single block analysis
         :vars => [1, 5], # variables needed for property
-        :partition=> [(2*i-1:2*i) for i in 1:4], # 2D blocks
+        :partition => [(2*i-1:2*i) for i in 1:4], # 2D blocks
         :plot_vars => [0, 5]
         ), Options(input_options...))
 

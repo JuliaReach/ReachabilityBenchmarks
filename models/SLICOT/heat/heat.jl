@@ -33,7 +33,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         :mode => "reach",
         :property => LinearConstraintProperty([1., 0.], 0.1), # x133 < 0.1
         :vars => [133], # variable needed for property
-        :partition=> [(2*i-1:2*i) for i in 1:100], # 2D blocks
+        :partition => [(2*i-1:2*i) for i in 1:100], # 2D blocks
         :plot_vars => [0, 133]
         ), Options(input_options...))
 

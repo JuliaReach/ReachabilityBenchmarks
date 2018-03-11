@@ -1,7 +1,7 @@
 #=
 Model: pde.jl
 =#
-using Reachability, LazySets, MAT
+using Reachability, MAT, Plots
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
@@ -47,13 +47,11 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # Plotting
     # ========
     if options[:mode] == "reach"
-        if options[:mode] == "reach"
-            println("Plotting...")
-            tic()
-            plot(result) # TODO output labels
-            @eval(savefig("motor.jl"))
-            toc()
-        end
+        println("Plotting...")
+        tic()
+        plot(result)
+        @eval(savefig(@filename_to_png))
+        toc()
     end
 end # function
 

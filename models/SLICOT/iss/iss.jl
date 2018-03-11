@@ -55,7 +55,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         tic()
         #project_output = options[:projection_matrix] != nothing
         #:plot_labels => add_plot_labels(options[:plot_vars], project_output)
-        plot(result) #TODO: labels, project output
+        plot(result)
         @eval(savefig(@filename_to_png))
         toc()
     end

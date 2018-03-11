@@ -3,7 +3,7 @@ Model: heat.jl
 
 This is a 200-variable model.
 =#
-using Reachability, LazySets, MAT
+using Reachability, MAT, Plots
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
@@ -45,7 +45,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     if options[:mode] == "reach"
         println("Plotting...")
         tic()
-        plot(result) # TODO: project_output
+        plot(result)
         @eval(savefig(@filename_to_png))
         toc()
     end

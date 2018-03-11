@@ -3,7 +3,7 @@ Model: fom.jl
 
 This is a 1006 x 1006 dimensional model with 1 input.
 =#
-using Reachability, MAT
+using Reachability, MAT, Plots
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
@@ -46,7 +46,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     if options[:mode] == "reach"
         println("Plotting...")
         tic()
-        plot(result) # TODO: project_output
+        plot(result)
         @eval(savefig(@filename_to_png))
         toc()
     end

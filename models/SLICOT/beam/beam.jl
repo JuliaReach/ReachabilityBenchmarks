@@ -3,7 +3,7 @@ Model: beam.jl
 
 This is a 348-variable model.
 =#
-using Reachability, LazySets, MAT
+using Reachability, MAT, Plots
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================

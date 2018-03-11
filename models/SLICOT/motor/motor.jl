@@ -54,7 +54,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         println("Plotting...")
         tic()
         plot(result)
-        @eval(savefig("motor.jl"))
+        @eval(savefig(@filename_to_png))
         toc()
     end
 end # function

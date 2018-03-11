@@ -5,7 +5,7 @@ See also:
 bak2017cav_repeatability or
 [Building example in Hylaa](https://github.com/stanleybak/hylaa/blob/master/examples/building/building.py)
 =#
-using Reachability, LazySets, MAT
+using Reachability, MAT, Plots
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================

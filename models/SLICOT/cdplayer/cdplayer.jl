@@ -3,7 +3,7 @@ Model: cdplayer.jl
 
 This is a 120-variable model.
 =#
-using Reachability, MAT
+using Reachability, MAT, Plots
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================

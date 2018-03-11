@@ -29,7 +29,9 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # define solver-specific options
     options = merge(Options(
         :mode => "reach",
-        :property => LinearConstraintProperty([Clause([LinearConstraint([1., 0.], 0.2)]), Clause([LinearConstraint([0., 1.], 0.15)])]), # x1 < 0.2 && x2 < 0.15
+        :property => LinearConstraintProperty([Clause([LinearConstraint([1., 0.], 0.2)]),
+                                               Clause([LinearConstraint([0., 1.], 0.15)])]),
+                                               # x1 < 0.2 && x2 < 0.15
 #       :vars => [1], # variable for single block analysis
         :vars => 1:2, # variables needed for property
         :partition => vcat([(2*i-1:2*i) for i in 1:5456], [10913:10913]), # 2D blocks except last (1D)
@@ -52,6 +54,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
 #           :plot_indices => range_last_x_percent(length(result), 10, 3)
             )
         plot(result, options_plot)
+        @eval(savefig(@filename_to_png))
         toc()
     end
 end # function

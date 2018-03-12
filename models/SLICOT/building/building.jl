@@ -37,12 +37,12 @@ function compute(input_options::Options)
     # ===============
     if input_options[:mode] == "reach"
         problem_options = Options(:vars => [25],
-                                 :partition => [(2*i-1:2*i) for i in 1:24],
-                                 :plot_vars => [0, 25])
+                                  :partition => [(2*i-1:2*i) for i in 1:24],
+                                  :plot_vars => [0, 25])
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => [25],
-                                 :partition => [(2*i-1:2*i) for i in 1:24],
-                                 :property => LinearConstraintProperty(sparsevec([25], [1.0], 48), 6e-3)) # x25 < 6e-3
+                                  :partition => [(2*i-1:2*i) for i in 1:24],
+                                  :property => LinearConstraintProperty(sparsevec([25], [1.0], 48), 6e-3)) # x25 < 6e-3
     end
 
     result = solve(S, merge(input_options, problem_options))

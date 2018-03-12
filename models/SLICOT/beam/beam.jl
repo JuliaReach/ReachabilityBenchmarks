@@ -5,7 +5,10 @@ This is a 348-variable model.
 =#
 using Reachability, MAT, Plots
 
-function compute(input_options::Pair{Symbol,<:Any}...)
+compute(o::Pair{Symbol,<:Any}...) = compute(Options(Dict{Symbol,Any}(o)))
+
+function compute(input_options::Options)
+
     # =====================
     # Problem specification
     # =====================
@@ -27,29 +30,31 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # ===============
     # Problem solving
     # ===============
+    if input_options[:mode] == "reach"
+        problem_options = Options(:vars => [89],
+                                 :partition => [(2*i-1:2*i) for i in 1:174],
+                                 :plot_vars => [0, 89])
 
-    # define solver-specific options
-    options = merge(Options(
-        :mode => "reach",
-        :property => LinearConstraintProperty([1., 0.], 2100.), # x89 < 2100
-        :vars => [89], # variable needed for property
-        :partition => [(2*i-1:2*i) for i in 1:174], # 2D blocks
-        :plot_vars => [0, 89]
-        ), Options(input_options...))
+    elseif input_options[:mode] == "check"
+        problem_options = Options(:vars => [89],
+                                  :partition => [(2*i-1:2*i) for i in 1:174],
+                                  :property => LinearConstraintProperty(sparsevec([89], [1.0], 348), 2100.)) # x89 < 2100
+    end
 
-    result = solve(S, options)
+    result = solve(S, merge(input_options, problem_options))
 
     # ========
     # Plotting
     # ========
-    if options[:mode] == "reach"
+    if input_options[:mode] == "reach"
         println("Plotting...")
         tic()
         plot(result)
-        @eval(savefig(@filename_to_png))
+        @eval(savefig(@relpath "beam.png"))
         toc()
     end
 end # function
 
-compute(:δ => 0.0005, :N => 3); # warm-up
-compute(:δ => 0.0005, :T => 20.0); # benchmark settings (long)
+# Reach tube computation in dense time
+compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "info"); # warm-up
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info"); # benchmark settings (long)

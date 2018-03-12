@@ -13,7 +13,7 @@ function compute(input_options::Options)
     # Problem specification
     # =====================
     file = matopen(@relpath "beam.mat")
-    A = sparse(read(file, "A"))
+    A = read(file, "A")
 
     # initial set
     # - x1-x300 are 0.0,
@@ -21,7 +21,7 @@ function compute(input_options::Options)
     X0 = Hyperrectangle([zeros(300); fill(0.00175, 48)], [zeros(300); fill(0.00025, 48)])
 
     # input set
-    B = sparse(read(file, "B"))
+    B = read(file, "B")
     U = B * BallInf([0.5], 0.3)
 
     # instantiate continuous LTI system
@@ -32,8 +32,8 @@ function compute(input_options::Options)
     # ===============
     if input_options[:mode] == "reach"
         problem_options = Options(:vars => [89],
-                                 :partition => [(2*i-1:2*i) for i in 1:174],
-                                 :plot_vars => [0, 89])
+                                  :partition => [(2*i-1:2*i) for i in 1:174],
+                                  :plot_vars => [0, 89])
 
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => [89],

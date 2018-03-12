@@ -3,7 +3,9 @@ Model: pde.jl
 =#
 using Reachability, MAT, Plots
 
-function compute(input_options::Pair{Symbol,<:Any}...)
+compute(o::Pair{Symbol,<:Any}...) = compute(Options(Dict{Symbol,Any}(o)))
+
+function compute(input_options::Options)
     # =====================
     # Problem specification
     # =====================
@@ -29,31 +31,31 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # ===============
     # Problem solving
     # ===============
+    if input_options[:mode] == "reach"
+        problem_options = Options(:vars => [1],
+                                  :partition => [(2*i-1:2*i) for i in 1:42], # 2D blocks
+                                  :plot_vars => [0, 1])
+                                  # :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M"))
 
-    # define solver-specific options
-    options = merge(Options(
-        :mode => "reach",
-        :property => LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 12.), # y < 12
-#       :vars => [1], # variable for single block analysis
-        :vars => 1:42, # variables needed for property
-        :partition => [(2*i-1:2*i) for i in 1:42], # 2D blocks
-#       :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M")),
-        :plot_vars => [0, 1]
-        ), Options(input_options...))
+    elseif input_options[:mode] == "check"
+        problem_options = Options(:vars => 1:42, # variables needed for property
+                                  :partition => [(2*i-1:2*i) for i in 1:42], # 2D blocks
+                                  :property => LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 12.)) # y < 12
 
-    result = solve(S, options)
+    result = solve(S, merge(input_options, problem_options))
 
     # ========
     # Plotting
     # ========
-    if options[:mode] == "reach"
+    if input_options[:mode] == "reach"
         println("Plotting...")
         tic()
         plot(result)
-        @eval(savefig(@filename_to_png))
+        @eval(savefig(@relpath "pde.png"))
         toc()
     end
 end # function
 
-compute(:δ => 0.003, :N => 3); # warm-up
-compute(:δ => 0.003, :T => 20.0); # benchmark settings (long)
+# Reach tube computation in dense time
+compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "info"); # warm-up
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info"); # benchmark settings (long)

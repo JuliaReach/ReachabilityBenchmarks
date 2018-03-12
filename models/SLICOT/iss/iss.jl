@@ -8,7 +8,9 @@ The corresponding SpaceEx model and configuration file are iss.xml and iss.cfg.
 =#
 using Reachability, MAT, Plots
 
-function compute(input_options::Pair{Symbol,<:Any}...)
+compute(o::Pair{Symbol,<:Any}...) = compute(Options(Dict{Symbol,Any}(o)))
+
+function compute(input_options::Options)
     # =====================
     # Problem specification
     # =====================
@@ -32,34 +34,34 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # ===============
     # Problem solving
     # ===============
+    if input_options[:mode] == "reach"
+        problem_options = Options(:vars => [182],
+                                  :partition => [(2*i-1:2*i) for i in 1:135],
+                                  :plot_vars => [0, 182],
+                                  :assume_sparse => true)
+    elseif input_options[:mode] == "check"
+        problem_options = Options(:vars => 136:270, # variables needed for property
+                                  :partition => [(2*i-1:2*i) for i in 1:135],
+                                  :property => LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 7e-4), # y < 7e-4
+                                  :assume_sparse => true)
+    end
 
-    # define solver-specific options
-    options = merge(Options(
-        :mode => "reach",
-        :property => LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 7e-4), # y < 7e-4
-#       :vars => [182], # variable for single block analysis
-        :vars => 136:270, # variables needed for property
-        :partition => [(2*i-1:2*i) for i in 1:135], # 2D blocks
-        :assume_sparse => true,
-#       :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M")),
-        :plot_vars => [0, 182]
-        ), Options(input_options...))
-
-    result = solve(S, options)
+    result = solve(S, merge(input_options, problem_options))
 
     # ========
     # Plotting
     # ========
-    if options[:mode] == "reach"
+    if input_options[:mode] == "reach"
         println("Plotting...")
         tic()
         #project_output = options[:projection_matrix] != nothing
         #:plot_labels => add_plot_labels(options[:plot_vars], project_output)
         plot(result)
-        @eval(savefig(@filename_to_png))
+        @eval(savefig(@relpath "iss.png"))
         toc()
     end
 end # function
 
-compute(:δ => 0.01, :N => 3); # warm-up
-compute(:δ => 0.01, :T => 20.0); # benchmark settings (long)
+# Reach tube computation in dense time
+compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "info"); # warm-up
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info"); # benchmark settings (long)

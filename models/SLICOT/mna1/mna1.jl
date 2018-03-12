@@ -5,7 +5,9 @@ This is a 578-variable model.
 =#
 using Reachability, MAT, Plots
 
-function compute(input_options::Pair{Symbol,<:Any}...)
+compute(o::Pair{Symbol,<:Any}...) = compute(Options(Dict{Symbol,Any}(o)))
+
+function compute(input_options::Options)
     # =====================
     # Problem specification
     # =====================
@@ -25,30 +27,33 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # ===============
     # Problem solving
     # ===============
+    if input_options[:mode] == "reach"
+        problem_options = Options(:vars => [1],
+                                  :partition => [(2*i-1:2*i) for i in 1:289],
+                                  :plot_vars => [0, 1],
+                                  :assume_sparse => false)
+    elseif input_options[:mode] == "check"
+        problem_options = Options(:vars => [1], # variables needed for property
+                                  :partition => [(2*i-1:2*i) for i in 1:289],
+                                  :property => LinearConstraintProperty(sparsevec([1], [1.0], 578), 0.5), # x1 < 0.5
+                                  :assume_sparse => false)
+    end
 
-    # define solver-specific options
-    options = merge(Options(
-        :mode => "reach",
-        :property => LinearConstraintProperty([1., 0.], 0.5), # x1 < 0.5
-        :vars => [1], # variable needed for property
-        :partition => [(2*i-1:2*i) for i in 1:289], # 2D blocks
-        :plot_vars => [0, 1]
-        ), Options(input_options...))
-
-    result = solve(S, options)
+    result = solve(S, merge(input_options, problem_options))
 
     # ========
     # Plotting
     # ========
-    if options[:mode] == "reach"
+    if input_options[:mode] == "reach"
         println("Plotting...")
         tic()
         plot(result)
-        @eval(savefig(@filename_to_png))
+        @eval(savefig(@relpath "mna1.png"))
         toc()
     end
 end # function
 
 
-compute(:δ => 0.001, :N => 3); # warm-up
-compute(:δ => 0.001, :T => 20.0); # benchmark settings (long)
+# Reach tube computation in dense time
+compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "info"); # warm-up
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info"); # benchmark settings (long)

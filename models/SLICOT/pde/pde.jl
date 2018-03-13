@@ -36,11 +36,11 @@ function compute(input_options::Options)
                                   :partition => [(2*i-1:2*i) for i in 1:42], # 2D blocks
                                   :plot_vars => [0, 1])
                                   # :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M"))
-
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => 1:84, # variables needed for property
                                   :partition => [(2*i-1:2*i) for i in 1:42], # 2D blocks
                                   :property => LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 12.)) # y < 12
+    end
 
     result = solve(S, merge(input_options, problem_options))
 

@@ -37,8 +37,10 @@ function compute(input_options::Options)
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => 1:2, # variables needed for property
                                   :partition => vcat([(2*i-1:2*i) for i in 1:5456], [10913:10913]), # 2D blocks except last (1D)
-                                  :property => LinearConstraintProperty([Clause([LinearConstraint(sparsevec([1], [1.0], 10913), 0.2)]),
-                                                                         Clause([LinearConstraint(sparsevec([2], [1.0], 10913), 0.15)]) ]), # x1 < 0.2 && x2 < 0.15
+                                  :property => LinearConstraintProperty([
+                                      Clause([LinearConstraint(sparsevec([1], [1.0], 10913), 0.2)]),
+                                      Clause([LinearConstraint(sparsevec([2], [1.0], 10913), 0.15)])
+                                      ]), # x1 < 0.2 && x2 < 0.15
                                   :assume_sparse => true,
                                   :lazy_expm => true)
     end

@@ -3,9 +3,11 @@ Model: MNA_5.jl
 
 This is a 10913-variable model.
 =#
-using Reachability, LazySets, MAT
+using Reachability, MAT, Plots
 
-function compute(input_options::Pair{Symbol,<:Any}...)
+compute(o::Pair{Symbol,<:Any}...) = compute(Options(Dict{Symbol,Any}(o)))
+
+function compute(input_options::Options)
     # =====================
     # Problem specification
     # =====================
@@ -25,34 +27,38 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # ===============
     # Problem solving
     # ===============
+    if input_options[:mode] == "reach"
+        problem_options = Options(:vars => [1],
+                                  :partition => vcat([(2*i-1:2*i) for i in 1:5456], [10913:10913]), # 2D blocks except last (1D)
+                                  :plot_vars => [0, 1],
+                                  :assume_sparse => true,
+                                  :lazy_expm => true)
 
-    # define solver-specific options
-    options = merge(Options(
-        :mode => "reach",
-        :property => LinearConstraintProperty([Clause([LinearConstraint([1., 0.], 0.2)]), Clause([LinearConstraint([0., 1.], 0.15)])]), # x1 < 0.2 && x2 < 0.15
-        :blocks => [1],
-        :assume_sparse => true,
-        :lazy_expm => true,
-        :plot_vars => [0, 1]
-        ), Options(input_options...))
+    elseif input_options[:mode] == "check"
+        problem_options = Options(:vars => 1:2, # variables needed for property
+                                  :partition => vcat([(2*i-1:2*i) for i in 1:5456], [10913:10913]), # 2D blocks except last (1D)
+                                  :property => LinearConstraintProperty([
+                                      Clause([LinearConstraint(sparsevec([1], [1.0], 10913), 0.2)]),
+                                      Clause([LinearConstraint(sparsevec([2], [1.0], 10913), 0.15)])
+                                      ]), # x1 < 0.2 && x2 < 0.15
+                                  :assume_sparse => true,
+                                  :lazy_expm => true)
+    end
 
-    result = solve(S, options)
+    result = solve(S, merge(input_options, problem_options))
 
     # ========
     # Plotting
     # ========
-    if options[:mode] == "reach"
+    if input_options[:mode] == "reach"
         println("Plotting...")
         tic()
-        options_plot = Options(
-            :plot_vars => options[:plot_vars],
-            :plot_name => @filename_to_png
-#           :plot_indices => range_last_x_percent(length(result), 10, 3)
-            )
-        plot(result, options_plot)
+        plot(result)
+        @eval(savefig(@relpath "mna5.png"))
         toc()
     end
 end # function
 
-compute(:δ => 0.05, :T => 0.1); # warm-up
-compute(:δ => 0.05, :T => 20.0); # benchmark settings (long)
+# Reach tube computation in dense time
+compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "info"); # warm-up
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info"); # benchmark settings (long)

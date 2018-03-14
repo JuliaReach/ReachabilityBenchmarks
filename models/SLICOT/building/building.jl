@@ -5,14 +5,16 @@ See also:
 bak2017cav_repeatability or
 [Building example in Hylaa](https://github.com/stanleybak/hylaa/blob/master/examples/building/building.py)
 =#
-using Reachability, LazySets, MAT
+using Reachability, MAT, Plots
 
-function compute(input_options::Pair{Symbol,<:Any}...)
+compute(o::Pair{Symbol,<:Any}...) = compute(Options(Dict{Symbol,Any}(o)))
+
+function compute(input_options::Options)
     # =====================
     # Problem specification
     # =====================
     file = matopen(@relpath "building.mat")
-    A = sparse(read(file, "A"))
+    A = read(file, "A")
 
     # initial set
     # - x1-x10 are in [0.0002, 0.00025],
@@ -24,7 +26,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # X0 = CartesianProductArray([BallInf(fill(0.000225, 10), 0.000025), Singleton(zeros(14)), BallInf([0.], 0.0001), Singleton(zeros(23))])
 
     # input set
-    B = sparse(read(file, "B"))
+    B = read(file, "B")
     U = B * BallInf([0.9], .1)
 
     # instantiate continuous LTI system
@@ -33,28 +35,30 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # ===============
     # Problem solving
     # ===============
+    if input_options[:mode] == "reach"
+        problem_options = Options(:vars => [25],
+                                  :partition => [(2*i-1:2*i) for i in 1:24],
+                                  :plot_vars => [0, 25])
+    elseif input_options[:mode] == "check"
+        problem_options = Options(:vars => [25],
+                                  :partition => [(2*i-1:2*i) for i in 1:24],
+                                  :property => LinearConstraintProperty(sparsevec([25], [1.0], 48), 6e-3)) # x25 < 6e-3
+    end
 
-    # define solver-specific options
-    options = merge(Options(
-        :mode => "reach",
-        :property => LinearConstraintProperty([1., 0.], 6e-3), # x25 < 6e-3
-        :blocks => [@block_id(25)],
-        :plot_vars => [0, 25]
-        ), Options(input_options...))
-
-    result = solve(S, options)
+    result = solve(S, merge(input_options, problem_options))
 
     # ========
     # Plotting
     # ========
-    if options[:mode] == "reach"
+    if input_options[:mode] == "reach"
         println("Plotting...")
         tic()
         plot(result)
-        @eval(savefig(@filename_to_png))
+        @eval(savefig(@relpath "building.png"))
         toc()
     end
 end # function
 
-compute(:N => 10, :T => 20.0); # warm-up
-compute(:δ => 0.002, :T => 20.0); # benchmark settings (long)
+# Reach tube computation in dense time
+compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "info"); # warm-up
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info"); # benchmark settings (long)

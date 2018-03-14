@@ -1,9 +1,11 @@
 #=
 Model: pde.jl
 =#
-using Reachability, LazySets, MAT
+using Reachability, MAT, Plots
 
-function compute(input_options::Pair{Symbol,<:Any}...)
+compute(o::Pair{Symbol,<:Any}...) = compute(Options(Dict{Symbol,Any}(o)))
+
+function compute(input_options::Options)
     # =====================
     # Problem specification
     # =====================
@@ -29,31 +31,31 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # ===============
     # Problem solving
     # ===============
+    if input_options[:mode] == "reach"
+        problem_options = Options(:vars => [1],
+                                  :partition => [(2*i-1:2*i) for i in 1:42], # 2D blocks
+                                  :plot_vars => [0, 1])
+                                  # :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M"))
+    elseif input_options[:mode] == "check"
+        problem_options = Options(:vars => 1:84, # variables needed for property
+                                  :partition => [(2*i-1:2*i) for i in 1:42], # 2D blocks
+                                  :property => LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 12.)) # y < 12
+    end
 
-    # define solver-specific options
-    options = merge(Options(
-        :mode => "reach",
-        :property => LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 12.), # y < 12
-#       :blocks => [1],
-#       :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M")),
-        :plot_vars => [0, 1]
-        ), Options(input_options...))
-
-    result = solve(S, options)
+    result = solve(S, merge(input_options, problem_options))
 
     # ========
     # Plotting
     # ========
-    if options[:mode] == "reach"
-        if options[:mode] == "reach"
-            println("Plotting...")
-            tic()
-            plot(result) # TODO output labels
-            @eval(savefig("motor.jl"))
-            toc()
-        end
+    if input_options[:mode] == "reach"
+        println("Plotting...")
+        tic()
+        plot(result)
+        @eval(savefig(@relpath "pde.png"))
+        toc()
     end
 end # function
 
-compute(:N => 100, :T => 1.0); # warm-up
-compute(:δ => 0.003, :T => 20.0); # benchmark settings (long)
+# Reach tube computation in dense time
+compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "info"); # warm-up
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info"); # benchmark settings (long)

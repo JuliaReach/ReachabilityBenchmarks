@@ -36,14 +36,18 @@ function compute(input_options::Options)
     # ===============
     if input_options[:mode] == "reach"
         problem_options = Options(:vars => [5],
-                                  :partition => [(2*i-1:2*i) for i in 1:4], # 2D blocks
+#                                 :partition => [(2*i-1:2*i) for i in 1:4], # 2D blocks
+                                  :partition => [[i] for i in 1:8], # 1D blocks
+                                  :set_type => Interval,
                                   :plot_vars => [0, 5])
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => [1, 5], # variables needed for property
                                   :partition => [(2*i-1:2*i) for i in 1:4], # 2D blocks
                                   :property => LinearConstraintProperty(
-                                                   Clause([LinearConstraint([1.; zeros(7)], 0.35),
-                                                           LinearConstraint([zeros(4); 1.; zeros(3)], 0.45)]))) # x1 < 0.35 || x5 < 0.45
+                                      Clause([LinearConstraint([1.; zeros(7)], 0.35),
+                                              LinearConstraint([zeros(4); 1.; zeros(3)], 0.45)]))
+                                               # x1 < 0.35 || x5 < 0.45
+                                 )
     end
 
     result = solve(S, merge(input_options, problem_options))

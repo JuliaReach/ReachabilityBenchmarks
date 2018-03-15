@@ -29,7 +29,9 @@ function compute(input_options::Options)
     # ===============
     if input_options[:mode] == "reach"
         problem_options = Options(:vars => [1],
-                                  :partition => vcat([(2*i-1:2*i) for i in 1:5456], [10913:10913]), # 2D blocks except last (1D)
+#                                 :partition => vcat([(2*i-1:2*i) for i in 1:5456], [10913:10913]), # 2D blocks except last (1D)
+                                  :partition => [[i] for i in 1:10913], # 1D blocks
+                                  :set_type => Interval,
                                   :plot_vars => [0, 1],
                                   :assume_sparse => true,
                                   :lazy_expm => true)

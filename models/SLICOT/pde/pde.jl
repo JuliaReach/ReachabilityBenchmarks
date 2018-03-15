@@ -33,7 +33,9 @@ function compute(input_options::Options)
     # ===============
     if input_options[:mode] == "reach"
         problem_options = Options(:vars => [1],
-                                  :partition => [(2*i-1:2*i) for i in 1:42], # 2D blocks
+#                                 :partition => [(2*i-1:2*i) for i in 1:42], # 2D blocks
+                                  :partition => [[i] for i in 1:84], # 1D blocks
+                                  :set_type => Interval,
                                   :plot_vars => [0, 1])
                                   # :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M"))
     elseif input_options[:mode] == "check"

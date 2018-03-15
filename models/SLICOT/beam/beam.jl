@@ -32,12 +32,14 @@ function compute(input_options::Options)
     # ===============
     if input_options[:mode] == "reach"
         problem_options = Options(:vars => [89],
-                                  :partition => [(2*i-1:2*i) for i in 1:174],
+#                                 :partition => [(2*i-1:2*i) for i in 1:174], # 2D blocks
+                                  :partition => [[i] for i in 1:348], # 1D blocks
+                                  :set_type => Interval,
                                   :plot_vars => [0, 89])
 
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => [89],
-                                  :partition => [(2*i-1:2*i) for i in 1:174],
+                                  :partition => [(2*i-1:2*i) for i in 1:174], # 2D blocks
                                   :property => LinearConstraintProperty(sparsevec([89], [1.0], 348), 2100.)) # x89 < 2100
     end
 

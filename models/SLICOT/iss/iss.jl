@@ -36,9 +36,7 @@ function compute(input_options::Options)
     # ===============
     if input_options[:mode] == "reach"
         problem_options = Options(:vars => [182],
-#                                 :partition => [(2*i-1:2*i) for i in 1:135], # 2D blocks
-                                  :partition => [[i] for i in 1:270], # 1D blocks
-                                  :set_type => Interval,
+                                  :partition => [(2*i-1:2*i) for i in 1:135], # 2D blocks
                                   :plot_vars => [0, 182],
                                   :assume_sparse => true)
     elseif input_options[:mode] == "check"
@@ -64,6 +62,20 @@ function compute(input_options::Options)
     end
 end # function
 
-# Reach tube computation in dense time
-compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "info"); # warm-up
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info"); # benchmark settings (long)
+# ===================================
+# Reach tube computation, dense time
+# ===================================
+
+info("warm-up run"; prefix=" ")
+compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "warn");
+
+info("dense time, 2D blocks Hyperrectangle"; prefix="BENCHMARK SETTINGS: ")
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach");
+
+info("dense time, 2D blocks HPolygon, cf. Table 1 HSCC"; prefix="BENCHMARK SETTINGS: ")
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach",
+        :set_type=>HPolygon, :lazy_sih=>false, :ε=>Inf);
+
+info("dense time, 1D blocks Interval"; prefix="BENCHMARK SETTINGS: ")
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach",
+        :set_type=>Interval, :partition => [[i] for i in 1:270]);

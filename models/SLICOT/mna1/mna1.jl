@@ -24,20 +24,21 @@ function compute(input_options::Options)
     # instantiate continuous LTI system
     S = ContinuousSystem(A, X0, U)
 
+    # property:  x1 < 0.5
+    p = LinearConstraintProperty(sparsevec([1], [1.0], 578), 0.5)
+
     # ===============
     # Problem solving
     # ===============
     if input_options[:mode] == "reach"
         problem_options = Options(:vars => [1],
-#                                 :partition => [(2*i-1:2*i) for i in 1:289], # 2D blocks
-                                  :partition => [[i] for i in 1:578], # 1D blocks
-                                  :set_type => Interval,
+                                  :partition => [(2*i-1:2*i) for i in 1:289],
                                   :plot_vars => [0, 1],
                                   :assume_sparse => false)
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => [1], # variables needed for property
                                   :partition => [(2*i-1:2*i) for i in 1:289], # 2D blocks
-                                  :property => LinearConstraintProperty(sparsevec([1], [1.0], 578), 0.5), # x1 < 0.5
+                                  :property => p
                                   :assume_sparse => false)
     end
 
@@ -55,7 +56,20 @@ function compute(input_options::Options)
     end
 end # function
 
+# ===================================
+# Reach tube computation, dense time
+# ===================================
 
-# Reach tube computation in dense time
-compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "info"); # warm-up
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info"); # benchmark settings (long)
+info("warm-up run"; prefix=" ")
+compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "warn");
+
+info("dense time, 2D blocks Hyperrectangle"; prefix="BENCHMARK SETTINGS: ")
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach");
+
+info("dense time, 2D blocks HPolygon, cf. Table 1 HSCC"; prefix="BENCHMARK SETTINGS: ")
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach",
+        :set_type=>HPolygon, :lazy_sih=>false, :ε=>Inf);
+
+info("dense time, 1D blocks Interval"; prefix="BENCHMARK SETTINGS: ")
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach",
+        :set_type=>Interval, :partition => [[i] for i in 1:578]);

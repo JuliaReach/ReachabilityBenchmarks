@@ -24,12 +24,17 @@ function compute(input_options::Options)
     # instantiate continuous LTI system
     S = ContinuousSystem(A, X0, U)
 
+    # safety property: x1 < 0.2 && x2 < 0.15
+    p = LinearConstraintProperty([
+        Clause([LinearConstraint(sparsevec([1], [1.0], 10913), 0.2)]),
+        Clause([LinearConstraint(sparsevec([2], [1.0], 10913), 0.15)])
+        ])
     # ===============
     # Problem solving
     # ===============
     if input_options[:mode] == "reach"
         problem_options = Options(:vars => [1],
-                                  :partition => vcat([(2*i-1:2*i) for i in 1:5456], [10913:10913]), # 2D blocks except last (1D)
+                                 :partition => vcat([(2*i-1:2*i) for i in 1:5456], [10913:10913]), # 2D blocks except last (1D)
                                   :plot_vars => [0, 1],
                                   :assume_sparse => true,
                                   :lazy_expm => true)
@@ -37,15 +42,12 @@ function compute(input_options::Options)
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => 1:2, # variables needed for property
                                   :partition => vcat([(2*i-1:2*i) for i in 1:5456], [10913:10913]), # 2D blocks except last (1D)
-                                  :property => LinearConstraintProperty([
-                                      Clause([LinearConstraint(sparsevec([1], [1.0], 10913), 0.2)]),
-                                      Clause([LinearConstraint(sparsevec([2], [1.0], 10913), 0.15)])
-                                      ]), # x1 < 0.2 && x2 < 0.15
+                                  :property => p,
                                   :assume_sparse => true,
                                   :lazy_expm => true)
     end
 
-    result = solve(S, merge(input_options, problem_options))
+    result = solve(S, merge(problem_options, input_options))
 
     # ========
     # Plotting
@@ -59,6 +61,20 @@ function compute(input_options::Options)
     end
 end # function
 
-# Reach tube computation in dense time
-compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "info"); # warm-up
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info"); # benchmark settings (long)
+# ===================================
+# Reach tube computation, dense time
+# ===================================
+
+info("warm-up run"; prefix=" ")
+compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "warn");
+
+info("dense time, 2D blocks Hyperrectangle"; prefix="BENCHMARK SETTINGS: ")
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach");
+
+info("dense time, 2D blocks HPolygon, cf. Table 1 HSCC"; prefix="BENCHMARK SETTINGS: ")
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach",
+        :set_type=>HPolygon, :lazy_sih=>false, :ε=>Inf);
+
+info("dense time, 1D blocks Interval"; prefix="BENCHMARK SETTINGS: ")
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach",
+        :set_type=>Interval, :partition => [[i] for i in 1:10913]);

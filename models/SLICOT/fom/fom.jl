@@ -24,6 +24,9 @@ function compute(input_options::Options)
     # instantiate continuous LTI system
     S = ContinuousSystem(A, X0, U)
 
+    # property: y < 185
+    p = LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 185.)
+
     # ===============
     # Problem solving
     # ===============
@@ -36,7 +39,7 @@ function compute(input_options::Options)
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => 1:1006, # variables needed for property
                                   :partition => [(2*i-1:2*i) for i in 1:503], # 2D blocks
-                                  :property => LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 185.), # y < 185
+                                  :property => p,
                                   :assume_sparse => true)
     end
 

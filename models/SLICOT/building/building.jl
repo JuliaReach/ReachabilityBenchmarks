@@ -32,6 +32,9 @@ function compute(input_options::Options)
     # instantiate continuous LTI system
     S = ContinuousSystem(A, X0, U)
 
+    # property: x25 < 6e-3
+    p = LinearConstraintProperty(sparsevec([25], [1.0], 48), 6e-3)
+
     # ===============
     # Problem solving
     # ===============
@@ -42,7 +45,7 @@ function compute(input_options::Options)
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => [25],
                                   :partition => [(2*i-1:2*i) for i in 1:24], # 2D blocks
-                                  :property => LinearConstraintProperty(sparsevec([25], [1.0], 48), 6e-3)) # x25 < 6e-3
+                                  :property => p)
     end
 
     result = solve(S, merge(problem_options, input_options))

@@ -42,7 +42,7 @@ function compute(input_options::Options)
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => 1:2, # variables needed for property
                                   :partition => vcat([(2*i-1:2*i) for i in 1:5456], [10913:10913]), # 2D blocks except last (1D)
-                                  :property => p
+                                  :property => p,
                                   :assume_sparse => true,
                                   :lazy_expm => true)
     end

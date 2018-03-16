@@ -38,7 +38,7 @@ function compute(input_options::Options)
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => [1], # variables needed for property
                                   :partition => [(2*i-1:2*i) for i in 1:289], # 2D blocks
-                                  :property => p
+                                  :property => p,
                                   :assume_sparse => false)
     end
 

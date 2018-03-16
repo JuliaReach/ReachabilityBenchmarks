@@ -45,7 +45,7 @@ function compute(input_options::Options)
                                   :property => LinearConstraintProperty(sparsevec([25], [1.0], 48), 6e-3)) # x25 < 6e-3
     end
 
-    result = solve(S, merge(input_options, problem_options))
+    result = solve(S, merge(problem_options, input_options))
 
     # ========
     # Plotting

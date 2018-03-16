@@ -47,7 +47,7 @@ function compute(input_options::Options)
                                   :lazy_expm => true)
     end
 
-    result = solve(S, merge(input_options, problem_options))
+    result = solve(S, merge(problem_options, input_options))
 
     # ========
     # Plotting

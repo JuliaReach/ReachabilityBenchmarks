@@ -70,12 +70,12 @@ info("warm-up run"; prefix=" ")
 compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "warn");
 
 info("dense time, 2D blocks Hyperrectangle"; prefix="BENCHMARK SETTINGS: ")
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach");
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info");
 
 info("dense time, 2D blocks HPolygon, cf. Table 1 HSCC"; prefix="BENCHMARK SETTINGS: ")
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach",
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info",
         :set_type=>HPolygon, :lazy_sih=>false, :ε=>Inf);
 
 info("dense time, 1D blocks Interval"; prefix="BENCHMARK SETTINGS: ")
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach",
+compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info",
         :set_type=>Interval, :partition => [[i] for i in 1:48]);

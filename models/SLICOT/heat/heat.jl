@@ -27,7 +27,7 @@ function compute(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # property: x133 < 0.1
-    p = LinearConstraintProperty(sparsevec([133], [1.0], 200), 0.1))
+    p = LinearConstraintProperty(sparsevec([133], [1.0], 200), 0.1)
 
     # ===============
     # Problem solving

@@ -29,7 +29,7 @@ function compute(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # property: y < 12
-    p = LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 12.))
+    p = LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 12.)
 
     # ===============
     # Problem solving

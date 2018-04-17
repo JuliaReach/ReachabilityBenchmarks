@@ -73,7 +73,9 @@ compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info");
 
 info("dense time, 2D blocks HPolygon, cf. Table 1 HSCC"; prefix="BENCHMARK SETTINGS: ")
 compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info",
-        :set_type=>HPolygon, :lazy_sih=>false, :ε=>Inf);
+        :block_types=>Dict(HPolygon=>[(2*i-1:2*i) for i in 1:5456],
+                           Interval=>[10913:10913]),
+        :lazy_sih=>false, :ε=>Inf);
 
 info("dense time, 1D blocks Interval"; prefix="BENCHMARK SETTINGS: ")
 compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info",

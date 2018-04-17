@@ -34,12 +34,14 @@ function compute(input_options::Options)
         problem_options = Options(:vars => [1],
                                   :partition => [(2*i-1:2*i) for i in 1:503], # 2D blocks
                                   :plot_vars => [0, 1],
+                                  :lazy_expm => true,
                                   :assume_sparse => true)
         # :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M")),
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => 1:1006, # variables needed for property
                                   :partition => [(2*i-1:2*i) for i in 1:503], # 2D blocks
                                   :property => p,
+                                  :lazy_expm => true,
                                   :assume_sparse => true)
     end
 

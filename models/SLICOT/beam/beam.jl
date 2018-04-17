@@ -34,12 +34,12 @@ function compute(input_options::Options)
     # Problem solving
     # ===============
     if input_options[:mode] == "reach"
-        problem_options = Options(:vars => [89], :verbosity => "info",
+        problem_options = Options(:vars => [89],
                                   :partition => [(2*i-1:2*i) for i in 1:174], # 2D blocks
                                   :plot_vars => [0, 89])
 
     elseif input_options[:mode] == "check"
-        problem_options = Options(:vars => [89], :verbosity => "info",
+        problem_options = Options(:vars => [89],
                                   :partition => [(2*i-1:2*i) for i in 1:174], # 2D blocks
                                   :property => p)
     end

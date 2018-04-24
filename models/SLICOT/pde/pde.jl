@@ -1,16 +1,16 @@
 #=
-Model: pde.jl
+Model: PDE (84 variables, 1 input)
 =#
-using Reachability, MAT, Plots
+using Reachability, MAT
 
-compute(o::Pair{Symbol,<:Any}...) = compute(Options(Dict{Symbol,Any}(o)))
+pde(o::Pair{Symbol, <:Any}...) = pde(Options(Dict{Symbol, Any}(o)))
 
-function compute(input_options::Options)
+function pde(input_options::Options)
     # =====================
     # Problem specification
     # =====================
     file = matopen(@relpath "pde.mat")
-    A = read(file, "A")*1.0 # this model provides a matrix with Int components
+    A = float(read(file, "A")) # this matrix has Int entries
 
     # initial set
     n = size(A, 1)
@@ -28,51 +28,25 @@ function compute(input_options::Options)
     # instantiate continuous LTI system
     S = ContinuousSystem(A, X0, U)
 
-    # property: y < 12
-    p = LinearConstraintProperty(read(matopen(@relpath "out.mat"), "M")[1,:], 12.)
+    # property: y < 12 for linear combination y
+    property = LinearConstraintProperty(
+        read(matopen(@relpath "out.mat"), "M")[1,:], 12.)
 
-    # ===============
-    # Problem solving
-    # ===============
+    # =======================
+    # Problem default options
+    # =======================
+    partition = [(2*i-1:2*i) for i in 1:42] # 2D blocks
+
     if input_options[:mode] == "reach"
         problem_options = Options(:vars => [1],
-                                  :partition => [(2*i-1:2*i) for i in 1:42], # 2D blocks
+                                  :partition => partition,
                                   :plot_vars => [0, 1])
-                                  # :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M"))
+        # :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M"))
     elseif input_options[:mode] == "check"
-        problem_options = Options(:vars => 1:84, # variables needed for property
-                                  :partition => [(2*i-1:2*i) for i in 1:42], # 2D blocks
-                                  :property => p)
+        problem_options = Options(:vars => 1:84,
+                                  :partition => partition,
+                                  :property => property)
     end
 
-    result = solve(S, merge(problem_options, input_options))
-
-    # ========
-    # Plotting
-    # ========
-    if input_options[:mode] == "reach"
-        println("Plotting...")
-        tic()
-        plot(result)
-        @eval(savefig(@relpath "pde.png"))
-        toc()
-    end
-end # function
-
-# ===================================
-# Reach tube computation, dense time
-# ===================================
-
-info("warm-up run"; prefix=" ")
-compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "warn");
-
-info("dense time, 2D blocks Hyperrectangle"; prefix="BENCHMARK SETTINGS: ")
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info");
-
-info("dense time, 2D blocks HPolygon, cf. Table 1 HSCC"; prefix="BENCHMARK SETTINGS: ")
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info",
-        :set_type=>HPolygon, :lazy_sih=>false, :ε=>Inf);
-
-info("dense time, 1D blocks Interval"; prefix="BENCHMARK SETTINGS: ")
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info",
-        :set_type=>Interval, :partition => [[i] for i in 1:84]);
+    return (S, merge(problem_options, input_options))
+end

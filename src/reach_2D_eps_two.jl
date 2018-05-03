@@ -1,10 +1,10 @@
-# reach, 1D blocks, intervals, fixed delta, single variable
+# reach, 2D blocks, rectangles, fixed delta, two variables
 using Reachability
 
-reach_1D_single(model::String, create_plots::Bool=false) =
-    reach_1D_single([model], create_plots)
+reach_2D_eps_two(model::String, create_plots::Bool=false) =
+    reach_2D_eps_two([model], create_plots)
 
-function reach_1D_single(models::Vector{String}, create_plots::Bool=false)
+function reach_2D_eps_two(models::Vector{String}, create_plots::Bool=false)
     # load models
     models_loaded = false
     for model in models
@@ -30,7 +30,7 @@ function reach_1D_single(models::Vector{String}, create_plots::Bool=false)
         return
     end
 
-    println("-- benchmark suite 'reach_1D_single' --")
+    println("-- benchmark suite 'reach_2D_eps_two' --")
 
     for model in models
         println("- analyzing model '$model' -")
@@ -44,8 +44,20 @@ function reach_1D_single(models::Vector{String}, create_plots::Bool=false)
         dict_raw = options_raw.dict
         dict_raw[:verbosity] = "info"
         dict_raw[:δ] = 1e-3
-        dict_raw[:partition] = [[i] for i in 1:n]
-        dict_raw[:set_type] = Interval
+        dict_raw[:vars] = [1, 2]
+        dict_raw[:plot_vars] = [1, 2]
+        dict_raw[:ε] = 1e-2
+        if n % 2 == 0
+            # even dimension
+            dict_raw[:partition] = [(2*i-1:2*i) for i in 1:div(n, 2)]
+            dict_raw[:set_type] = HPolygon
+        else
+            # odd dimension
+            dict_raw[:partition] = vcat([(2*i-1:2*i) for i in 1:div(n, 2)], [n:n])
+            dict_raw[:block_types] = Dict(
+                HPolygon => [(2*i-1:2*i) for i in 1:div(n, 2)],
+                Interval => [n:n])
+        end
 
         for i in 1:2
             dict = copy(dict_raw)
@@ -55,11 +67,11 @@ function reach_1D_single(models::Vector{String}, create_plots::Bool=false)
             else
                 # benchmark settings
                 dict[:T] = 20.
-                dict[:logfile] = "$model-reach-1D-fixedstep-onevar.txt"
+                dict[:logfile] = "$model-reach-2D-eps-fixedstep-twovars.txt"
             end
             result = solve(S, Options(dict))
             if create_plots && i == 2
-                plot_reach(result, "$model-1D")
+                plot_reach(result, "$model-2D-eps-two")
             end
         end
         println()

@@ -1,14 +1,11 @@
 #=
-Model: beam.jl
-
-This is a 348-variable model.
+Model: Beam (348 variables, 1 input)
 =#
-using Reachability, MAT, Plots
+using Reachability, MAT
 
-compute(o::Pair{Symbol,<:Any}...) = compute(Options(Dict{Symbol,Any}(o)))
+beam(o::Pair{Symbol, <:Any}...) = beam(Options(Dict{Symbol, Any}(o)))
 
-function compute(input_options::Options)
-
+function beam(input_options::Options)
     # =====================
     # Problem specification
     # =====================
@@ -16,9 +13,10 @@ function compute(input_options::Options)
     A = read(file, "A")
 
     # initial set
-    # - x1-x300 are 0.0,
+    # - x1-x300 are 0,
     # - the rest is in [0.002, 0.0015]
-    X0 = Hyperrectangle([zeros(300); fill(0.00175, 48)], [zeros(300); fill(0.00025, 48)])
+    X0 = Hyperrectangle([zeros(300); fill(0.00175, 48)],
+                        [zeros(300); fill(0.00025, 48)])
 
     # input set
     B = read(file, "B")
@@ -28,50 +26,23 @@ function compute(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # safety property: x89 < 2100
-    p = LinearConstraintProperty(sparsevec([89], [1.0], 348), 2100.)
+    property = LinearConstraintProperty(sparsevec([89], [1.0], 348), 2100.)
 
-    # ===============
-    # Problem solving
-    # ===============
+    # =======================
+    # Problem default options
+    # =======================
+    partition = [(2*i-1:2*i) for i in 1:174] # 2D blocks
+
     if input_options[:mode] == "reach"
         problem_options = Options(:vars => [89],
-                                  :partition => [(2*i-1:2*i) for i in 1:174], # 2D blocks
+                                  :partition => partition,
                                   :plot_vars => [0, 89])
 
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => [89],
-                                  :partition => [(2*i-1:2*i) for i in 1:174], # 2D blocks
-                                  :property => p)
+                                  :partition => partition,
+                                  :property => property)
     end
 
-    result = solve(S, merge(problem_options, input_options))
-
-    # ========
-    # Plotting
-    # ========
-    if input_options[:mode] == "reach"
-        println("Plotting...")
-        tic()
-        plot(result)
-        @eval(savefig(@relpath "beam.png"))
-        toc()
-    end
-end # function
-
-# ===================================
-# Reach tube computation, dense time
-# ===================================
-
-info("warm-up run"; prefix=" ")
-compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "warn");
-
-info("dense time, 2D blocks Hyperrectangle"; prefix="BENCHMARK SETTINGS: ")
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info");
-
-info("dense time, 2D blocks HPolygon, cf. Table 1 HSCC"; prefix="BENCHMARK SETTINGS: ")
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info",
-        :set_type=>HPolygon, :lazy_sih=>false, :ε=>Inf);
-
-info("dense time, 1D blocks Interval"; prefix="BENCHMARK SETTINGS: ")
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info",
-        :set_type=>Interval, :partition => [[i] for i in 1:348]);
+    return (S, merge(problem_options, input_options))
+end

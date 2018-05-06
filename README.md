@@ -20,28 +20,39 @@ These scripts assume that `spaceex` (and some other tools for creating plots) ar
 
 ## Usage
 
-The models are given as Julia scripts, which you can run by including them in Julia's REPL, e.g.
+The models are given as Julia scripts, which you can run by including them in
+Julia's REPL, e.g.
 
 ```julia
 julia> include("models/SLICOT/iss/iss.jl")
 ```
 
-The scripts are accompanied by the `compute` function, which calculates reachable states, or checks a safety property,
-depending on the model's options. To use the default options, do
+The scripts are accompanied by a function named like the model, which calculates
+reachable states or checks a safety property, depending on the model's options.
+To compute the reach set using the default options with a time step of 0.01, do
 
 ```julia
-julia> compute()
+julia> sol = solve(iss(:mode=>"reach", :T=>20.0, :δ=>0.01));
 ```
 
-The models can also be executed as a script, e.g.
+More options can be added in the same style.
+
+To plot the reachable states, you can use the function `plot` from the `Plots`
+package.
 
 ```julia
-$ julia -e 'include("models/SLICOT/iss/iss.jl")'
+julia> using Plots
+
+julia> plot(sol)
 ```
 
 ## Running all the benchmarks
 
-This repository provides a bash script that will execute Julia on all existent
+This repository provides a Julia script that will execute Julia on all existent
 [SLICOT](http://slicot.org/20-site/126-benchmark-examples-for-model-reduction) models.
-The results are stored in the folder of each model.
-The script can also be modified (by just uncommenting the respective parts) to run SpaceEx on all the models.
+```bash
+julia -e 'include("src/benchmark_all.jl")'
+```
+The results are stored in the current folder.
+There is also a bash script which can be modified (by just uncommenting the
+respective parts) to run SpaceEx on all the models.

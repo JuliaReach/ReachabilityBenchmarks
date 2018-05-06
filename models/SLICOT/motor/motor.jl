@@ -1,16 +1,11 @@
 #=
-Model: motor.jl
-
-For the SpaceEx model, see [1] Motor.xml and the configuration file Motor.cfg.
-Output variables are x1 and x2.
-
-[1] BakDuggirala2017cavrepeatability/arch_benchmarks/Motor/Motor.xml
+Model: Motor (8 variables, 2 inputs)
 =#
-using Reachability, Plots
+using Reachability
 
-compute(o::Pair{Symbol,<:Any}...) = compute(Options(Dict{Symbol,Any}(o)))
+motor(o::Pair{Symbol, <:Any}...) = motor(Options(Dict{Symbol, Any}(o)))
 
-function compute(input_options::Options)
+function motor(input_options::Options)
     # =====================
     # Problem specification
     # =====================
@@ -32,50 +27,24 @@ function compute(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # property: x1 < 0.35 || x5 < 0.45
-    p = LinearConstraintProperty(Clause([LinearConstraint([1.; zeros(7)], 0.35),
-                                         LinearConstraint([zeros(4); 1.; zeros(3)], 0.45)]))
+    property = LinearConstraintProperty(Clause([
+        LinearConstraint([1.; zeros(7)], 0.35),
+        LinearConstraint([zeros(4); 1.; zeros(3)], 0.45)]))
 
-    # ===============
-    # Problem solving
-    # ===============
+    # =======================
+    # Problem default options
+    # =======================
+    partition = [(2*i-1:2*i) for i in 1:4] # 2D blocks
+
     if input_options[:mode] == "reach"
         problem_options = Options(:vars => [5],
-                                  :partition => [(2*i-1:2*i) for i in 1:4], # 2D blocks
+                                  :partition => partition,
                                   :plot_vars => [0, 5])
     elseif input_options[:mode] == "check"
-        problem_options = Options(:vars => [1, 5], # variables needed for property
-                                  :partition => [(2*i-1:2*i) for i in 1:4], # 2D blocks
-                                  :property => p)
+        problem_options = Options(:vars => [1, 5],
+                                  :partition => partition,
+                                  :property => property)
     end
 
-    result = solve(S, merge(problem_options, input_options))
-
-    # ========
-    # Plotting
-    # ========
-    if input_options[:mode] == "reach"
-        println("Plotting...")
-        tic()
-        plot(result)
-        @eval(savefig(@relpath "motor.png"))
-        toc()
-    end
-end # function
-
-# ===================================
-# Reach tube computation, dense time
-# ===================================
-
-info("warm-up run"; prefix=" ")
-compute(:δ => 1e-3, :N => 3, :mode=>"reach", :verbosity => "warn");
-
-info("dense time, 2D blocks Hyperrectangle"; prefix="BENCHMARK SETTINGS: ")
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info");
-
-info("dense time, 2D blocks HPolygon, cf. Table 1 HSCC"; prefix="BENCHMARK SETTINGS: ")
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info",
-        :set_type=>HPolygon, :lazy_sih=>false, :ε=>Inf);
-
-info("dense time, 1D blocks Interval"; prefix="BENCHMARK SETTINGS: ")
-compute(:δ => 1e-3, :T => 20.0, :mode=>"reach", :verbosity => "info",
-        :set_type=>Interval, :partition => [[i] for i in 1:8]);
+    return (S, merge(problem_options, input_options))
+end

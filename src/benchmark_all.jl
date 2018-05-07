@@ -1,6 +1,7 @@
 # script to run all SLICOT models in several benchmark settings
 
-using Reachability
+# Plots is required here, unless never used, to avoid an issue with "world age"
+using Reachability, Plots
 
 # model list
 models = [

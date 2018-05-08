@@ -26,7 +26,6 @@
 <param name="x23" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
 <param name="x24" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
 <param name="x25" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
-<param name="y1" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
 <param name="t" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
 <param name="u1" type="real" d1="1" d2="1" local="false" dynamics="const" controlled="true"/>
 <param name="stoptime" type="real" d1="1" d2="1" local="false" dynamics="const" controlled="true"/>

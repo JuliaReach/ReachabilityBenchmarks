@@ -7,7 +7,6 @@
     <param name="x4" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
     <param name="x5" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
     <param name="x6" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
-    <param name="y1" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
     <param name="t" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
     <param name="u1" type="real" d1="1" d2="1" local="false" dynamics="const" controlled="true" />
     <param name="stoptime" type="real" d1="1" d2="1" local="false" dynamics="const" controlled="true" />

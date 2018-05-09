@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" version="0.2" math="SpaceEx">
+<component id="root_net">
+<param name="x1" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="x2" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="x3" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="x4" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="x5" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="x6" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="x7" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="x8" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="x9" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="t" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<location id="1" name="negAngle">
+   <note>Location constraints: loc()==negAngle
+
+State variables: [x1,x2,x3,x4,x5,x6,x7,x8,x9,t]
+real parts of Eigenvalues: [-0.0446926,-0.0446926,-20.7606,-2.8299,-2.8299,-0.103395,-0.103395,2.04836e-14,2.04836e-14,0], imag parts of Eigenvalues: [42.2052,-42.2052,0,12.2035,-12.2035,0.440951,-0.440951,3.83939e-07,-3.83939e-07,0]
+Eigenvectors (columns): [
+0.0241775,0.00510335,0.0145281,0.133003,-1.36586,0.00121634,-0.00383942,-4.24008e-10,-7.47729e-15,0
+4.72452,-5.05977,37.4433,-291.941,-659.541,1.23072,-3.76817,-3.5334e-07,-6.21424e-12,0
+8.58577e-18,4.23255e-17,3.81262e-16,1.08297e-14,-6.47672e-15,3.60114e-13,4.89224e-13,-8.61884e-07,1.67327,0
+1.51995e-17,-8.75538e-17,3.10921e-17,-2.22569e-15,2.96336e-15,-2.55284e-13,8.52125e-14,-6.42437e-07,-3.44835e-13,0
+0.0145778,0.00241913,0.00112404,0.12212,0.377565,0.0776683,0.824532,-8.02534e-07,1.67327,0
+-0.102751,0.615154,-0.0233358,-4.95322,0.421822,-0.371609,-0.0510048,-6.42437e-07,-7.37954e-13,0
+-0.734208,1.2189,-4.06804,148.287,75.6299,-4.4394,-0.600237,-7.70924e-06,-2.17794e-12,0
+-0.0217692,-0.00365622,0.00180098,0.134259,0.291292,0.0777328,0.824307,-8.0257e-07,1.67327,0
+0.155284,-0.918613,-0.0373897,-3.93474,0.814115,-0.371517,-0.0509531,-6.42437e-07,4.4514e-13,0
+0,0,0,0,0,0,0,0,0,1
+]
+ </note>
+   <invariant>x1 &lt;= -0.0299999 </invariant>
+   <flow>x1&apos; == 0.0833333*x7-x9 &amp; x2&apos; == 13828.8*x1-26.6666*x2+60*x3+60*x4-5*x7-60*x8+716.666 &amp; x3&apos; == x4 &amp; x4&apos; == 5 &amp; x5&apos; == x6 &amp; x6&apos; == -714.285*x5-0.0399999*x6+714.285*x8 &amp; x7&apos; == -2777.77*x1+3.33333*x2-83.3333 &amp; x8&apos; == x9 &amp; x9&apos; == 99.9999*x1+999.999*x5-999.999*x8-0.00999999*x9+2.99999 &amp; t&apos; == 1 </flow>
+</location>
+<location id="2" name="deadzone">
+   <note>Location constraints: loc()==deadzone
+
+State variables: [x1,x2,x3,x4,x5,x6,x7,x8,x9,t]
+real parts of Eigenvalues: [-26.0514,-0.3076,-0.3076,0,0,-0.0112499,-0.0112499,-0.0275,2.50868e-12,0], imag parts of Eigenvalues: [0,0.738336,-0.738336,0,0,41.4039,-41.4039,0,0,0]
+Eigenvectors (columns): [
+-0.000405982,-0.317531,0.408412,0.999999,0.999999,0.178161,-0.0409369,0.71654,-26.0818,0
+-0.991913,1.18284,-0.143163,1.02348e-15,1.34961e-15,-2.54136e-16,-1.25463e-15,1.1744e-15,4.82947e-15,0
+-2.81812e-17,5.43225e-16,9.59428e-16,0.999999,0.999999,1.61778e-32,-5.00741e-33,2.86301e-29,-8.92497e-28,0
+0,0,0,0,-8.23275e-13,0,0,0,0,0
+0,0,0,0,0,0.127279,-0.0291484,-0.716541,26.0818,0
+0,0,0,0,0,1.20542,5.2702,0.0197048,5.88511e-11,0
+0.126917,-2.44646,-4.32087,9.98368e-14,9.70334e-14,-7.28583e-17,2.25514e-17,-1.28938e-13,4.01945e-12,0
+0,0,0,0,0,-0.178161,0.0409369,-0.71654,26.0818,0
+0,0,0,0,0,-1.69294,-7.37706,0.0197048,6.61491e-11,0
+0,0,0,0,0,0,0,0,0,1
+]
+ </note>
+   <invariant>x1 &gt;= -0.0299999 &amp; x1 &lt;= 0.0299999 </invariant>
+   <flow>x1&apos; == 0.0833333*x7-x9 &amp; x2&apos; == -60*x1-26.6666*x2+60*x3+60*x4-5*x7-60*x8+300 &amp; x3&apos; == x4 &amp; x4&apos; == 5 &amp; x5&apos; == x6 &amp; x6&apos; == -714.285*x5-0.0399999*x6+714.285*x8 &amp; x7&apos; == 3.33333*x2 &amp; x8&apos; == x9 &amp; x9&apos; == 999.999*x5-999.999*x8-0.00999999*x9 &amp; t&apos; == 1 </flow>
+</location>
+<location id="3" name="posAngle">
+   <note>Location constraints: loc()==posAngle
+
+State variables: [x1,x2,x3,x4,x5,x6,x7,x8,x9,t]
+real parts of Eigenvalues: [-0.0446926,-0.0446926,-20.7606,-2.8299,-2.8299,-0.103395,-0.103395,2.04836e-14,2.04836e-14,0], imag parts of Eigenvalues: [42.2052,-42.2052,0,12.2035,-12.2035,0.440951,-0.440951,3.83939e-07,-3.83939e-07,0]
+Eigenvectors (columns): [
+0.0241775,0.00510335,0.0145281,0.133003,-1.36586,0.00121634,-0.00383942,-4.24008e-10,-7.47729e-15,0
+4.72452,-5.05977,37.4433,-291.941,-659.541,1.23072,-3.76817,-3.5334e-07,-6.21424e-12,0
+8.58577e-18,4.23255e-17,3.81262e-16,1.08297e-14,-6.47672e-15,3.60114e-13,4.89224e-13,-8.61884e-07,1.67327,0
+1.51995e-17,-8.75538e-17,3.10921e-17,-2.22569e-15,2.96336e-15,-2.55284e-13,8.52125e-14,-6.42437e-07,-3.44835e-13,0
+0.0145778,0.00241913,0.00112404,0.12212,0.377565,0.0776683,0.824532,-8.02534e-07,1.67327,0
+-0.102751,0.615154,-0.0233358,-4.95322,0.421822,-0.371609,-0.0510048,-6.42437e-07,-7.37954e-13,0
+-0.734208,1.2189,-4.06804,148.287,75.6299,-4.4394,-0.600237,-7.70924e-06,-2.17794e-12,0
+-0.0217692,-0.00365622,0.00180098,0.134259,0.291292,0.0777328,0.824307,-8.0257e-07,1.67327,0
+0.155284,-0.918613,-0.0373897,-3.93474,0.814115,-0.371517,-0.0509531,-6.42437e-07,4.4514e-13,0
+0,0,0,0,0,0,0,0,0,1
+]
+ </note>
+   <invariant>x1 &gt;= 0.0299999 </invariant>
+   <flow>x1&apos; == 0.0833333*x7-x9 &amp; x2&apos; == 13828.8*x1-26.6666*x2+60*x3+60*x4-5*x7-60*x8-116.666 &amp; x3&apos; == x4 &amp; x4&apos; == 5 &amp; x5&apos; == x6 &amp; x6&apos; == -714.285*x5-0.0399999*x6+714.285*x8 &amp; x7&apos; == -2777.77*x1+3.33333*x2+83.3333 &amp; x8&apos; == x9 &amp; x9&apos; == 99.9999*x1+999.999*x5-999.999*x8-0.00999999*x9-2.99999 &amp; t&apos; == 1 </flow>
+</location>
+<location id="4" name="negAngleInit">
+   <note>Location constraints: loc()==negAngleInit
+
+State variables: [x1,x2,x3,x4,x5,x6,x7,x8,x9,t]
+real parts of Eigenvalues: [-0.0446926,-0.0446926,-20.7606,-2.8299,-2.8299,-0.103395,-0.103395,2.04836e-14,2.04836e-14,0], imag parts of Eigenvalues: [42.2052,-42.2052,0,12.2035,-12.2035,0.440951,-0.440951,3.83939e-07,-3.83939e-07,0]
+Eigenvectors (columns): [
+0.0241775,0.00510335,0.0145281,0.133003,-1.36586,0.00121634,-0.00383942,-4.24008e-10,-7.47729e-15,0
+4.72452,-5.05977,37.4433,-291.941,-659.541,1.23072,-3.76817,-3.5334e-07,-6.21424e-12,0
+8.58577e-18,4.23255e-17,3.81262e-16,1.08297e-14,-6.47672e-15,3.60114e-13,4.89224e-13,-8.61884e-07,1.67327,0
+1.51995e-17,-8.75538e-17,3.10921e-17,-2.22569e-15,2.96336e-15,-2.55284e-13,8.52125e-14,-6.42437e-07,-3.44835e-13,0
+0.0145778,0.00241913,0.00112404,0.12212,0.377565,0.0776683,0.824532,-8.02534e-07,1.67327,0
+-0.102751,0.615154,-0.0233358,-4.95322,0.421822,-0.371609,-0.0510048,-6.42437e-07,-7.37954e-13,0
+-0.734208,1.2189,-4.06804,148.287,75.6299,-4.4394,-0.600237,-7.70924e-06,-2.17794e-12,0
+-0.0217692,-0.00365622,0.00180098,0.134259,0.291292,0.0777328,0.824307,-8.0257e-07,1.67327,0
+0.155284,-0.918613,-0.0373897,-3.93474,0.814115,-0.371517,-0.0509531,-6.42437e-07,4.4514e-13,0
+0,0,0,0,0,0,0,0,0,1
+]
+ </note>
+   <invariant>t &lt;= 0.199999 </invariant>
+   <flow>x1&apos; == 0.0833333*x7-x9 &amp; x2&apos; == 13828.8*x1-26.6666*x2+60*x3+60*x4-5*x7-60*x8+116.666 &amp; x3&apos; == x4 &amp; x4&apos; == -5 &amp; x5&apos; == x6 &amp; x6&apos; == -714.285*x5-0.0399999*x6+714.285*x8 &amp; x7&apos; == -2777.77*x1+3.33333*x2-83.3333 &amp; x8&apos; == x9 &amp; x9&apos; == 99.9999*x1+999.999*x5-999.999*x8-0.00999999*x9+2.99999 &amp; t&apos; == 1 </flow>
+</location>
+<transition source="4" target="1">
+   <label></label>
+   <guard> t == 0.199999 &amp; x1 &lt;= -0.0299999 </guard>
+   <assignment> x1&apos; == x1 &amp; x2&apos; == x2 &amp; x3&apos; == x3 &amp; x4&apos; == x4 &amp; x5&apos; == x5 &amp; x6&apos; == x6 &amp; x7&apos; == x7 &amp; x8&apos; == x8 &amp; x9&apos; == x9 &amp; t&apos; == t </assignment>
+</transition>
+<transition source="1" target="2">
+   <label></label>
+   <guard> x1 == -0.0299999 </guard>
+   <assignment> x1&apos; == x1 &amp; x2&apos; == x2 &amp; x3&apos; == x3 &amp; x4&apos; == x4 &amp; x5&apos; == x5 &amp; x6&apos; == x6 &amp; x7&apos; == x7 &amp; x8&apos; == x8 &amp; x9&apos; == x9 &amp; t&apos; == t </assignment>
+</transition>
+<transition source="2" target="3">
+   <label></label>
+   <guard> x1 == 0.0299999 </guard>
+   <assignment> x1&apos; == x1 &amp; x2&apos; == x2 &amp; x3&apos; == x3 &amp; x4&apos; == x4 &amp; x5&apos; == x5 &amp; x6&apos; == x6 &amp; x7&apos; == x7 &amp; x8&apos; == x8 &amp; x9&apos; == x9 &amp; t&apos; == t </assignment>
+</transition>
+<transition source="2" target="1">
+   <label></label>
+   <guard> x1 == -0.0299999 </guard>
+   <assignment> x1&apos; == x1 &amp; x2&apos; == x2 &amp; x3&apos; == x3 &amp; x4&apos; == x4 &amp; x5&apos; == x5 &amp; x6&apos; == x6 &amp; x7&apos; == x7 &amp; x8&apos; == x8 &amp; x9&apos; == x9 &amp; t&apos; == t </assignment>
+</transition>
+<transition source="3" target="2">
+   <label></label>
+   <guard> x1 &lt;= 0.0299999 </guard>
+   <assignment> x1&apos; == x1 &amp; x2&apos; == x2 &amp; x3&apos; == x3 &amp; x4&apos; == x4 &amp; x5&apos; == x5 &amp; x6&apos; == x6 &amp; x7&apos; == x7 &amp; x8&apos; == x8 &amp; x9&apos; == x9 &amp; t&apos; == t </assignment>
+</transition>
+</component>
+</sspaceex>

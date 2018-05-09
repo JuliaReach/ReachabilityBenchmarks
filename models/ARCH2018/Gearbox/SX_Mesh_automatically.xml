@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" version="0.2" math="SpaceEx">
+<component id="mesh">
+<param name="t" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="vx" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="vy" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="px" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="py" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="I" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true"/>
+<param name="Stateflowtransition1" type="label" local="false"/>
+<param name="Stateflowtransition2" type="label" local="false"/>
+<param name="Stateflowtransition31" type="label" local="false"/>
+<param name="Stateflowtransition32" type="label" local="false"/>
+<param name="Stateflowtransition33" type="label" local="false"/>
+<param name="Stateflowtransition34" type="label" local="false"/>
+<location id="1" name="loc01movefree">
+   <note>Location constraints: loc(Stateflow_2)==move_free
+
+State variables: [t,vx,vy,px,py,I]
+real parts of Eigenvalues: [0,0,0,0,0,0], imag parts of Eigenvalues: [0,0,0,0,0,0]
+Eigenvectors (columns): [
+1,0,0,0,0,0
+0,0,-4.44089e-16,0,0,0
+0,0,0,0,4.44089e-16,0
+0,1,1,0,0,0
+0,0,0,1,-1,0
+0,0,0,0,0,1
+]
+ </note>
+   <invariant>t &lt;= 0.5 &amp; px &lt;= -0.00299999 &amp; py+0.726542*px &lt;= 0 &amp; py-0.726542*px &gt;= 0 </invariant>
+   <flow>t&apos; == 1 &amp; vx&apos; == 21.875 &amp; vy&apos; == -0.114285 &amp; px&apos; == vx &amp; py&apos; == vy &amp; I&apos; == 0 </flow>
+</location>
+<location id="2" name="loc01meshed">
+   <note>Location constraints: loc(Stateflow_2)==meshed
+
+ </note>
+   <invariant>t &lt;= 0.5 </invariant>
+   <flow>t&apos; == 0 </flow>
+</location>
+<transition source="1" target="1">
+   <label>Stateflowtransition1</label>
+   <guard> py+0.726542*px == 0 &amp; 0.587785*vx+0.809016*vy &gt; 0 &amp; t &lt;= 0.5 &amp; px &lt;= -0.00299999 </guard>
+   <assignment> t&apos; == t &amp; vx&apos; == -0.423299*vx-1.959*vy &amp; vy&apos; == -0.346343*vx+0.523299*vy &amp; px&apos; == px &amp; py&apos; == py &amp; I&apos; == 7.74867*vx+10.6651*vy+I </assignment>
+</transition>
+<transition source="1" target="1">
+   <label>Stateflowtransition2</label>
+   <guard> py-0.726542*px == 0 &amp; 0.587785*vx-0.809016*vy &gt; 0 &amp; t &lt;= 0.5 &amp; px &lt;= -0.00299999 </guard>
+   <assignment> t&apos; == t &amp; vx&apos; == -0.423299*vx+1.959*vy &amp; vy&apos; == 0.346343*vx+0.523299*vy &amp; px&apos; == px &amp; py&apos; == py &amp; I&apos; == 7.74867*vx-10.6651*vy+I </assignment>
+</transition>
+<transition source="1" target="2">
+   <label>Stateflowtransition31</label>
+   <guard> px == -0.00299999 &amp; vx &gt;= 0 &amp; vy &gt;= 0 &amp; py+0.726542*px &lt;= 0 &amp; py-0.726542*px &gt;= 0 &amp; t &lt;= 0.5 </guard>
+   <assignment> t&apos; == t &amp; vx&apos; == 0 &amp; vy&apos; == 0 &amp; px&apos; == px &amp; py&apos; == py &amp; I&apos; == 3.19999*vx+3.19999*vy+I </assignment>
+</transition>
+<transition source="1" target="2">
+   <label>Stateflowtransition32</label>
+   <guard> px == -0.00299999 &amp; vx &gt;= 0 &amp; vy &lt;= 0 &amp; py+0.726542*px &lt;= 0 &amp; py-0.726542*px &gt;= 0 &amp; t &lt;= 0.5 </guard>
+   <assignment> t&apos; == t &amp; vx&apos; == 0 &amp; vy&apos; == 0 &amp; px&apos; == px &amp; py&apos; == py &amp; I&apos; == 3.19999*vx-3.19999*vy+I </assignment>
+</transition>
+<transition source="1" target="2">
+   <label>Stateflowtransition33</label>
+   <guard> px == -0.00299999 &amp; vx &lt;= 0 &amp; vy &gt;= 0 &amp; py+0.726542*px &lt;= 0 &amp; py-0.726542*px &gt;= 0 &amp; t &lt;= 0.5 </guard>
+   <assignment> t&apos; == t &amp; vx&apos; == 0 &amp; vy&apos; == 0 &amp; px&apos; == px &amp; py&apos; == py &amp; I&apos; == -3.19999*vx+3.19999*vy+I </assignment>
+</transition>
+<transition source="1" target="2">
+   <label>Stateflowtransition34</label>
+   <guard> px == -0.00299999 &amp; vx &lt;= 0 &amp; vy &lt;= 0 &amp; py+0.726542*px &lt;= 0 &amp; py-0.726542*px &gt;= 0 &amp; t &lt;= 0.5 </guard>
+   <assignment> t&apos; == t &amp; vx&apos; == 0 &amp; vy&apos; == 0 &amp; px&apos; == px &amp; py&apos; == py &amp; I&apos; == -3.19999*vx-3.19999*vy+I </assignment>
+</transition>
+</component>
+</sspaceex>

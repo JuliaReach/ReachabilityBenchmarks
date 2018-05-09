@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" math="SpaceEx" version="0.2">
   <component id="root_net">
-    <note>Created by Hyst v1.4
-Hybrid Automaton in SpaceEx
-Converted from file: 
-Command Line arguments: -gen drivetrain "-theta 1 -init_scale 0.05" -o drivetrain_theta1_5percent.xml -tool spaceex ""</note>
     <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x1" type="real" />
     <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x2" type="real" />
     <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x3" type="real" />

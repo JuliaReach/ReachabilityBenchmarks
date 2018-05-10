@@ -2,13 +2,13 @@
 <sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" version="0.2" math="SpaceEx">
   <component id="sys_platoon">
     <param name="t" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
-    <param name="e1" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
+    <param name="xe1" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
     <param name="v1" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
     <param name="a1" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
-    <param name="e2" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
+    <param name="xe2" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
     <param name="v2" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
     <param name="a2" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
-    <param name="e3" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
+    <param name="xe3" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
     <param name="v3" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
     <param name="a3" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="true" />
     <param name="aL" type="real" d1="1" d2="1" local="false" dynamics="any" controlled="false" />
@@ -17,7 +17,7 @@
     <location id="1" name="communicationcommunication" x="210.0" y="110.0">
       <note>Location constraints: loc(break_pattern)==communication and loc(platoon)==communication
 
-State variables: [t,e1,v1,a1,e2,v2,a2,e3,v3,a3]
+State variables: [t,xe1,v1,a1,xe2,v2,a2,xe3,v3,a3]
 real parts of Eigenvalues: [0,-0.320077,-0.612296,-0.612296,-0.560333,-0.560333,-1.55739,-1.55739,-2.1027,-2.06776], imag parts of Eigenvalues: [0,0,0.875205,-0.875205,0.805945,-0.805945,0.73023,-0.73023,0,0]
 Eigenvectors (columns): [
 1,0,0,0,0,0,0,0,0,0
@@ -32,12 +32,12 @@ Eigenvectors (columns): [
 0,-0.134792,0.153548,-0.048338,0.642463,-0.0751525,3.59524,-3.27924,0.702051,-1.70308
 ]</note>
       <invariant>t &lt;= 20 &amp; -aL &lt;= 9 &amp; aL &lt;= 1</invariant>
-      <flow>t' == 1 &amp; e1' == v1 &amp; v1' == -a1-4 &amp; a1' == 1.60499*e1+4.86799*v1-3.57539*a1-0.819799*e2+0.426999*v2-0.0449999*a2-0.194199*e3+0.362599*v3-0.0945999*a3 &amp; e2' == v2 &amp; v2' == a1-a2 &amp; a2' == 0.871799*e1+3.81399*v1-0.0753999*a1+1.19359*e2+3.62579*v2-3.23959*a2-0.594999*e3+0.129399*v3-0.0795999*a3 &amp; e3' == v3 &amp; v3' == a2-a3 &amp; a3' == 0.713199*e1+3.57299*v1-0.0963999*a1+0.847199*e2+3.25679*v2-0.0875999*a2+1.27259*e3+3.07199*v3-3.13559*a3</flow>
+      <flow>t' == 1 &amp; xe1' == v1 &amp; v1' == -a1-4 &amp; a1' == 1.60499*xe1+4.86799*v1-3.57539*a1-0.819799*xe2+0.426999*v2-0.0449999*a2-0.194199*xe3+0.362599*v3-0.0945999*a3 &amp; xe2' == v2 &amp; v2' == a1-a2 &amp; a2' == 0.871799*xe1+3.81399*v1-0.0753999*a1+1.19359*xe2+3.62579*v2-3.23959*a2-0.594999*xe3+0.129399*v3-0.0795999*a3 &amp; xe3' == v3 &amp; v3' == a2-a3 &amp; a3' == 0.713199*xe1+3.57299*v1-0.0963999*a1+0.847199*xe2+3.25679*v2-0.0875999*a2+1.27259*xe3+3.07199*v3-3.13559*a3</flow>
     </location>
     <location id="2" name="nocommunicationNocommunication" x="434.0" y="266.0" width="800.0" height="218.0">
       <note>Location constraints: loc(break_pattern)==no_communication and loc(platoon)==no_communication
 
-State variables: [t,e1,v1,a1,e2,v2,a2,e3,v3,a3]
+State variables: [t,xe1,v1,a1,xe2,v2,a2,xe3,v3,a3]
 real parts of Eigenvalues: [0,-1.552,-1.552,-1.84382,-1.33793,-1.33793,-0.645886,-0.645886,-0.471395,-0.563726], imag parts of Eigenvalues: [0,0.998035,-0.998035,0,0.57207,-0.57207,0.522518,-0.522518,0,0]
 Eigenvectors (columns): [
 1,0,0,0,0,0,0,0,0,0
@@ -52,21 +52,21 @@ Eigenvectors (columns): [
 0,0.141803,0.291103,-0.857627,-4.9313,0.414731,-1.63396,0.842622,0.592604,10.6479
 ]</note>
       <invariant>t &lt;= 20 &amp; -aL &lt;= 9 &amp; aL &lt;= 1</invariant>
-      <flow>t' == 1 &amp; e1' == v1 &amp; v1' == -a1-4 &amp; a1' == 1.60499*e1+4.86799*v1-3.57539*a1 &amp; 
-e2' == v2 &amp; v2' == a1-a2 &amp; a2' == 1.19359*e2+3.62579*v2-3.23959*a2 &amp; e3' == v3 &amp;
+      <flow>t' == 1 &amp; xe1' == v1 &amp; v1' == -a1-4 &amp; a1' == 1.60499*xe1+4.86799*v1-3.57539*a1 &amp; 
+xe2' == v2 &amp; v2' == a1-a2 &amp; a2' == 1.19359*xe2+3.62579*v2-3.23959*a2 &amp; xe3' == v3 &amp;
 v3' == a2-a3 &amp;
- a3' == 0.713199*e1+3.57299*v1-0.0963999*a1+0.847199*e2+3.25679*v2-0.0875999*a2+1.27259*e3+3.07199*v3-3.13559*a3</flow>
+ a3' == 0.713199*xe1+3.57299*v1-0.0963999*a1+0.847199*xe2+3.25679*v2-0.0875999*a2+1.27259*xe3+3.07199*v3-3.13559*a3</flow>
     </location>
     <transition source="1" target="2">
       <label>breaking</label>
       <guard>t &gt;= 10 &amp; t &lt;= 20</guard>
-      <assignment>t' == 0 &amp; e1' == e1 &amp; v1' == v1 &amp; a1' == a1 &amp; e2' == e2 &amp; v2' == v2 &amp; a2' == a2 &amp; e3' == e3 &amp; v3' == v3 &amp; a3' == a3</assignment>
+      <assignment>t' == 0 &amp; xe1' == xe1 &amp; v1' == v1 &amp; a1' == a1 &amp; xe2' == xe2 &amp; v2' == v2 &amp; a2' == a2 &amp; xe3' == xe3 &amp; v3' == v3 &amp; a3' == a3</assignment>
       <labelposition x="-49.0" y="4.0" />
     </transition>
     <transition source="2" target="1">
       <label>restoring</label>
       <guard>t &lt;= 20</guard>
-      <assignment>t' == 0 &amp; e1' == e1 &amp; v1' == v1 &amp; a1' == a1 &amp; e2' == e2 &amp; v2' == v2 &amp; a2' == a2 &amp; e3' == e3 &amp; v3' == v3 &amp; a3' == a3</assignment>
+      <assignment>t' == 0 &amp; xe1' == xe1 &amp; v1' == v1 &amp; a1' == a1 &amp; xe2' == xe2 &amp; v2' == v2 &amp; a2' == a2 &amp; xe3' == xe3 &amp; v3' == v3 &amp; a3' == a3</assignment>
       <labelposition x="13.0" y="-50.0" />
       <middlepoint x="348.5" y="115.5" />
     </transition>

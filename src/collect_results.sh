@@ -33,7 +33,7 @@ function convert_to_scientific() {
                 # at least two digits remain
                 AFTER="${D:1:2}"
             fi
-            SHARED="${D:0:1}.${AFTER}e$EXPONENT"
+            BEFORE="${D:0:1}"
         else
             # number is bigger than 1
             L_I=${#I}
@@ -50,7 +50,12 @@ function convert_to_scientific() {
                 AFTER=${I:1:2}
                 EXPONENT=$(($L_I - 1))
             fi
-            SHARED="${I:0:1}.${AFTER}e$EXPONENT"
+            BEFORE="${I:0:1}"
+        fi
+        if [ $EXPONENT -eq 0 ]; then
+            SHARED="$BEFORE.$AFTER"
+        else
+            SHARED="$BEFORE.${AFTER}e$EXPONENT"
         fi
     else
         # scientific notation

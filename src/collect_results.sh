@@ -95,8 +95,11 @@ function collect() {
                     convert_to_scientific $T
                     DISC_SC=$SHARED
                 elif [ $COUNTER -eq 4 ]; then
-                    TOTAL=$T
-                    convert_to_scientific $T
+                    # total runtime has to include discretization time
+                    DISC_DEC=$(echo "$DISC" | awk '{ print +$1 }')
+                    T_DEC=$(echo "$T" | awk '{ print +$1 }')
+                    TOTAL=$(echo "$DISC_DEC + $T_DEC" | bc)
+                    convert_to_scientific $TOTAL
                     TOTAL_SC=$SHARED
                 fi
                 COUNTER=$(($COUNTER + 1))

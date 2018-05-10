@@ -76,7 +76,7 @@ function collect() {
         fi
         touch "$OUTPUT_FILE"
         
-        echo -e "Model\tdiscretize\ttotal\n" >> "$OUTPUT_FILE"
+        echo -e "Model\tdiscretize\tanalyze\t\ttotal\n" >> "$OUTPUT_FILE"
         for MODEL in ${MODELS[@]}; do
             FILE="$MODEL-$MODE"
             
@@ -96,16 +96,19 @@ function collect() {
                     DISC_SC=$SHARED
                 elif [ $COUNTER -eq 4 ]; then
                     # total runtime has to include discretization time
+                    ANALYZE=$T
+                    convert_to_scientific $ANALYZE
+                    ANALYZE_SC=$SHARED
                     DISC_DEC=$(echo "$DISC" | awk '{ print +$1 }')
-                    T_DEC=$(echo "$T" | awk '{ print +$1 }')
-                    TOTAL=$(echo "$DISC_DEC + $T_DEC" | bc)
+                    ANALYZE_DEC=$(echo "$ANALYZE" | awk '{ print +$1 }')
+                    TOTAL=$(echo "$DISC_DEC + $ANALYZE_DEC" | bc | awk '{ print +$1 }')
                     convert_to_scientific $TOTAL
                     TOTAL_SC=$SHARED
                 fi
                 COUNTER=$(($COUNTER + 1))
             done
             
-            echo -e "$MODEL\t$DISC\t$TOTAL\n\t$DISC_SC\t\t$TOTAL_SC" >> "$OUTPUT_FILE"
+            echo -e "$MODEL\t$DISC\t$ANALYZE\t$TOTAL\n\t$DISC_SC\t\t$ANALYZE_SC\t\t$TOTAL_SC" >> "$OUTPUT_FILE"
         done
     done
 }

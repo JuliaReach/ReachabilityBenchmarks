@@ -36,7 +36,7 @@ function check_1D_dense(models::Vector{String}, deltas::Vector{Float64})
         S, options_raw = func(:mode => "check")
 
         # options
-        n = Systems.statedim(S)
+        n = MathematicalSystems.statedim(S)
         dict_raw = options_raw.dict
         dict_raw[:verbosity] = "info"
         dict_raw[:δ] = delta

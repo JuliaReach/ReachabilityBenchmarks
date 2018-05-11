@@ -31,7 +31,7 @@ function check_1D_discrete(models::Vector{String})
         S, options_raw = func(:mode => "check")
 
         # options
-        n = Systems.statedim(S)
+        n = MathematicalSystems.statedim(S)
         dict_raw = options_raw.dict
         dict_raw[:verbosity] = "info"
         dict_raw[:δ] = 5e-3

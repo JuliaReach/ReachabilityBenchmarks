@@ -40,7 +40,7 @@ function reach_1D_all(models::Vector{String}, create_plots::Bool=false)
         S, options_raw = func(:mode => "reach")
 
         # options
-        n = Systems.statedim(S)
+        n = MathematicalSystems.statedim(S)
         dict_raw = options_raw.dict
         dict_raw[:verbosity] = "info"
         dict_raw[:δ] = 1e-3

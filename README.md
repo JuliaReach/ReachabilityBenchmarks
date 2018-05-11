@@ -56,3 +56,9 @@ julia -e 'include("src/benchmark_all.jl")'
 The results are stored in the current folder.
 There is also a bash script which can be modified (by just uncommenting the
 respective parts) to run SpaceEx on all the models.
+
+## Screenshots
+
+![buildingT1](models/ARCH2018/Building/buildingT1.png)
+
+![buildingT20](models/ARCH2018/Building/buildingT20.png )

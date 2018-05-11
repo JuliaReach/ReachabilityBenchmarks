@@ -38,6 +38,7 @@ function check_1D_discrete(models::Vector{String})
         dict_raw[:approx_model] = "nobloating"
         dict_raw[:partition] = [[i] for i in 1:n]
         dict_raw[:set_type] = Interval
+        dict_raw[:eager_checking] = false
 
         for i in 1:2
             dict = copy(dict_raw)

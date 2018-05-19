@@ -57,6 +57,12 @@ The results are stored in the current folder.
 There is also a bash script which can be modified (by just uncommenting the
 respective parts) to run SpaceEx on all the models.
 
+## Exploring the tutorial notebooks
+
+Follow [this Jupyter nbviewer link](https://nbviewer.jupyter.org/github/JuliaReach/ReachabilityBenchmarks/tree/master/models/) to access the folder of available models, and click on files of type ".ipynb" to open the notebooks.
+
+For example, in [models/ARCH2018/SpaceStation](https://nbviewer.jupyter.org/github/JuliaReach/ReachabilityBenchmarks/tree/master/models/) you will find a safety property check for the 270-variable structural model of component 1R (Russian service module) of the International Space Station.
+
 ## Screenshots
 
 ![buildingT1](models/ARCH2018/Building/buildingT1.png)

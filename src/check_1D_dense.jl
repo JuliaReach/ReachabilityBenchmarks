@@ -42,7 +42,7 @@ function check_1D_dense(models::Vector{String}, deltas::Vector{Float64})
         dict_raw[:δ] = delta
         dict_raw[:partition] = [[i] for i in 1:n]
         dict_raw[:set_type] = Interval
-        dict_raw[:eager_checking] = false
+        dict_raw[:lazy_inputs_interval] = 0
 
         for i in 1:2
             dict = copy(dict_raw)

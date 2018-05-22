@@ -1,9 +1,10 @@
-# check property, 1D blocks, intervals, fixed delta, discrete time
+# check property, kD blocks, intervals, given delta, dense time
 using Reachability
 
-check_1D_discrete(model::String) = check_1D_discrete([model])
+check_kD_dense(model::String, delta::Float64) =
+    check_kD_dense([model], [delta])
 
-function check_1D_discrete(models::Vector{String})
+function check_kD_dense(models::Vector{String}, deltas::Vector{Float64})
     # load models
     models_loaded = false
     for model in models
@@ -21,9 +22,13 @@ function check_1D_discrete(models::Vector{String})
         return
     end
 
-    println("-- benchmark suite 'check_1D_discrete' --")
+    println("-- benchmark suite 'check_kD_dense' --")
 
-    for model in models
+    @assert length(models) == length(deltas) "the input lengths must be equal"
+    for i in 1:length(models)
+        model = models[i]
+        delta = deltas[i]
+
         println("- analyzing model '$model' -")
 
         # raw model
@@ -34,12 +39,7 @@ function check_1D_discrete(models::Vector{String})
         n = MathematicalSystems.statedim(S)
         dict_raw = options_raw.dict
         dict_raw[:verbosity] = "info"
-        dict_raw[:δ] = 5e-3
-        dict_raw[:approx_model] = "nobloating"
-        dict_raw[:partition] = [[i] for i in 1:n]
-        dict_raw[:set_type] = Interval
-        dict_raw[:lazy_inputs_interval] = 0
-        dict_raw[:eager_checking] = false
+        dict_raw[:δ] = delta
 
         for i in 1:2
             dict = copy(dict_raw)
@@ -49,7 +49,7 @@ function check_1D_discrete(models::Vector{String})
             else
                 # benchmark settings
                 dict[:T] = 20.
-                dict[:logfile] = "$model-check-1D-discrete-fixedstep.txt"
+                dict[:logfile] = "$model-check-kD-dense-givenstep.txt"
             end
             result = solve(S, Options(dict))
         end

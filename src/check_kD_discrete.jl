@@ -1,9 +1,9 @@
-# check property, 1D blocks, intervals, fixed delta, discrete time
+# check property, kD blocks, intervals, fixed delta, discrete time
 using Reachability
 
-check_1D_discrete(model::String) = check_1D_discrete([model])
+check_kD_discrete(model::String) = check_kD_discrete([model])
 
-function check_1D_discrete(models::Vector{String})
+function check_kD_discrete(models::Vector{String})
     # load models
     models_loaded = false
     for model in models
@@ -21,7 +21,7 @@ function check_1D_discrete(models::Vector{String})
         return
     end
 
-    println("-- benchmark suite 'check_1D_discrete' --")
+    println("-- benchmark suite 'check_kD_discrete' --")
 
     for model in models
         println("- analyzing model '$model' -")
@@ -36,9 +36,6 @@ function check_1D_discrete(models::Vector{String})
         dict_raw[:verbosity] = "info"
         dict_raw[:δ] = 5e-3
         dict_raw[:approx_model] = "nobloating"
-        dict_raw[:partition] = [[i] for i in 1:n]
-        dict_raw[:set_type] = Interval
-        dict_raw[:lazy_inputs_interval] = 0
         dict_raw[:eager_checking] = false
 
         for i in 1:2
@@ -49,7 +46,7 @@ function check_1D_discrete(models::Vector{String})
             else
                 # benchmark settings
                 dict[:T] = 20.
-                dict[:logfile] = "$model-check-1D-discrete-fixedstep.txt"
+                dict[:logfile] = "$model-check-kD-discrete-fixedstep.txt"
             end
             result = solve(S, Options(dict))
         end

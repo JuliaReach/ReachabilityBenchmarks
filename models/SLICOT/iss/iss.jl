@@ -42,7 +42,7 @@ function iss(input_options::Options)
         problem_options = Options(:vars => 136:270,
                                   :partition => partition_135D,
                                   :property => property,
-                                  :lazy_inputs_interval => 2147483647,
+                                  :lazy_inputs_interval => -1,
                                   :assume_sparse => true)
     end
 

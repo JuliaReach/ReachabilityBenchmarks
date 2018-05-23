@@ -42,7 +42,7 @@ function fom(input_options::Options)
         problem_options = Options(:vars => 1:1006,
                                   :partition => partition_6D,
                                   :property => property,
-                                  :lazy_inputs_interval => 2147483647,
+                                  :lazy_inputs_interval => -1,
                                   :assume_sparse => true)
     end
 

@@ -36,6 +36,7 @@ function fom(input_options::Options)
         problem_options = Options(:vars => [1],
                                   :partition => partition_2D,
                                   :plot_vars => [0, 1],
+                                  :lazy_expm_discretize => true,
                                   :assume_sparse => true)
         # :projection_matrix => sparse(read(matopen(@relpath "out.mat"), "M")),
     elseif input_options[:mode] == "check"
@@ -43,13 +44,8 @@ function fom(input_options::Options)
                                   :partition => partition_6D,
                                   :property => property,
                                   :lazy_inputs_interval => -1,
+                                  :lazy_expm_discretize => true,
                                   :assume_sparse => true)
-    end
-
-    # use lazy_expm option if no more than 10 variables are needed
-    options = merge(problem_options, input_options)
-    if !haskey(options.dict, :lazy_expm) && length(options[:vars]) <= 10
-        options.dict[:lazy_expm] = true
     end
 
     return (S, options)

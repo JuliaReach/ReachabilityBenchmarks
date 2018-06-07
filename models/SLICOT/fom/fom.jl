@@ -48,5 +48,5 @@ function fom(input_options::Options)
                                   :assume_sparse => true)
     end
 
-    return (S, options)
+    return (S, merge(problem_options, input_options))
 end

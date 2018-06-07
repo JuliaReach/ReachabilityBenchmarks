@@ -92,11 +92,10 @@ check_1D_dense(models_filtered, deltas)
 
 
 # -- check_kD_dense --
-# only use iss and fom; use default partition
-models_filtered = filter(e -> e ∈ ["iss", "fom"], models)
+# only use iss; use default partition
+models_filtered = filter(e -> e ∈ ["iss"], models)
 delta_map = Dict(
     "iss" => 6e-4,
-    "fom" => 5e-4,
    )
 deltas = Vector{Float64}(length(models_filtered))
 for (i, model) in enumerate(models_filtered)

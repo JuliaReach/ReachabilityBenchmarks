@@ -4,7 +4,7 @@
 using Reachability, Plots
 
 # model list
-models = [
+models = String[
     "motor",
     "building",
     "pde",

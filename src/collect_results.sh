@@ -9,6 +9,8 @@ MODES=( \
        "reach-1D-fixedstep-allvars.txt" \
        "check-1D-dense-givenstep.txt" \
        "check-1D-discrete-fixedstep.txt" \
+       "check-kD-dense-givenstep.txt" \
+       "check-kD-discrete-fixedstep.txt" \
        "reach-2D-box-fixedstep-twovars.txt" \
        "reach-2D-eps-fixedstep-twovars.txt" \
       )

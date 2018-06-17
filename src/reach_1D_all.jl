@@ -47,9 +47,6 @@ function reach_1D_all(models::Vector{String}, create_plots::Bool=false)
         dict_raw[:partition] = [[i] for i in 1:n]
         dict_raw[:set_type] = Interval
         dict_raw[:vars] = 1:n
-        if n < 5000
-            dict_raw[:lazy_expm] = false
-        end
 
         for i in 1:2
             dict = copy(dict_raw)

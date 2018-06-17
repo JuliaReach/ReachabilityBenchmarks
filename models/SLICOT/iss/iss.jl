@@ -30,17 +30,20 @@ function iss(input_options::Options)
     # =======================
     # Problem default options
     # =======================
-    partition = [(2*i-1:2*i) for i in 1:135] # 2D blocks
+    partition_2D = [(2*i-1:2*i) for i in 1:135] # 2D blocks
+    partition_135D = [1:135, 136:270] # 135D blocks
+    partition_1D_135D = vcat([[i] for i in 1:135], [136:270]) # mixed 1D and 135D blocks
 
     if input_options[:mode] == "reach"
         problem_options = Options(:vars => [182],
-                                  :partition => partition,
+                                  :partition => partition_2D,
                                   :plot_vars => [0, 182],
                                   :assume_sparse => true)
     elseif input_options[:mode] == "check"
         problem_options = Options(:vars => 136:270,
-                                  :partition => partition,
+                                  :partition => partition_1D_135D,
                                   :property => property,
+                                  :lazy_inputs_interval => -1,
                                   :assume_sparse => true)
     end
 

@@ -1,34 +1,36 @@
-r"""
-This script reads a file in gen format containing polygons and stores them 
-in a Julia array. The sequence of polygons can be plotted using a plotting
-backend, such as PyPlot or Gadfly.
-
-EXAMPLES:
-
-We load the results for the BEAM model, which contain 20000 polygons:
-
-    julia> include("plot_gen.jl")
-    julia> P = read_gen("SpaceEx_plots/beam_t_x89_20_spaceex.txt");
-    julia> size(P)
-    (20000,)
-    julia> plot_polygon(P, backend="pyplot_inline")
-"""
+# This script reads a file in gen format containing polygons and stores them
+# in a Julia array. The sequence of polygons can be plotted using a plotting
+# backend, such as GR, PyPlot, or Gadfly.
+#
+# EXAMPLES:
+#
+# We load the results for the BEAM model, which contain 20000 polygons:
+#
+#     julia> include("plot_gen.jl")
+#     julia> using Reachability
+#     julia> import GR
+#     julia> Xk = read_gen("SpaceEx_plots/beam_t_x89_20_spaceex.txt");
+#     julia> R = ReachSolution(Xk, Options(:plot_vars => [1,2]));
+#     julia> plot(R)
+#     alternative, more spohisticated plotting command
+#     julia> plot(R, color="red", xlabel="t", ylabel = "x89", ylims=(-55000, 55000))
 
 # choose a plotting backend, eg. PyPlot or Gadfly
-using PyPlot
+using Plots, LazySets
 
 """
     read_gen(filename)
 
 Read a sequence of polygons stored in vertex representation (gen format).
 
-INPUT: 
+### Input
 
-- ``filename`` -- path of the file containing the polygons
+- `filename` -- path of the file containing the polygons
 
 The x and y coordinates of each vertex are separated by an empty space, and
 polygons are separated by empty lines. For example:
 
+```
 1.01 1.01
 0.99 1.01
 0.99 0.99
@@ -38,26 +40,49 @@ polygons are separated by empty lines. For example:
 0.873089 1.31047
 0.873089 1.28452
 0.908463 1.28452
+```
 
-
-OUTPUT: 
+### Output
 
 A sequence of matrices, where the first row is for the x coordinates, and the
 second row for the y coordinates.
 
 In the example of above:
 
+```julia
     julia> P = read_gen("test.gen")
     2-element Array{Array{Float64,2},1}:
      [1.01 0.99 0.99 1.01; 1.01 1.01 0.99 0.99]
      [0.908463 0.873089 0.873089 0.908463; 1.31047 1.31047 1.28452 1.28452]
+```
 
-WARNING:
+### Warning
 
-The input file should end with at least one empty line before the end of file;s
-this is to detect the lat polygon. 
+The input file should end with at least one empty line before the end of files
+this is to detect the last polygon.
 """
-function read_gen(filename::String)::Array{Matrix{Float64}, 1}
+function read_gen(filename::String)
+    Mi = Vector{Vector{Float64}}()
+    P = Vector{VPolygon{Float64}}()
+    # detects when we finished reading a new polygon, needed because polygons
+    # may be separated by more than one end-of-line
+    new_polygon = true
+    open(filename) do f
+        for line in eachline(f)
+          if !isempty(line)
+              push!(Mi, map(x -> parse(Float64, x), split(line)))
+              new_polygon = true
+          elseif isempty(line) && new_polygon
+              push!(P, VPolygon(Mi))
+              Mi = Vector{Vector{Float64}}()
+              new_polygon = false
+          end
+        end
+    end
+    return P
+end
+
+function read_gen_old(filename::String)::Array{Matrix{Float64}, 1}
     Mi = Array{Vector{Float64}, 1}()
     P = Array{Matrix{Float64}, 1}()
     # detects when we finished reading a new polygon, needed because polygons
@@ -77,7 +102,6 @@ function read_gen(filename::String)::Array{Matrix{Float64}, 1}
     end
     return P
 end
-
 
 """
     plot_polygon(P; backend, [name], [gridlines], [plot_polygon])
@@ -177,3 +201,5 @@ function plot_all(path::String=".")
         plot_polygon(read_gen(f), name=f * ".png", gridlines=true)
     end
 end
+
+return nothing

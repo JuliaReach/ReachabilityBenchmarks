@@ -26,6 +26,7 @@ include(@relpath "reach_1D_single.jl")
 include(@relpath "reach_1D_all.jl")
 include(@relpath "reach_2D_box_two.jl")
 include(@relpath "reach_2D_eps_two.jl")
+include(@relpath "reach_kD_all.jl")
 include(@relpath "check_1D_discrete.jl")
 include(@relpath "check_kD_discrete.jl")
 include(@relpath "check_1D_dense.jl")
@@ -59,6 +60,12 @@ reach_2D_box_two(models, create_plots)
 # -- reach_2D_eps_two --
 # no modification, optionally create plots
 reach_2D_eps_two(models, create_plots)
+
+
+# -- reach_kD_all --
+# only use pde, optionally create plots
+models_filtered = filter(e -> e ∈ ["pde"], models)
+reach_kD_all(models, create_plots)
 
 
 # -- check_1D_discrete --

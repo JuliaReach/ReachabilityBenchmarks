@@ -38,16 +38,7 @@ function reach_kD_all(models::Vector{String}, create_plots::Bool=false)
         # raw model (check mode to obtain the property)
         func = getfield(Main, Symbol(model))
         S, options_raw = func(:mode => "check")
-
-        # options
         n = MathematicalSystems.statedim(S)
-        dict_raw = options_raw.dict
-        dict_raw[:mode] = "reach"
-        dict_raw[:verbosity] = "info"
-        dict_raw[:δ] = 1e-3
-        dict_raw[:vars] = 1:n
-        dict_raw[:plot_vars] = [0, n]
-        dict_raw[:project_reachset] = true
 
         # extract output function from property
         property = options_raw[:property]
@@ -56,8 +47,19 @@ function reach_kD_all(models::Vector{String}, create_plots::Bool=false)
                 "type $(typeof(property))... skipping model")
             break
         end
-        dir = property.clauses[1].atoms[1].a
-        dict_raw[:projection_matrix] = reshape(dir, (1, n))
+        projection_matrix = reshape(property.clauses[1].atoms[1].a, (1, n))
+
+        # options
+        dict_raw = options_raw.dict
+        dict_raw[:mode] = "reach"
+        dict_raw[:verbosity] = "info"
+        dict_raw[:δ] = 1e-3
+        dict_raw[:vars] = 1:n
+        dict_raw[:plot_vars] = [0, n]
+        dict_raw[:lazy_X0] = true
+        dict_raw[:lazy_inputs_interval] = -1
+        dict_raw[:project_reachset] = true
+        dict_raw[:projection_matrix] = projection_matrix
 
         # create uniform partitions
         partitions = Vector{Vector{AbstractVector{Int}}}(ceil(Int, log(2, n)) + 1)
@@ -84,7 +86,7 @@ function reach_kD_all(models::Vector{String}, create_plots::Bool=false)
             else
                 # benchmark settings
                 k = i == length(partitions) + 1 ? n : 2^(i-2)
-                dict[:T] = 20.
+                dict[:N] = 50
                 dict[:logfile] = "$model-reach-$(k)D-varying-fixedstep-allvars.txt"
                 dict_raw[:partition] = partitions[i-1]
             end

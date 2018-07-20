@@ -64,7 +64,7 @@ reach_2D_eps_two(models, create_plots)
 
 # -- reach_kD_all --
 # only use pde, optionally create plots
-models_filtered = filter(e -> e ∈ ["pde"], models)
+models_filtered = filter(e -> e ∈ ["fom"], models)
 reach_kD_all(models_filtered, create_plots)
 
 

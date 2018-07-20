@@ -58,7 +58,7 @@ function reach_kD_all(models::Vector{String}, create_plots::Bool=false)
         dict_raw[:plot_vars] = [0, n]
         dict_raw[:lazy_X0] = true
         dict_raw[:lazy_inputs_interval] = -1
-        dict_raw[:project_reachset] = true
+        dict_raw[:project_reachset] = false
         dict_raw[:projection_matrix] = projection_matrix
 
         # create uniform partitions
@@ -86,7 +86,7 @@ function reach_kD_all(models::Vector{String}, create_plots::Bool=false)
             else
                 # benchmark settings
                 k = i == length(partitions) + 1 ? n : 2^(i-2)
-                dict[:N] = 50
+                dict[:N] = 20
                 dict[:logfile] = "$model-reach-$(k)D-varying-fixedstep-allvars.txt"
                 dict_raw[:partition] = partitions[i-1]
             end

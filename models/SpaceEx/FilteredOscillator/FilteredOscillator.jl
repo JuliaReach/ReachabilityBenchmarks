@@ -2,7 +2,7 @@
 # See: https://flowstar.org/benchmarks/filtered-oscillator/
 # ============================
 
-using HybridSystems, MathematicalSystems, LazySets, Polyhedra
+using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra
 import LazySets.HalfSpace
 
 
@@ -30,7 +30,7 @@ A = flow
 B = reshape(vcat([1.4, -0.7], zeros(32)), (34, 1))
 X = HalfSpace([-1.0, 0.0], 0.0); # x >= 0
 U = Singleton([1.0]);
-m_1 = [ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U)];
+m_1 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
 #Mode 2
 flow[1,1], flow[2,2] = -2., -1.
@@ -38,7 +38,7 @@ A = flow
 B = reshape(vcat([-1.4, 0.7], zeros(32)), (34, 1))
 X = HalfSpace([-1.0, 0.0], 0.0); # x >= 0
 U = Singleton([1.0]);
-m_2 = [ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U)];
+m_2 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
 #Mode 3
 flow[1,1], flow[2,2] = -2., -1.
@@ -46,7 +46,7 @@ A = flow
 B = reshape(vcat([1.4, -0.7], zeros(32)), (34, 1))
 X = HalfSpace([-1.0, 0.0], 0.0); # x >= 0
 U = Singleton([1.0]);
-m_3 = [ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U)];
+m_3 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
 #Mode 4
 flow[1,1], flow[2,2] = -2., -1.
@@ -54,7 +54,7 @@ A = flow
 B = reshape(vcat([-1.4, 0.7], zeros(32)), (34, 1))
 X = HalfSpace([-1.0, 0.0], 0.0); # x >= 0
 U = Singleton([1.0]);
-m_4 = [ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U)];
+m_4 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
 m = [m_1, m_2, m_3, m_4];
 

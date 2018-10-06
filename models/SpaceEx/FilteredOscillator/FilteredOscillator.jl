@@ -65,25 +65,25 @@ A_l3l4 = ones(eye(Float64, system_dimension))
 X_l3l4 = HPolytope([HalfSpace(vcat([-1.0, 0.0], zeros(32)), 0.0),   # x >= 0
                HalfSpace(vcat([-0.714286, -1.0], zeros(32)), 0.0),  # 0.714286*x + y  >= 0
                HalfSpace(vcat([0.714286, 0.0], zeros(32)), 0.0)])  # 0.714286*x + y <= 0
-r1 = [ConstrainedLinearDiscreteSystem(A_l3l4, X_l3l4)];
+r1 = ConstrainedLinearDiscreteSystem(A_l3l4, X_l3l4);
 # Transition l4 -> l2
 A_l4l2 = ones(eye(Float64, system_dimension))
 X_l4l2 = HPolytope([HalfSpace(vcat([0.714286, 0.0], zeros(32)), 0.0),   # 0.714286*x + y <= 0
                HalfSpace(vcat([-1.0, 0.0], zeros(32)), 0.0),  # x >= 0
                HalfSpace(vcat([1.0, 0.0], zeros(32)), 0.0)]) # x <= 0
-r2 = [ConstrainedLinearDiscreteSystem(A_l4l2, X_l4l2)];
+r2 = ConstrainedLinearDiscreteSystem(A_l4l2, X_l4l2);
 # Transition l2 -> l1
 A_l2l1 = ones(eye(Float64, system_dimension))
 X_l2l1 = HPolytope([HalfSpace(vcat([1.0, 0.0], zeros(32)), 0.0),   # x <= 0
                HalfSpace(vcat([-0.714286, -1.0], zeros(32)), 0.0),  #  0.714286*x + y >= 0
                HalfSpace(vcat([0.714286, 0.0], zeros(32)), 0.0)]) #  0.714286*x + y <= 0
-r3 = [ConstrainedLinearDiscreteSystem(A_l2l1, X_l2l1)];
+r3 = ConstrainedLinearDiscreteSystem(A_l2l1, X_l2l1);
 # Transition l1 -> l3
 A_l1l3 = ones(eye(Float64, system_dimension))
 X_l1l3 = HPolytope([HalfSpace(vcat([-0.714286, -1.0], zeros(32)), 0.0),   # 0.714286*x + y >= 0
                HalfSpace(vcat([-1.0, 0.0], zeros(32)), 0.0),  # x >= 0
                HalfSpace(vcat([1.0, 0.0], zeros(32)), 0.0)]) # x <= 0
-r4 = [ConstrainedLinearDiscreteSystem(A_l1l3, X_l1l3)];
+r4 = ConstrainedLinearDiscreteSystem(A_l1l3, X_l1l3);
 
 r = [r1,r2,r3,r4]
 # Switchings

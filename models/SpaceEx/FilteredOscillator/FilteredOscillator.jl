@@ -89,7 +89,8 @@ s = [HybridSystems.AutonomousSwitching()];
 HS = HybridSystem(a, m, r, s);
 
 # initial condition in mode 1
-X0 = Hyperrectangle(low=[0.2; -0.1; z], high=[0.3; 0.1; z]);
+X0 = Hyperrectangle(low=[0.2; -0.1 * ones(system_dimension-1)],
+                    high=[0.4; 0.1 * ones(system_dimension-1)]);
 
 system = InitialValueProblem(HS, X0);
 input_options = Options(:mode=>"reach");

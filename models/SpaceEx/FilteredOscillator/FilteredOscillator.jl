@@ -39,7 +39,7 @@ m_1 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 #Mode 2
 B = [1.4; 0.7; z]
 X = HPolytope([HalfSpace([1.0; 0.0; z], 0.0),  # x <= 0
-               HalfSpace([0.714286; -1.0; z], 0.0)])  # 0.714286*x + y <= 0
+               HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
 m_2 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
 #Mode 3
@@ -50,7 +50,7 @@ m_3 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
 #Mode 4
 B = [1.4; 0.7; z]
-X = HPolytope([HalfSpace([0.714286; -1.0; z], 0.0),  # 0.714286*x + y <= 0
+X = HPolytope([HalfSpace([0.714286; 1.0; z], 0.0),  # 0.714286*x + y <= 0
                HalfSpace([-1.0; 0.0; z], 0.0)])  # x >= 0
 m_4 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
@@ -64,17 +64,17 @@ A_trans = eye(system_dimension)
 # Transition l3 -> l4
 X_l3l4 = HPolytope([HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
-               HalfSpace([0.714286; -1.0; z], 0.0)])  # 0.714286*x + y <= 0
+               HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
 r1 = ConstrainedLinearDiscreteSystem(A_trans, X_l3l4);
 # Transition l4 -> l2
-X_l4l2 = HPolytope([HalfSpace([0.714286; -1.0; z], 0.0),  # 0.714286*x + y <= 0
+X_l4l2 = HPolytope([HalfSpace([0.714286; 1.0; z], 0.0),  # 0.714286*x + y <= 0
                HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                HalfSpace([1.0; 0.0; z], 0.0)])  # x <= 0
 r2 = ConstrainedLinearDiscreteSystem(A_trans, X_l4l2);
 # Transition l2 -> l1
 X_l2l1 = HPolytope([HalfSpace([1.0; 0.0; z], 0.0),  # x <= 0
                HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
-               HalfSpace([0.714286; -1.0; z], 0.0)])  # 0.714286*x + y <= 0
+               HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
 r3 = ConstrainedLinearDiscreteSystem(A_trans, X_l2l1);
 # Transition l1 -> l3
 X_l1l3 = HPolytope([HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0

@@ -47,7 +47,7 @@ function reach_1D_single(models::Vector{String}, create_plots::Bool=false)
         dict_raw[:partition] = [[i] for i in 1:n]
         dict_raw[:set_type] = Interval
 
-        for i in 1:2
+        for i in 2:2
             dict = copy(dict_raw)
             if i == 1
                 # warm-up run
@@ -59,7 +59,7 @@ function reach_1D_single(models::Vector{String}, create_plots::Bool=false)
             end
             result = solve(S, Options(dict))
             if create_plots && i == 2
-                plot_reach(result, "$model-1D")
+                plot_reach(result, "$model-1D-single")
             end
         end
         println()

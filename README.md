@@ -32,7 +32,7 @@ reachable states or checks a safety property, depending on the model's options.
 To compute the reach set using the default options with a time step of 0.01, do
 
 ```julia
-julia> sol = solve(iss(:mode=>"reach", :T=>20.0, :δ=>0.01));
+julia> sol = solve(iss(:mode=>"reach", :T=>20.0, :δ=>0.01)...);
 ```
 
 More options can be added in the same style.

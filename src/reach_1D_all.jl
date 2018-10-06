@@ -60,7 +60,7 @@ function reach_1D_all(models::Vector{String}, create_plots::Bool=false)
             end
             result = solve(S, Options(dict))
             if create_plots && i == 2
-                plot_reach(result, "$model-1D")
+                plot_reach(result, "$model-1D-all")
             end
         end
         println()

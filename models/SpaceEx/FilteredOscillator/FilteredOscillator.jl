@@ -6,16 +6,16 @@ using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra
 import LazySets.HalfSpace
 
 
-n0 = 32
+n0 = 2
 system_dimension = n0 + 2
 z = zeros(n0)
 
 # Transition graph (automaton)
 a = LightAutomaton(4);
 add_transition!(a, 3, 4, 1);
-add_transition!(a, 4, 2, 1);
-add_transition!(a, 2, 1, 1);
-add_transition!(a, 1, 3, 1);
+add_transition!(a, 4, 2, 2);
+add_transition!(a, 2, 1, 3);
+add_transition!(a, 1, 3, 4);
 
 # common flow
 A = zeros(system_dimension, system_dimension)
@@ -95,7 +95,7 @@ X0 = Hyperrectangle(low=[0.2; -0.1 * ones(system_dimension-1)],
 system = InitialValueProblem(HS, X0);
 input_options = Options(:mode=>"reach");
 
-problem_options = Options(:vars=>1:system_dimension, :T=>5.0, :δ=>0.05,
-                          :plot_vars=>[1, 2], :max_jumps=>1, :verbosity=>1);
+problem_options = Options(:vars=>[1,2], :T=>5.0, :δ=>0.05,
+                          :plot_vars=>[1, 2], :max_jumps=>1, :verbosity=>1, :init_locs=>[3]);
 options_input = merge(problem_options, input_options);
 sol = solve(system, options_input);

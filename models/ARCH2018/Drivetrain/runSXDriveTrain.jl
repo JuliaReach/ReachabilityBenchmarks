@@ -30,7 +30,7 @@ end
 
 
 AFFINE_SYSTEM = ConstrainedLinearControlContinuousSystem
-HS = readsxmodel("examples/Drivetrain/drivetrain_theta1_5percent_flat_manually.xml")
+HS = readsxmodel("models/ARCH2018/Drivetrain/drivetrain_theta1_5percent_flat_manually.xml", raw_dict=true)
 # initial condition in mode 1
 
 
@@ -41,6 +41,6 @@ input_options = Options(:mode=>"reach")
 problem_options = Options(:vars=>[1,3,10], :T=>10.0, :δ=>0.005, :plot_vars=>[1, 3], :verbosity=>1);
 options_input = merge(problem_options, input_options)
 using Polyhedra
-sol = solve_hybrid(HS, x0sets, options_input);
+sol = solve(HS, options_input);
 
 plot(sol, indices=1:2:length(sol.Xk))

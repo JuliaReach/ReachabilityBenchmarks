@@ -19,16 +19,14 @@ end
 
 
 AFFINE_SYSTEM = ConstrainedLinearControlContinuousSystem
-HS = readsxmodel("examples/filtered_oscillator/filtered_oscillator_flattened.xml", ST=AFFINE_SYSTEM)
-# initial condition in mode 1
-
+HS = readsxmodel("models/SpaceEx/FilteredOscillator/filtered_oscillator_flattened.xml", ST=AFFINE_SYSTEM)
 
 # calculate reachable states up to time T
 prob = InitialValueProblem(HS, x0sets)
-input_options = Options(:mode=>"reach")
+input_options = Options(:mode=>"reach");
 
-problem_options = Options(:vars=>[1,2], :T=>99.0, :δ=>0.01, :plot_vars=>[1, 2],
-                          :max_jumps=>15, :verbosity=>1)
+problem_options = Options(:vars=>1:system_dimension, :T=>5.0, :δ=>0.05,
+                          :plot_vars=>[1, 2], :max_jumps=>1, :verbosity=>1, :init_loc=>3);
 options_input = merge(problem_options, input_options)
 using Polyhedra
 sol = solve(prob, options_input);

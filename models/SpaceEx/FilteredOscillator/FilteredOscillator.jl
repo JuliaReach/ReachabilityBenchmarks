@@ -96,6 +96,6 @@ system = InitialValueProblem(HS, X0);
 input_options = Options(:mode=>"reach");
 
 problem_options = Options(:vars=>1:system_dimension, :T=>5.0, :δ=>0.05,
-                          :plot_vars=>[1, 2], :max_jumps=>1, :verbosity=>1, :init_locs=>[3]);
+                          :plot_vars=>[1, 2], :max_jumps=>1, :verbosity=>1);
 options_input = merge(problem_options, input_options);
 sol = solve(system, options_input);

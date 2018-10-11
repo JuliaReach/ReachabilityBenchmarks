@@ -37,7 +37,7 @@ X = HPolytope([HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
 m_1 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
 #Mode 2
-B = [1.4; 0.7; z]
+B = [-1.4; 0.7; z]
 X = HPolytope([HalfSpace([1.0; 0.0; z], 0.0),  # x <= 0
                HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
 m_2 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
@@ -49,7 +49,7 @@ X = HPolytope([HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
 m_3 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
 #Mode 4
-B = [1.4; 0.7; z]
+B = [-1.4; 0.7; z]
 X = HPolytope([HalfSpace([0.714286; 1.0; z], 0.0),  # 0.714286*x + y <= 0
                HalfSpace([-1.0; 0.0; z], 0.0)])  # x >= 0
 m_4 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
@@ -92,10 +92,12 @@ HS = HybridSystem(a, m, r, s);
 X0 = Hyperrectangle(low=[0.2; -0.1 * ones(system_dimension-1)],
                     high=[0.4; 0.1 * ones(system_dimension-1)]);
 
-system = InitialValueProblem(HS, X0);
+system = InitialValueProblem(HS, [(3, X0)]);
 input_options = Options(:mode=>"reach");
 
-problem_options = Options(:vars=>1:system_dimension, :T=>5.0, :δ=>0.05,
-                          :plot_vars=>[1, 2], :max_jumps=>1, :verbosity=>1, :init_locs=>[3]);
+problem_options = Options(:vars=>1:system_dimension, :T=>10.0, :δ=>0.05,
+                          :plot_vars=>[1, 2], :max_jumps=>3, :verbosity=>1, :template_directions=>:boxdiag);
 options_input = merge(problem_options, input_options);
 sol = solve(system, options_input);
+
+#sol = solve(system, options_input, Reachability.BFFPSV18(),Reachability.ReachSets.LazyTextbookDiscretePost());

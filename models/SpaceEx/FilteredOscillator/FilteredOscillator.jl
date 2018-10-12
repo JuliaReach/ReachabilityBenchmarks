@@ -6,7 +6,7 @@ using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra
 import LazySets.HalfSpace
 
 
-n0 = 2
+n0 = 4
 system_dimension = n0 + 2
 z = zeros(n0)
 
@@ -93,11 +93,10 @@ X0 = Hyperrectangle(low=[0.2; -0.1 * ones(system_dimension-1)],
                     high=[0.4; 0.1 * ones(system_dimension-1)]);
 
 system = InitialValueProblem(HS, [(3, X0)]);
-input_options = Options(:mode=>"reach");
 
-problem_options = Options(:vars=>1:system_dimension, :T=>10.0, :δ=>0.05,
-                          :plot_vars=>[1, 2], :max_jumps=>3, :verbosity=>1, :template_directions=>:boxdiag);
-options_input = merge(problem_options, input_options);
+options_input = Options(:mode=>"reach",:vars=>1:system_dimension, :T=>10.0, :δ=>0.01,
+                          :plot_vars=>[1, 2], :max_jumps=>6, :verbosity=>1, :partition=>[1:system_dimension], :template_directions => :oct, :ε_proj=>0.00001, :clustering=>:chull);
+
 sol = solve(system, options_input);
 
 #sol = solve(system, options_input, Reachability.BFFPSV18(),Reachability.ReachSets.LazyTextbookDiscretePost());

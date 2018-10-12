@@ -95,7 +95,7 @@ X0 = Hyperrectangle(low=[0.2; -0.1 * ones(system_dimension-1)],
 system = InitialValueProblem(HS, [(3, X0)]);
 
 options_input = Options(:mode=>"reach",:vars=>1:system_dimension, :T=>10.0, :δ=>0.01,
-                          :plot_vars=>[1, 2], :max_jumps=>6, :verbosity=>1, :partition=>[1:system_dimension], :template_directions => :oct, :ε_proj=>0.00001, :clustering=>:chull);
+                          :plot_vars=>[1, 2], :max_jumps=>4, :verbosity=>1, :partition=>[1:system_dimension], :template_directions => :oct, :ε_proj=>0.0001, :clustering=>:chull);
 
 sol = solve(system, options_input);
 

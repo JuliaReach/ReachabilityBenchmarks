@@ -32,25 +32,25 @@ U = Singleton([1.0]);
 
 #Mode 1
 B = [1.4; -0.7; z]
-X = HPolytope([HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
+X = HPolyhedron([HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
                HalfSpace([1.0; 0.0; z], 0.0)])  # x <= 0
 m_1 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
 #Mode 2
 B = [-1.4; 0.7; z]
-X = HPolytope([HalfSpace([1.0; 0.0; z], 0.0),  # x <= 0
+X = HPolyhedron([HalfSpace([1.0; 0.0; z], 0.0),  # x <= 0
                HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
 m_2 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
 #Mode 3
 B = [1.4; -0.7; z]
-X = HPolytope([HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
+X = HPolyhedron([HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                HalfSpace([-0.714286; -1.0; z], 0.0)])  # 0.714286*x + y >= 0
 m_3 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
 #Mode 4
 B = [-1.4; 0.7; z]
-X = HPolytope([HalfSpace([0.714286; 1.0; z], 0.0),  # 0.714286*x + y <= 0
+X = HPolyhedron([HalfSpace([0.714286; 1.0; z], 0.0),  # 0.714286*x + y <= 0
                HalfSpace([-1.0; 0.0; z], 0.0)])  # x >= 0
 m_4 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
@@ -62,22 +62,22 @@ m = [m_1, m_2, m_3, m_4];
 A_trans = eye(system_dimension)
 
 # Transition l3 -> l4
-X_l3l4 = HPolytope([HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
+X_l3l4 = HPolyhedron([HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
                HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
 r1 = ConstrainedLinearDiscreteSystem(A_trans, X_l3l4);
 # Transition l4 -> l2
-X_l4l2 = HPolytope([HalfSpace([0.714286; 1.0; z], 0.0),  # 0.714286*x + y <= 0
+X_l4l2 = HPolyhedron([HalfSpace([0.714286; 1.0; z], 0.0),  # 0.714286*x + y <= 0
                HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                HalfSpace([1.0; 0.0; z], 0.0)])  # x <= 0
 r2 = ConstrainedLinearDiscreteSystem(A_trans, X_l4l2);
 # Transition l2 -> l1
-X_l2l1 = HPolytope([HalfSpace([1.0; 0.0; z], 0.0),  # x <= 0
+X_l2l1 = HPolyhedron([HalfSpace([1.0; 0.0; z], 0.0),  # x <= 0
                HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
                HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
 r3 = ConstrainedLinearDiscreteSystem(A_trans, X_l2l1);
 # Transition l1 -> l3
-X_l1l3 = HPolytope([HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
+X_l1l3 = HPolyhedron([HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
                HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                HalfSpace([1.0; 0.0; z], 0.0)])  # x <= 0
 r4 = ConstrainedLinearDiscreteSystem(A_trans, X_l1l3);
@@ -95,18 +95,19 @@ X0 = Hyperrectangle(low=[0.2; -0.1 * ones(system_dimension-1)],
 system = InitialValueProblem(HS, [(3, X0)]);
 
 options = Options(:mode=>"reach",:vars=>1:system_dimension, :T=>10.0, :δ=>0.01,
-                          :plot_vars=>[1, 2], :max_jumps=>5, :verbosity=>1,
-                          :partition=>[1:system_dimension], :ε_proj=>0.0001,
-                          :clustering=>:chull);
+                  :plot_vars=>[1, 2], :max_jumps=>5,
+                  :partition=>[1:system_dimension], :ε_proj=>0.001,
+                  :clustering=>:chull, :verbosity=>1);
 
 # default algorithm
 sol = solve(system, options);
 
 # specify lazy discrete post operator
-# sol = solve(system, options, Reachability.BFFPSV18(),
-#             Reachability.ReachSets.LazyTextbookDiscretePost());
+sol = solve(system, options, Reachability.BFFPSV18(),
+            Reachability.ReachSets.LazyTextbookDiscretePost());
 
 # specify overapproximating discrete post operator
-# sol = solve(system, options, Reachability.BFFPSV18(),
-#             Reachability.ReachSets.ApproximatingDiscretePost(
-#                 Options(:overapproximation=>Hyperrectangle)));
+sol = solve(system, options, Reachability.BFFPSV18(),
+            Reachability.ReachSets.ApproximatingDiscretePost(
+                Options(:overapproximation=>Hyperrectangle)));
+

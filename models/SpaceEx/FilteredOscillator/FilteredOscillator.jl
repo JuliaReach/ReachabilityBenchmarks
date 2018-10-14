@@ -95,9 +95,9 @@ X0 = Hyperrectangle(low=[0.2; -0.1 * ones(system_dimension-1)],
 system = InitialValueProblem(HS, [(3, X0)]);
 
 options = Options(:mode=>"reach",:vars=>1:system_dimension, :T=>10.0, :δ=>0.01,
-                          :plot_vars=>[1, 2], :max_jumps=>5, :verbosity=>1,
-                          :partition=>[1:system_dimension], :ε_proj=>0.0001,
-                          :clustering=>:chull);
+                  :plot_vars=>[1, 2], :max_jumps=>5,
+                  :partition=>[1:system_dimension], :ε_proj=>0.001,
+                  :clustering=>:chull, :verbosity=>1);
 
 # default algorithm
 sol = solve(system, options);
@@ -110,3 +110,4 @@ sol = solve(system, options, Reachability.BFFPSV18(),
 sol = solve(system, options, Reachability.BFFPSV18(),
             Reachability.ReachSets.ApproximatingDiscretePost(
                 Options(:overapproximation=>Hyperrectangle)));
+

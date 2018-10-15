@@ -5,7 +5,6 @@
 using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra
 import LazySets.HalfSpace
 
-
 n0 = 2
 system_dimension = n0 + 2
 z = zeros(n0)
@@ -94,9 +93,8 @@ X0 = Hyperrectangle(low=[0.2; -0.1 * ones(system_dimension-1)],
 system = InitialValueProblem(HS, [(3, X0)]);
 plot_vars = [1, 2]
 options_common = Options(:mode=>"reach",:vars=>1:system_dimension, :T=>10.0, :δ=>0.01,
-                  :plot_vars=>plot_vars, :max_jumps=>4,
-                  :partition=>[1:system_dimension], :ε_proj=>0.001,
-                  :clustering=>:chull, :verbosity=>1);
+                  :plot_vars=>plot_vars, :max_jumps=>4, :ε_proj=>0.001,
+                  :clustering=>:chull, :verbosity=>0, :partition=>[1:system_dimension]);
 
 options_proj_false = Options(:project_reachset=>false)
 options_proj_true = Options(:project_reachset=>true)
@@ -105,20 +103,25 @@ options_pr_t = merge(options_common, options_proj_true)
 options_pr_f = merge(options_common, options_proj_false)
 
 # default algorithm
-sol = solve(system, options_pr_t);
+@time begin
+sol1 = solve(system, options_pr_t);
+end
 # specify lazy discrete post operator
-sol = solve(system, options_pr_f, Reachability.BFFPSV18(),
+@time begin
+sol2 = solve(system, options_pr_f, Reachability.BFFPSV18(),
             Reachability.ReachSets.LazyTextbookDiscretePost());
-
+end
 N = Float64
-sol_processed =  Reachability.ReachSolution([Reachability.ReachSet{CartesianProductArray{N}, N}(
+sol2_processed =  Reachability.ReachSolution([Reachability.ReachSet{CartesianProductArray{N}, N}(
             CartesianProductArray{N, HPolytope{N}}([LazySets.Approximations.overapproximate(rs.X, LazySets.Approximations.OctDirections(system_dimension))]),
-            rs.t_start, rs.t_end) for rs in sol.Xk], sol.options)
+            rs.t_start, rs.t_end) for rs in sol2.Xk], sol2.options)
 
-sol_proj = Reachability.ReachSolution(Reachability.project_reach(
-    sol_processed.Xk, plot_vars, system_dimension, sol.options), sol.options);
+sol2_proj = Reachability.ReachSolution(Reachability.project_reach(
+    sol2_processed.Xk, plot_vars, system_dimension, sol2.options), sol2.options);
 
 # specify overapproximating discrete post operator
-sol = solve(system, options_pr_t, Reachability.BFFPSV18(),
+@time begin
+sol3 = solve(system, options_pr_t, Reachability.BFFPSV18(),
            Reachability.ReachSets.ApproximatingDiscretePost(
                 Options(:overapproximation=>Hyperrectangle)));
+end

@@ -101,8 +101,8 @@ options_common = Options(:mode=>"reach",:vars=>1:system_dimension, :T=>10.0, :δ
 options_proj_false = Options(:project_reachset=>false)
 options_proj_true = Options(:project_reachset=>true)
 
-options_pr_t = merge!(options_common, options_proj_true)
-options_pr_f = merge!(options_common, options_proj_false)
+options_pr_t = merge(options_common, options_proj_true)
+options_pr_f = merge(options_common, options_proj_false)
 
 # default algorithm
 sol = solve(system, options_pr_t);
@@ -112,7 +112,7 @@ sol = solve(system, options_pr_f, Reachability.BFFPSV18(),
 
 N = Float64
 sol_processed =  Reachability.ReachSolution([Reachability.ReachSet{CartesianProductArray{N}, N}(
-            CartesianProductArray{N, HPolytope{N}}([LazySets.Approximations.overapproximate(rs.X, LazySets.Approximations.OctDirections(4))]),
+            CartesianProductArray{N, HPolytope{N}}([LazySets.Approximations.overapproximate(rs.X, LazySets.Approximations.OctDirections(system_dimension))]),
             rs.t_start, rs.t_end) for rs in sol.Xk], sol.options)
 
 sol_proj = Reachability.ReachSolution(Reachability.project_reach(

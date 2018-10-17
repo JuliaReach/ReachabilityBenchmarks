@@ -15,7 +15,7 @@ for opD_i in 1:length(opDs)
     n0 = 2;
     while (n0 <= 4)
         opD = opDs[opD_i]
-        sol = filtered_oscillator(2, opDs[opD_i]);
+        sol = filtered_oscillator(n0, opDs[opD_i], 20., 20);
         n0 = n0*2;
     end
 end
@@ -25,7 +25,7 @@ results = Vector{Tuple{AbstractSolution, Int64}}()
 for opD_i in 1:length(opDs)
     println("**********************************")
     println(opDs[opD_i])
-    upper_bound = opD_i == 1 ? 8 : 256;
+    upper_bound = opD_i == 1 ? 4 : 256;
     n0 = 2;
     while (n0 <= upper_bound)
         if n0 == 2

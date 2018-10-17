@@ -16,8 +16,7 @@ function get_projection(sol::AbstractSolution, system_dimension::Int64) ::Abstra
 end
 opDs = [Reachability.ReachSets.TextbookDiscretePost(),
             Reachability.ReachSets.LazyTextbookDiscretePost(),
-            Reachability.ReachSets.ApproximatingDiscretePost(
-                Options(:overapproximation=>Hyperrectangle))];
+            Reachability.ReachSets.ApproximatingDiscretePost()];
 
 #warmup run for each opD for low dimension
 println("Warmup run just after restart REPL")
@@ -80,3 +79,5 @@ for opD_i in 1:length(opDs)
         end
     end
 end
+
+return results

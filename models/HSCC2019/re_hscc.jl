@@ -14,69 +14,81 @@ function get_projection(sol::AbstractSolution, system_dimension::Int64) ::Abstra
 
     return sol_proj;
 end
-opDs = [Reachability.ReachSets.TextbookDiscretePost(),
-            Reachability.ReachSets.LazyTextbookDiscretePost(),
-            Reachability.ReachSets.ApproximatingDiscretePost()];
+
+# discrete post operators + short name + upper bound on dimensionality
+opDs = [
+        (Reachability.ReachSets.TextbookDiscretePost(),      "C",   4)
+        (Reachability.ReachSets.LazyTextbookDiscretePost(),  "L", 256)
+        (Reachability.ReachSets.ApproximatingDiscretePost(), "A", 256)
+       ];
 
 #warmup run for each opD for low dimension
 println("Warmup run just after restart REPL")
-for opD_i in 1:length(opDs)
+for (opD, name, upper_bound) in opDs
     n0 = 2;
     while (n0 <= 4)
-        opD = opDs[opD_i]
-        sol = filtered_oscillator(n0, opDs[opD_i], 20., 20);
+        sol = filtered_oscillator(n0, opD, 20., 20);
         n0 = n0*2;
     end
 end
 println("End of warmup run")
 
-results = Vector{Tuple{AbstractSolution, Int64}}()
-for opD_i in 1:length(opDs)
-    println("**********************************")
-    println(opDs[opD_i])
-    upper_bound = opD_i == 1 ? 4 : 256;
-    n0 = 2;
-    while (n0 <= upper_bound)
+project_and_store = true
+if project_and_store
+    println("Note: using output projection and storage")
+else
+    println("Note: skipping output projection and storage")
+end
+
+results = Vector{Tuple{AbstractSolution, String}}()
+n0 = 2
+while n0 <= 256
+    for (opD, name, upper_bound) in opDs
+        println("**********************************")
+        if n0 > upper_bound
+            continue
+        end
+        println("$name $(n0)")
         if n0 == 2
-            t = 20.
+            T = 20.
             max_jumps = 20
         elseif n0 == 4
-            t = 20.
+            T = 20.
             max_jumps = 20
         elseif n0 == 8
-            t = 99.
+            T = 99.
             max_jumps = 20
         elseif n0 == 16
-            t = 99.
+            T = 99.
             max_jumps = 30
         elseif n0 == 32
-            t = 99.
+            T = 99.
             max_jumps = 40
         elseif n0 == 64
-            t = 99.
+            T = 99.
             max_jumps = 40
         elseif n0 == 128
-            t = 99.
+            T = 99.
             max_jumps = 1000
         elseif n0 == 196
-            t = 99.
+            T = 99.
             max_jumps = 1000
         elseif n0 == 256
-            t = 99.
+            T = 99.
             max_jumps = 1000
         end
-        println("\t", n0)
-        opD = opDs[opD_i];
-        sol = filtered_oscillator(n0, opD, t, max_jumps);
-        sol_proj = get_projection(sol, n0+2);
-        push!(results, (sol_proj, opD_i));
-        if n0 == 128
-            n0 = 196
-        elseif n0 == 196
-            n0 = 256
-        else
-            n0 *= 2;
+        sol = filtered_oscillator(n0, opD, T, max_jumps);
+        if project_and_store
+            sol_proj = get_projection(sol, n0+2);
+            push!(results, (sol_proj, name));
         end
+    end
+    if n0 == 128
+        n0 = 196
+    elseif n0 == 196
+        n0 = 256
+    else
+        n0 *= 2;
     end
 end
 

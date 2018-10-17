@@ -59,8 +59,8 @@ for opD_i in 1:length(opDs)
         println("\t", n0)
         opD = opDs[opD_i];
         sol = filtered_oscillator(n0, opD, t, max_jumps);
-        sol_proj = get_projection(sol, n0+2);
-        push!(results, (sol_proj, opD_i));
+        #sol_proj = get_projection(sol, n0+2);
+        push!(results, (sol, opD_i));
         if n0 == 128
             n0 = 196
         elseif n0 == 196

@@ -25,14 +25,14 @@ results = Vector{Tuple{AbstractSolution, Int64}}()
 for opD_i in 1:length(opDs)
     println("**********************************")
     println(opDs[opD_i])
-    upper_bound = opD_i == 1 ? 4 : 256;
+    upper_bound = opD_i == 1 ? 8 : 256;
     n0 = 2;
     while (n0 <= upper_bound)
         println("\t", n0)
         opD = opDs[opD_i];
         sol = filtered_oscillator(n0, opD);
-        #sol_proj = get_projection(sol, n0+2);
-        push!(results, (sol, opD_i));
+        sol_proj = get_projection(sol, n0+2);
+        push!(results, (sol_proj, opD_i));
         if n0 == 128
             n0 = 196
         elseif n0 == 196

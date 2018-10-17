@@ -28,9 +28,37 @@ for opD_i in 1:length(opDs)
     upper_bound = opD_i == 1 ? 8 : 256;
     n0 = 2;
     while (n0 <= upper_bound)
+        if n0 == 2
+            t = 20.
+            max_jumps = 20
+        elseif n0 == 4
+            t = 20.
+            max_jumps = 20
+        elseif n0 == 8
+            t = 99.
+            max_jumps = 20
+        elseif n0 == 16
+            t = 99.
+            max_jumps = 30
+        elseif n0 == 32
+            t = 99.
+            max_jumps = 40
+        elseif n0 == 64
+            t = 99.
+            max_jumps = 40
+        elseif n0 == 128
+            t = 99.
+            max_jumps = 1000
+        elseif n0 == 196
+            t = 99.
+            max_jumps = 1000
+        elseif n0 == 256
+            t = 99.
+            max_jumps = 1000
+        end
         println("\t", n0)
         opD = opDs[opD_i];
-        sol = filtered_oscillator(n0, opD);
+        sol = filtered_oscillator(n0, opD, t, max_jumps);
         sol_proj = get_projection(sol, n0+2);
         push!(results, (sol_proj, opD_i));
         if n0 == 128

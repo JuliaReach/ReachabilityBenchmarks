@@ -2,7 +2,7 @@
 # See: https://flowstar.org/benchmarks/filtered-oscillator/
 # ============================
 
-function filtered_oscillator(n0, opD)::AbstractSolution
+function filtered_oscillator(n0, opD, t, max_jumps)::AbstractSolution
     system_dimension = n0 + 2
     z = zeros(n0)
 
@@ -89,7 +89,7 @@ function filtered_oscillator(n0, opD)::AbstractSolution
 
     system = InitialValueProblem(HS, [(3, X0)]);
     plot_vars = [1, 2]
-    options = Options(:mode=>"reach",:vars=>1:system_dimension, :T=>3., :δ=>0.01, :max_jumps=>10,
+    options = Options(:mode=>"reach",:vars=>1:system_dimension, :T=>t, :δ=>0.01, :max_jumps=>max_jumps,
                   :plot_vars=>plot_vars, :ε_proj=>0.001, :verbosity=>0, :project_reachset=>false);
 
 

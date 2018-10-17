@@ -86,12 +86,12 @@ function filtered_oscillator(n0, opD)::AbstractSolution
     HS = HybridSystem(a, m, r, s);
 
     # initial condition in mode 1
-    X0 = Hyperrectangle(low=[0.2; -0.1 * ones(system_dimension-1)],
-                    high=[0.4; 0.1 * ones(system_dimension-1)]);
+    X0 = Hyperrectangle(low=[0.2; -0.1; zeros(n0)],
+                    high=[0.3; 0.1; zeros(n0)]);
 
     system = InitialValueProblem(HS, [(3, X0)]);
     plot_vars = [1, 2]
-    options = Options(:mode=>"reach",:vars=>1:system_dimension, :T=>3., :δ=>0.01, :max_jumps=>4,
+    options = Options(:mode=>"reach",:vars=>1:system_dimension, :T=>3., :δ=>0.05, :max_jumps=>4,
                   :plot_vars=>plot_vars, :ε_proj=>0.001, :verbosity=>0, :project_reachset=>false);
 
 

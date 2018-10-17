@@ -3,8 +3,6 @@
 # ============================
 
 function filtered_oscillator(n0, opD)::AbstractSolution
-    N = Float64
-    sol1,sol2, sol3 = Reachability.ReachSolution(Vector{Reachability.ReachSet{LazySet{N}, N}}()), Reachability.ReachSolution(Vector{Reachability.ReachSet{LazySet{N}, N}}()), Reachability.ReachSolution(Vector{Reachability.ReachSet{LazySet{N}, N}}())
     system_dimension = n0 + 2
     z = zeros(n0)
 
@@ -91,7 +89,7 @@ function filtered_oscillator(n0, opD)::AbstractSolution
 
     system = InitialValueProblem(HS, [(3, X0)]);
     plot_vars = [1, 2]
-    options = Options(:mode=>"reach",:vars=>1:system_dimension, :T=>3., :δ=>0.05, :max_jumps=>4,
+    options = Options(:mode=>"reach",:vars=>1:system_dimension, :T=>3., :δ=>0.01, :max_jumps=>10,
                   :plot_vars=>plot_vars, :ε_proj=>0.001, :verbosity=>0, :project_reachset=>false);
 
 

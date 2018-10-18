@@ -17,7 +17,7 @@ end
 
 # discrete post operators + short name + upper bound on dimensionality
 opDs = [
-        (Reachability.ReachSets.TextbookDiscretePost(),      "C",   4)
+        (Reachability.ReachSets.TextbookDiscretePost(),      "C",   8)
         (Reachability.ReachSets.LazyTextbookDiscretePost(),  "L", 256)
         (Reachability.ReachSets.ApproximatingDiscretePost(), "A", 256)
        ];

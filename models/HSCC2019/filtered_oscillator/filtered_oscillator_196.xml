@@ -23,7 +23,7 @@
       <flow>x' == a1*x-a1*x0 &amp; y' == a2*y+a2*y0</flow>
     </location>
     <location id="4" name="pn" x="516.0" y="273.0" width="265.0" height="72.0">
-      <invariant>x&gt;=0 &amp; y &lt;= -c/x0*x</invariant>
+      <invariant>x&gt;=0 &amp; y &lt;= -c/x0*x &amp; k&lt;=2</invariant>
       <flow>x' == a1*x+a1*x0 &amp; y' == a2*y-a2*y0</flow>
     </location>
     <transition source="2" target="1">

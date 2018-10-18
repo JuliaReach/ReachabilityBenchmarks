@@ -47,7 +47,7 @@ function filtered_oscillator(n0, opD, t, max_jumps)::AbstractSolution
     B = [-1.4; 0.7; z]
     X = HPolyhedron([HalfSpace([0.714286; 1.0; z], 0.0),  # 0.714286*x + y <= 0
                HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
-               HalfSpace([zeros(system_dimension-1); 1.], 2.0)])  # k <= 2
+               HalfSpace([zeros(system_dimension-1); 1.], 2.1)])  # k <= 2 (2.1 for numerical issues)
     m_4 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
     m = [m_1, m_2, m_3, m_4];

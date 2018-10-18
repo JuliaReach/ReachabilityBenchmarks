@@ -9,12 +9,13 @@
     <param name="c" type="real" local="false" d1="1" d2="1" dynamics="const" />
     <param name="x0" type="real" local="false" d1="1" d2="1" dynamics="const" />
     <param name="y0" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="k" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
     <location id="1" name="np" x="137.0" y="137.5" width="247.0" height="66.0">
       <invariant>x&lt;=0 &amp; y &gt;= -c/x0*x</invariant>
       <flow>x' == a1*x-a1*x0 &amp; y' == a2*y+a2*y0</flow>
     </location>
     <location id="2" name="nn" x="137.5" y="273.5" width="248.0" height="69.0">
-      <invariant>x&lt;=0 &amp; y &lt;= -c/x0*x</invariant>
+      <invariant>x&lt;=0 &amp; y &lt;= -c/x0*x &amp; k&lt;=2</invariant>
       <flow>x' == a1*x+a1*x0 &amp; y' == a2*y-a2*y0</flow>
     </location>
     <location id="3" name="pp" x="516.5" y="135.5" width="263.0" height="60.0">
@@ -31,13 +32,16 @@
     </transition>
     <transition source="1" target="3">
       <label>hop</label>
+      <labelposition x="0.0" y="0.0" />
     </transition>
     <transition source="3" target="4">
       <label>hop</label>
+      <assignment>k' == 2*k</assignment>
       <labelposition x="20.0" y="-24.0" />
     </transition>
     <transition source="4" target="2">
       <label>hop</label>
+      <labelposition x="0.0" y="0.0" />
     </transition>
   </component>
   <component id="filter_t">
@@ -50,6 +54,7 @@
   </component>
   <component id="oscillator">
     <param name="x" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="k" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
     <bind component="oscillator_template" as="osci" x="230.0" y="55.0">
       <map key="x">x</map>
       <map key="a1">-2</map>
@@ -57,6 +62,7 @@
       <map key="c">0.5</map>
       <map key="x0">0.7</map>
       <map key="y0">0.7</map>
+      <map key="k">k</map>
     </bind>
   </component>
   <component id="filter_4th_order">
@@ -139,8 +145,10 @@
     <param name="x4" type="real" local="true" d1="1" d2="1" dynamics="any" controlled="true" />
     <param name="x5" type="real" local="true" d1="1" d2="1" dynamics="any" controlled="true" />
     <param name="z" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="k" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
     <bind as="oscillator_1" component="oscillator" x="220.0" y="24.0">
       <map key="x">x</map>
+      <map key="k">k</map>
     </bind>
     <bind as="filter_32th_order_1" component="filter_32th_order" x="220.0" y="100.0">
       <map key="u">x</map>
@@ -174,4 +182,3 @@
     </bind>
   </component>
 </sspaceex>
-

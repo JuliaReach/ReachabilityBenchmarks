@@ -33,7 +33,7 @@ for (opD, name, upper_bound) in opDs
 end
 println("End of warmup run")
 
-project_and_store = true
+project_and_store = false
 if project_and_store
     println("Note: using output projection and storage")
 else

@@ -277,4 +277,35 @@
       <map key="c">-5</map>
     </bind>
   </component>
+  <component id="filter_2nd_order">
+    <param name="u" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="false" />
+    <param name="x" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" x="806.0" y="488.0" />
+    <param name="c" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="x1" type="real" local="true" d1="1" d2="1" dynamics="any" controlled="true" x="601.0" y="176.0" />
+    <bind component="filter_t" as="filter_t_1" x="386.0" y="149.0">
+      <map key="u">u</map>
+      <map key="x">x1</map>
+      <map key="c">c</map>
+    </bind>
+    <bind component="filter_t" as="filter_t_2" x="685.0" y="212.0">
+      <map key="u">x1</map>
+      <map key="x">x</map>
+      <map key="c">c</map>
+    </bind>
+  </component>
+  <component id="osc_w_2nd_order">
+    <param name="k" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" x="661.0" y="456.0" />
+    <param name="u" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" x="253.0" y="101.0" />
+    <param name="c" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="z" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" x="758.0" y="288.0" />
+    <bind component="oscillator" as="oscillator_1" x="124.0" y="334.0">
+      <map key="x">u</map>
+      <map key="k">k</map>
+    </bind>
+    <bind component="filter_2nd_order" as="filter_2nd_order_1" x="395.0" y="227.0">
+      <map key="u">u</map>
+      <map key="x">z</map>
+      <map key="c">c</map>
+    </bind>
+  </component>
 </sspaceex>

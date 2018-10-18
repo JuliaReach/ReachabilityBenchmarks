@@ -15,7 +15,7 @@
       <flow>x' == a1*x-a1*x0 &amp; y' == a2*y+a2*y0</flow>
     </location>
     <location id="2" name="nn" x="137.5" y="273.5" width="248.0" height="69.0">
-      <invariant>x&lt;=0 &amp; y &lt;= -c/x0*x &amp; k&lt;=2</invariant>
+      <invariant>x&lt;=0 &amp; y &lt;= -c/x0*x</invariant>
       <flow>x' == a1*x+a1*x0 &amp; y' == a2*y-a2*y0</flow>
     </location>
     <location id="3" name="pp" x="516.5" y="135.5" width="263.0" height="60.0">

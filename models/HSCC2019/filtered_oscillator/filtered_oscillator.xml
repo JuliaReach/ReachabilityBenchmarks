@@ -9,22 +9,22 @@
     <param name="c" type="real" local="false" d1="1" d2="1" dynamics="const" />
     <param name="x0" type="real" local="false" d1="1" d2="1" dynamics="const" />
     <param name="y0" type="real" local="false" d1="1" d2="1" dynamics="const" />
-    <param name="k" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="k" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
     <location id="1" name="np" x="137.0" y="137.5" width="247.0" height="66.0">
       <invariant>x&lt;=0 &amp; y &gt;= -c/x0*x</invariant>
-      <flow>x' == a1*x-a1*x0 &amp; y' == a2*y+a2*y0&amp; k' == 0</flow>
+      <flow>x' == a1*x-a1*x0 &amp; y' == a2*y+a2*y0</flow>
     </location>
     <location id="2" name="nn" x="137.5" y="273.5" width="248.0" height="69.0">
       <invariant>x&lt;=0 &amp; y &lt;= -c/x0*x</invariant>
-      <flow>x' == a1*x+a1*x0 &amp; y' == a2*y-a2*y0 &amp; k' == 0</flow>
+      <flow>x' == a1*x+a1*x0 &amp; y' == a2*y-a2*y0 </flow>
     </location>
     <location id="3" name="pp" x="516.5" y="135.5" width="263.0" height="60.0">
       <invariant>x&gt;=0 &amp; y &gt;= -c/x0*x</invariant>
-      <flow>x' == a1*x-a1*x0 &amp; y' == a2*y+a2*y0 &amp; k' == 0</flow>
+      <flow>x' == a1*x-a1*x0 &amp; y' == a2*y+a2*y0 </flow>
     </location>
     <location id="4" name="pn" x="516.0" y="273.0" width="265.0" height="72.0">
       <invariant>x&gt;=0 &amp; y &lt;= -c/x0*x &amp; k&lt;=2</invariant>
-      <flow>x' == a1*x+a1*x0 &amp; y' == a2*y-a2*y0 &amp; k' == 0</flow>
+      <flow>x' == a1*x+a1*x0 &amp; y' == a2*y-a2*y0 </flow>
     </location>
     <transition source="2" target="1">
       <label>hop</label>

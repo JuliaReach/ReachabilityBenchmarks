@@ -2,7 +2,8 @@
 # See: https://flowstar.org/benchmarks/filtered-oscillator/
 # ============================
 
-using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra
+using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra,
+      Optim
 import LazySets.HalfSpace
 
 

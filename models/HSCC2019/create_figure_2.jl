@@ -7,6 +7,8 @@
 
 using LazySets, LazySets.Approximations, Plots
 
+ENV["GKSwstype"] = "100"
+
 n = 1000; m = 2; δ = 0.1;
 A, B = sprandn(n, n, 0.01), randn(n, m);
 X0 = BallInf(ones(n), 0.1);

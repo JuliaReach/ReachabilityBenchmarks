@@ -5,6 +5,9 @@
 
 using LazySets, Plots
 
+#disable graphics output in GR - https://github.com/JuliaPlots/Plots.jl/issues/1182
+ENV["GKSwstype"] = "100"
+
 function reach_continuous(A, X0, δ, μ, T, max_order)
     # bloating factors
     Anorm = norm(A, Inf)

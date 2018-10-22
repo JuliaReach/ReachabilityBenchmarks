@@ -6,6 +6,9 @@
 using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra, Optim, Plots
 import LazySets.HalfSpace
 
+#disable graphics output in GR - https://github.com/JuliaPlots/Plots.jl/issues/1182
+ENV["GKSwstype"] = "100"
+
 include("FilteredOscillator.jl")
 
 N = Float64

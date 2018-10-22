@@ -3,7 +3,7 @@
 #
 #     include("create_figure_5.jl")
 
-using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra, Optim
+using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra, Optim, Plots
 import LazySets.HalfSpace
 
 include("FilteredOscillator.jl")

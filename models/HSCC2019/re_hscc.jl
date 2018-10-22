@@ -79,7 +79,7 @@ while n0 <= 256
         end
         sol = filtered_oscillator(n0, opD, T, max_jumps);
         if project_and_store
-            sol_proj = get_projection(sol, n0+2);
+            sol_proj = get_projection(sol, n0+3);
             push!(results, (sol_proj, name));
         end
     end

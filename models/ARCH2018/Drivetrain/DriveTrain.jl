@@ -1,4 +1,4 @@
-function filtered_oscillator(nϴ, opD, t, max_jumps)::AbstractSolution
+function drivetrain(nϴ, opD, t, max_jumps)::AbstractSolution
     system_dimension = 2 * nϴ + 7 + 1
     z = zeros(system_dimension-1)
 

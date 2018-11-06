@@ -24,26 +24,49 @@ function drivetrain(nϴ, opD, t, max_jumps)::AbstractSolution
 
     # common flow
     A = zeros(system_dimension, system_dimension)
-    A[1,7], A[1,9] = 1./γ, -1.
-    A[2,1], A[2,2], A[2,3], A[2,4], A[2,7], A[2,8] = (-(1/τ_eng)*k_I*γ+k_D*(1/J_m)*k_s),-k_D*(1/J_m - 1),
-            (1/τ_eng)*k_I*γ, (1/τ_eng)*k_P*γ, -(1/τ_eng)*k_I + k_D*(1/J_m)*b_m, -(1/τ_eng)*k_I
-    #TODO add U for x2' : k_D*γ*u-k_D*(1/(J_m*\gamma))k_s*α
+
+    A[1,7] = 1.0/γ
+    A[1,9] =  -1.
+
+    A[2,1] = -(1.0/τ_eng)*k_I*γ+k_D*(1.0/(J_m*γ*τ_eng)*k_s
+    A[2,2] = -k_D*(1.0/J_m - 1)/τ_eng
+    A[2,3] = (1.0/τ_eng)*k_I*γ
+    A[2,4] = (1.0/τ_eng)*k_P*γ
+    A[2,7] = (-k_P + k_D*(1.0/J_m)*b_m)/τ_eng
+    A[2,8] = -(1.0/τ_eng)*k_I
+    #TODO add U for x2' : (k_D*γ*u-k_D*(1.0/(J_m*\gamma))*k_s*α)/τ_eng
+
     A[3,4] = 1.
+
     A[5,6] = 1.
-    A[6,5], A[6,6], A[6,2*ϴ+6] = -(1/J_l)*k_ϴ, -(1/J_l)*b_l, (1/J_l)*k_ϴ
-    A[7,1], A[7,2], A[7,7] = (1/(J_m*γ))*k_s, 1/J_m, -(1/J_m)*b_m
-    #TODO add U for x7' : (1/(J_m*\gamma))*k_s*α
-    A[9,1], A[9,8], A[9,9], A[9,10] = (1/J_1)*k_s, -(1/J_1)*k_1,-(1/J_1)*b_1, (1/J_1)
-    #TODO add U for x_9' : -(1/J_1)*k_s*α
+
+    A[6,5] = -(1.0/J_l)*k_ϴ
+    A[6,6] =  -(1.0/J_l)*b_l
+    A[6,2*ϴ+6] = (1.0/J_l)*k_ϴ
+
+    A[7,1] = -(1.0/(J_m*γ))*k_s
+    A[7,2] = 1.0/J_m
+    A[7,7] = -(1.0/J_m)*b_m
+    #TODO add U for x7' : (1.0/(J_m*γ))*k_s*α
+
     J_arr = ones((system_dimension - 1 - 7)/2)
     b_arr = ones((system_dimension - 1 - 7)/2)
     k_arr = ones((system_dimension - 1 - 7)/2)
+
+    A[9,1] = (1.0/J_arr[1])*k_s
+    A[9,8] = -(1.0/J_arr[1])*k_arr[1]
+    A[9,9] = -(1.0/J_arr[1])*b_arr[1]
+    A[9,10] = (1.0/J_arr[1])*k_arr[1]
+    #TODO add U for x_9' : -(1.0/J_arr[1])*k_s*α
+
     i = 10
     while i < system_dimension-1
         el = (system_dimension - 8 - i)/2
         A[i,i+1] = 1.
-        A[i+1,5], A[i+1,2*τ+4], A[i+1,2*τ+6], A[i+1,2*τ+7] = (1/J_arr[el])*k_arr[ϴ], -(1/J_arr[el])*k_arr[ϴ-1],
-        -(1/J_arr[el])*(k_arr[ϴ-1]+k_arr[ϴ]), -(1/J_arr[el])*b_arr[ϴ]
+        A[i+1,5] = (1.0/J_arr[el])*k_arr[el]
+        A[i+1,2*el+4] = (1.0/J_arr[el])*k_arr[el-1]
+        A[i+1,2*el+6] = -(1.0/J_arr[el])*(k_arr[el-1]+k_arr[el])
+        A[i+1,2*el+7] =  -(1.0/J_arr[el])*b_arr[el]
         i += 2
     end
 
@@ -84,7 +107,7 @@ function drivetrain(nϴ, opD, t, max_jumps)::AbstractSolution
 
     # Transition negAngleInit -> negAngle
     X_l1l2 = HPolyhedron(HalfSpace([z,1.;], 0.2)])  # t <= 0.2
-    r1 = ConstrainedLinearDiscreteSystem(A_trans_34, X_l3l4);
+    r1 = ConstrainedLinearDiscreteSystem(A_trans, X_l3l4);
 
     # Transition negAngle -> Deadzone
     X_l2l3 = HPolyhedron([HalfSpace([-1.; z], -0.03)])  # x >= -0.03

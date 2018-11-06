@@ -58,18 +58,18 @@ function drivetrain(nϴ, opD, t, max_jumps)::AbstractSolution
 
     #negAngleInit
     B = [sparsevec(4:4, [u], system_dimension)]
-    X = HPolyhedron([HalfSpace([1; z], 0.2)]) # t <= 0.2
+    X = HPolyhedron([HalfSpace([z; 1.], 0.2)]) # t <= 0.2
     m_negAngleInit = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
     #negAngle
     B = [sparsevec(4:4, [u], system_dimension)]
-    X = HPolyhedron([HalfSpace([1; z], -0.03)]) # x <= -0.03
+    X = HPolyhedron([HalfSpace([1.; z], -0.03)]) # x <= -0.03
     m_negAngle = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
     #Deadzone
     B = [sparsevec(4:4, [u], system_dimension)]
-    X = HPolyhedron([HalfSpace([-1; z], -0.03),  # x >= -0.03
-              HalfSpace([1; z], 0.03)])  # x <= 0.03
+    X = HPolyhedron([HalfSpace([-1.; z], -0.03),  # x >= -0.03
+              HalfSpace([1.; z], 0.03)])  # x <= 0.03
     m_deadzone = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
     #posAngle
@@ -84,7 +84,6 @@ function drivetrain(nϴ, opD, t, max_jumps)::AbstractSolution
 
     # Transition negAngleInit -> negAngle
     X_l1l2 = HPolyhedron(HalfSpace([z,1.;], 0.2)])  # t <= 0.2
-    A_trans_34 = eye(system_dimension)
     r1 = ConstrainedLinearDiscreteSystem(A_trans_34, X_l3l4);
 
     # Transition negAngle -> Deadzone

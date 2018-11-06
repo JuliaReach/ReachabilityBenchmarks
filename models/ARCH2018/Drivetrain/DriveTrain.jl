@@ -49,9 +49,9 @@ function drivetrain(nϴ, opD, t, max_jumps)::AbstractSolution
     A[7,7] = -(1.0/J_m)*b_m
     #TODO add U for x7' : (1.0/(J_m*γ))*k_s*α
 
-    J_arr = ones((system_dimension - 1 - 7)/2)
-    b_arr = ones((system_dimension - 1 - 7)/2)
-    k_arr = ones((system_dimension - 1 - 7)/2)
+    J_arr = repeat([J_i],Int((system_dimension - 1 - 7)/2))
+    b_arr = repeat([b_i],Int((system_dimension - 1 - 7)/2))
+    k_arr = repeat([k_i],Int((system_dimension - 1 - 7)/2))
 
     A[9,1] = (1.0/J_arr[1])*k_s
     A[9,8] = -(1.0/J_arr[1])*k_arr[1]

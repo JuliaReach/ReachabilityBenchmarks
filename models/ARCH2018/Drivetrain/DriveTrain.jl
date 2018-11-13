@@ -1,3 +1,8 @@
+using HybridSystems, LazySets
+if VERSION >= v"0.7"
+    using LinearAlgebra, SparseArrays
+end
+
 function drivetrain(nϴ)::HybridSystem
     system_dimension = 2 * nϴ + 7
     z = zeros(system_dimension)

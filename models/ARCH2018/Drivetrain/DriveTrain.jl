@@ -1,27 +1,26 @@
 function drivetrain(nϴ)::HybridSystem
-
     system_dimension = 2 * nϴ + 7
     z = zeros(system_dimension)
 
+    # Based on: M. Althoff & B. H. Krogh - Avoiding Geometric Intersection
+    # Operations in Reachability Analysis of Hybrid Systems
 
-    # Based on: Avoiding Geometric Intersection Operations in Reachability Analysis of Hybrid Systems
-    # Matthias Althoff & Bruce H. Krogh
-
-    #constants
+    # constants
     α = 0.03 # backlash size (half gap width)
     α_neg = -0.03
     τ_eng = 0.1 # engine time constant
     γ = 12. # the gearbox ratio
     u = 5 # requested engine torque
 
-    # The indices m and l refer to the motor and the load
-    # numbered indices refer to the numbering of additional rotating masses, which are currently generalized by i.
+    # indices m and l refer to the motor and the load
+    # numbered indices refer to the numbering of additional rotating masses,
+    # which are currently generalized by i
 
-    #viscous friction constants by b [Nm/(s/rad)]
+    # viscous friction constants by b [Nm/(s/rad)]
     b_l = 5.6
     b_m = 0.
     b_i = 1.
-    #Moments of inertia are denoted by J [kg m²]
+    # moments of inertia are denoted by J [kg m²]
     J_l = 140.
     J_m = 0.3
     J_i = 0.01
@@ -31,7 +30,7 @@ function drivetrain(nϴ)::HybridSystem
     k_s = 10000.
     k_s_zero = 0.
 
-    #PID parameters
+    # PID parameters
     k_P = 0.5
     k_I = 0.5
     k_D = 0.5
@@ -66,7 +65,7 @@ function drivetrain(nϴ)::HybridSystem
         A[7,7] = -(1.0/J_m)*b_m
 
         i = 10
-        if (nϴ>1)
+        if (nϴ > 1)
             A[8, 9] = 1.
             A[9,1] = (1.0/J_arr[1])*k_s
             A[9,8] = -(1.0/J_arr[1])*k_arr[1]
@@ -97,7 +96,7 @@ function drivetrain(nϴ)::HybridSystem
     end
 
 
-    # Transition graph (automaton)
+    # transition graph (automaton)
     a = LightAutomaton(3);
 
     add_transition!(a, 1, 2, 1);
@@ -110,27 +109,27 @@ function drivetrain(nϴ)::HybridSystem
     # common resets
     A_trans = eye(system_dimension)
 
-    #negAngle
+    # negAngle
     A = get_dynamics(k_s, α_neg)
     B = get_b(k_s, α_neg)
     X = HPolyhedron([HalfSpace([1.; z], α_neg)]) # x <= -α
     m_negAngle = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
 
-    # Transition negAngle -> Deadzone
+    # transition negAngle -> deadzone
     X_l1l2 = HPolyhedron([HalfSpace([-1.; z], α)])  # x >= -0.03
     r1 = ConstrainedLinearDiscreteSystem(A_trans, X_l1l2);
 
 
-    #Deadzone
+    # deadzone
     A = get_dynamics(k_s_zero, α_neg)
     B = get_b(k_s_zero, α_neg)
-    X = HPolyhedron([HalfSpace([-1.; z], α),  # x >= -⁠α
+    X = HPolyhedron([HalfSpace([-1.; z], α),  # x >= -α
               HalfSpace([1.; z], α)])  # x <= 0.03
     m_deadzone = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
-    # Transition Deadzone -> negAngle
+    # transition deadzone -> negAngle
     X_l2l1 = HPolyhedron([HalfSpace([1.; z], α_neg)])  # x <= -0.03
     r2 = ConstrainedLinearDiscreteSystem(A_trans, X_l2l1);
-    # Transition Deadzone -> posAngle
+    # transition deadzone -> posAngle
     X_l2l3 = HPolyhedron([HalfSpace([-1.; z], α_neg)])  # x >= 0.03
     r3 = ConstrainedLinearDiscreteSystem(A_trans, X_l2l3);
 
@@ -140,7 +139,7 @@ function drivetrain(nϴ)::HybridSystem
     B = get_b(k_s, α)
     X = HPolyhedron([HalfSpace([-1.; z], α_neg)])  # x >= α (2.1 for numerical issues)
     m_posAngle = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
-    # Transition posAngle -> Deadzone
+    # transition posAngle -> deadzone
     X_l3l2 = HPolyhedron([HalfSpace([1.; z], α)])  # x <= 0.03
     r4 = ConstrainedLinearDiscreteSystem(A_trans, X_l3l2);
 
@@ -148,13 +147,10 @@ function drivetrain(nϴ)::HybridSystem
 
     r = [r1,r2,r3,r4];
 
-    # Switchings
+    # switchings
     s = [HybridSystems.AutonomousSwitching()];
 
     HS = HybridSystem(a, m, r, s);
 
     return HS;
-
-
-
 end

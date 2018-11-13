@@ -42,7 +42,7 @@ function drivetrain(nϴ)::HybridSystem
 
     function get_dynamics(k_s, α)
         # common flow
-        A = zeros(system_dimension, system_dimension)
+        A = spzeros(system_dimension, system_dimension)
 
         J_arr = fill(J_i, nϴ)
         b_arr = fill(b_i, nϴ)

@@ -88,6 +88,7 @@ function drivetrain(nϴ)::HybridSystem
             A[i+1,2*el+7] =  -(1.0/J_arr[el])*b_arr[el]
             i += 2
         end
+        return A
     end
 
     function get_b(k_s, α)

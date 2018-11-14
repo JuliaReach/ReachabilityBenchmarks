@@ -6,9 +6,9 @@ if VERSION >= v"0.7"
 end
 
 """
-    drivetrain(nϴ)::HybridSystem
+    drivetrain(nϴ::Int)::HybridSystem
 
-Return the hybrid system that models a mechanical system with backslash
+Return the hybrid system that models a mechanical system with backlash
 (powertrain) from an automotive drivetrain problem.
 
 ### Input
@@ -21,10 +21,12 @@ Hybrid system representing the powertrain model.
 
 ### Notes
 
-The model is based on: M. Althoff and B. H. Krogh, [Avoiding Geometric Intersection
-Operations in Reachability Analysis of Hybrid Systems].
+The model is based on: M. Althoff and B. H. Krogh, Avoiding Geometric
+Intersection Operations in Reachability Analysis of Hybrid Systems
+[HSCC '12 Proceedings of the 15th ACM international conference on Hybrid Systems:
+Computation and Control Pages 45-54](https://dl.acm.org/citation.cfm?id=2185643).
 """
-function drivetrain(nϴ=1)::HybridSystem
+function drivetrain(nϴ::Int=1)::HybridSystem
 
     # dimension of state space
     system_dimension = 2 * nϴ + 7

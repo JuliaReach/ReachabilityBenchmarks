@@ -21,10 +21,23 @@ Hybrid system representing the powertrain model.
 
 ### Notes
 
-The model is based on: M. Althoff and B. H. Krogh, Avoiding Geometric
-Intersection Operations in Reachability Analysis of Hybrid Systems
-[HSCC '12 Proceedings of the 15th ACM international conference on Hybrid Systems:
-Computation and Control Pages 45-54](https://dl.acm.org/citation.cfm?id=2185643).
+The model is based on [1], which is an extension with a parametric number of
+rotationg massesof the autmotive powertrain model presented in [2].
+The parameters of the system's additional masses, which can be interpreted as
+rotating elements in a gearbox and further drivetrain elements, are taken from
+[3].
+
+[1] M. Althoff and B. H. Krogh, Avoiding Geometric Intersection Operations in
+Reachability Analysis of Hybrid Systems [HSCC '12 Proceedings of the 15th ACM
+international conference on Hybrid Systems: Computation and Control Pages
+45-54](https://dl.acm.org/citation.cfm?id=2185643).
+
+[2] A. Lagerberg. A benchmark on hybrid control of an automotive powertrain with
+backlash. Technical Report R005/2007, Signals and Systems, Chalmers University
+of Technology, 2007.
+
+[3] E.-A. M. A. Rabeih. Torsional Vibration Analysis of Automotive Drivelines.
+PhD thesis, University of Leeds, 1997.
 """
 function drivetrain(nϴ::Int=1)::HybridSystem
 
@@ -144,12 +157,14 @@ function drivetrain(nϴ::Int=1)::HybridSystem
     A_trans = system_dimension * I
     
     z = zeros(system_dimension)
-    # identity matrix
-    E = Matrix{Float64}(I, size(B, 1), size(B, 1))
 
     # negAngle
     A = get_dynamics(k_s, α_neg)
     B = get_b(k_s, α_neg)
+
+    # identity matrix
+    E = Matrix{Float64}(I, system_dimension, system_dimension)
+
     X = HPolyhedron([HalfSpace([1.; z], α_neg)]) # x <= -α
     m_negAngle = ConstrainedLinearControlContinuousSystem(A, E, X, B*U)
 

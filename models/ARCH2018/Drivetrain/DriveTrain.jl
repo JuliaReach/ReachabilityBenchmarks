@@ -109,7 +109,7 @@ function drivetrain(θ::Int=1)::HybridSystem
         A[7,7] = -(1.0/J_m)*b_m
 
         i = 10
-        if (ϴ >= 1)
+        if (θ >= 1)
             A[8, 9] = 1.
             A[9,1] = (1.0/J_arr[1])*k_s
             A[9,8] = -(1.0/J_arr[1])*k_arr[1]
@@ -119,8 +119,6 @@ function drivetrain(θ::Int=1)::HybridSystem
             else
                 A[9,5] = (1.0/J_arr[1])*k_arr[1]
             end
-        else
-            i = 8
         end
         el = Int((i + 1 - 7)/2) # returns the index of additional rotating mass
         while i < n

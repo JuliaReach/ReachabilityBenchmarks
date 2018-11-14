@@ -1,16 +1,37 @@
 using HybridSystems, LazySets
+
+# compatibility of julia versions
 if VERSION >= v"0.7"
     using LinearAlgebra, SparseArrays
 end
 
-function drivetrain(nϴ)::HybridSystem
+"""
+    drivetrain(nϴ)::HybridSystem
+
+Return the hybrid system that models a mechanical system with backslash
+(powertrain) from an automotive drivetrain problem.
+
+### Input
+
+- `nϴ` -- (optional, default: `1`) number of rotating masses
+
+### Output
+
+Hybrid system representing the powertrain model.
+
+### Notes
+
+The model is based on: M. Althoff and B. H. Krogh, [Avoiding Geometric Intersection
+Operations in Reachability Analysis of Hybrid Systems].
+"""
+function drivetrain(nϴ=1)::HybridSystem
+
+    # dimension of state space
     system_dimension = 2 * nϴ + 7
-    z = zeros(system_dimension)
 
-    # Based on: M. Althoff & B. H. Krogh - Avoiding Geometric Intersection
-    # Operations in Reachability Analysis of Hybrid Systems
-
+    # =========
     # constants
+    # =========
     α = 0.03 # backlash size (half gap width)
     α_neg = -0.03
     τ_eng = 0.1 # engine time constant
@@ -40,6 +61,9 @@ function drivetrain(nϴ)::HybridSystem
     k_I = 0.5
     k_D = 0.5
 
+    # =========
+    # dynamics
+    # =========
     function get_dynamics(k_s, α)
         # common flow
         A = spzeros(system_dimension, system_dimension)
@@ -101,8 +125,9 @@ function drivetrain(nϴ)::HybridSystem
         return sparsevec([2, 4, 7, 9], [x2_u, x4_u, x7_u, x9_u], system_dimension)
     end
 
-
+    # =============================
     # transition graph (automaton)
+    # =============================
     a = LightAutomaton(3);
 
     add_transition!(a, 1, 2, 1);
@@ -111,52 +136,63 @@ function drivetrain(nϴ)::HybridSystem
     add_transition!(a, 3, 2, 1);
 
     # common U
-    U = Singleton([1.0]);
+    U = Singleton([1.0])
+
     # common resets
-    A_trans = eye(system_dimension)
+    A_trans = system_dimension * I
+    
+    z = zeros(system_dimension)
+    # identity matrix
+    E = Matrix{Float64}(I, size(B, 1), size(B, 1))
 
     # negAngle
     A = get_dynamics(k_s, α_neg)
     B = get_b(k_s, α_neg)
     X = HPolyhedron([HalfSpace([1.; z], α_neg)]) # x <= -α
-    m_negAngle = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
+    m_negAngle = ConstrainedLinearControlContinuousSystem(A, E, X, B*U)
 
     # transition negAngle -> deadzone
     X_l1l2 = HPolyhedron([HalfSpace([-1.; z], α)])  # x >= -0.03
     r1 = ConstrainedLinearDiscreteSystem(A_trans, X_l1l2);
 
-
     # deadzone
     A = get_dynamics(k_s_zero, α_neg)
     B = get_b(k_s_zero, α_neg)
     X = HPolyhedron([HalfSpace([-1.; z], α),  # x >= -α
-              HalfSpace([1.; z], α)])  # x <= 0.03
-    m_deadzone = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
+                     HalfSpace([1.; z], α)])  # x <= 0.03
+    m_deadzone = ConstrainedLinearControlContinuousSystem(A, E, X, B*U)
+
     # transition deadzone -> negAngle
     X_l2l1 = HPolyhedron([HalfSpace([1.; z], α_neg)])  # x <= -0.03
-    r2 = ConstrainedLinearDiscreteSystem(A_trans, X_l2l1);
+    r2 = ConstrainedLinearDiscreteSystem(A_trans, X_l2l1)
+
     # transition deadzone -> posAngle
     X_l2l3 = HPolyhedron([HalfSpace([-1.; z], α_neg)])  # x >= 0.03
-    r3 = ConstrainedLinearDiscreteSystem(A_trans, X_l2l3);
-
+    r3 = ConstrainedLinearDiscreteSystem(A_trans, X_l2l3)
 
     #posAngle
     A = get_dynamics(k_s, α)
     B = get_b(k_s, α)
     X = HPolyhedron([HalfSpace([-1.; z], α_neg)])  # x >= α (2.1 for numerical issues)
-    m_posAngle = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
+    m_posAngle = ConstrainedLinearControlContinuousSystem(A, E, X, B*U)
+
     # transition posAngle -> deadzone
     X_l3l2 = HPolyhedron([HalfSpace([1.; z], α)])  # x <= 0.03
-    r4 = ConstrainedLinearDiscreteSystem(A_trans, X_l3l2);
+    r4 = ConstrainedLinearDiscreteSystem(A_trans, X_l3l2)
 
-    modes = [m_negAngle, m_deadzone, m_posAngle];
+    # modes
+    modes = [m_negAngle, m_deadzone, m_posAngle]
 
-    r = [r1,r2,r3,r4];
+    # reset maps
+    r = [r1, r2, r3, r4]
 
+    # ===========
     # switchings
-    s = [HybridSystems.AutonomousSwitching()];
+    # ===========
+    s = [HybridSystems.AutonomousSwitching()]
 
-    HS = HybridSystem(a, m, r, s);
+    # instantiate hybrid system
+    HS = HybridSystem(a, m, r, s)
 
-    return HS;
+    return HS
 end

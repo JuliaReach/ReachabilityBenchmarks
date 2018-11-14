@@ -114,7 +114,7 @@ function drivetrain(θ::Int=1)::HybridSystem
             A[9,1] = (1.0/J_arr[1])*k_s
             A[9,8] = -(1.0/J_arr[1])*k_arr[1]
             A[9,9] = -(1.0/J_arr[1])*b_arr[1]
-            if (ϴ > 1)
+            if (θ > 1)
                 A[9,10] = (1.0/J_arr[1])*k_arr[1]
             else
                 A[9,5] = (1.0/J_arr[1])*k_arr[1]
@@ -126,7 +126,7 @@ function drivetrain(θ::Int=1)::HybridSystem
             A[i+1,2*el+4] = (1.0/J_arr[el])*k_arr[el-1]
             A[i+1,2*el+6] = -(1.0/J_arr[el])*(k_arr[el-1]+k_arr[el])
             A[i+1,2*el+7] =  -(1.0/J_arr[el])*b_arr[el]
-            if el == ϴ
+            if el == θ
                 A[i+1,5] = (1.0/J_arr[el])*k_arr[el]
             else
                 A[i+1,i+2] = (1.0/J_arr[el])*k_arr[el]

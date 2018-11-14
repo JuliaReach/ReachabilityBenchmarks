@@ -6,14 +6,14 @@ if VERSION >= v"0.7"
 end
 
 """
-    drivetrain(nϴ::Int)::HybridSystem
+    drivetrain(ϴ::Int)::HybridSystem
 
 Return the hybrid system that models a mechanical system with backlash
 (powertrain) from an automotive drivetrain problem.
 
 ### Input
 
-- `nϴ` -- (optional, default: `1`) number of rotating masses
+- `ϴ` -- (optional, default: `1`) number of rotating masses
 
 ### Output
 
@@ -39,10 +39,10 @@ of Technology, 2007.
 [3] E.-A. M. A. Rabeih. Torsional Vibration Analysis of Automotive Drivelines.
 PhD thesis, University of Leeds, 1997.
 """
-function drivetrain(nϴ::Int=1)::HybridSystem
+function drivetrain(ϴ::Int=1)::HybridSystem
 
     # dimension of state space
-    system_dimension = 2 * nϴ + 7
+    n = 2 * ϴ + 7
 
     # =========
     # constants
@@ -81,11 +81,11 @@ function drivetrain(nϴ::Int=1)::HybridSystem
     # =========
     function get_dynamics(k_s, α)
         # common flow
-        A = spzeros(system_dimension, system_dimension)
+        A = zeros(n, n) # use spzeros? => see #40 in MathematicalSystems.jl
 
-        J_arr = fill(J_i, nϴ)
-        b_arr = fill(b_i, nϴ)
-        k_arr = fill(k_i, nϴ)
+        J_arr = fill(J_i, ϴ)
+        b_arr = fill(b_i, ϴ)
+        k_arr = fill(k_i, ϴ)
 
         A[1,7] = 1.0/γ
         A[1,9] =  -1.
@@ -100,16 +100,16 @@ function drivetrain(nϴ::Int=1)::HybridSystem
 
         A[5,6] = 1.
 
-        A[6,5] = -(1.0/J_l) * k_arr[nϴ]
+        A[6,5] = -(1.0/J_l) * k_arr[ϴ]
         A[6,6] =  -(1.0/J_l) * b_l
-        A[6,2 * nϴ+6] = (1.0/J_l) * k_arr[nϴ]
+        A[6,2 * ϴ+6] = (1.0/J_l) * k_arr[ϴ]
 
         A[7,1] = -(1.0/(J_m*γ))*k_s
         A[7,2] = 1.0/J_m
         A[7,7] = -(1.0/J_m)*b_m
 
         i = 10
-        if (nϴ > 1)
+        if (ϴ > 1)
             A[8, 9] = 1.
             A[9,1] = (1.0/J_arr[1])*k_s
             A[9,8] = -(1.0/J_arr[1])*k_arr[1]
@@ -118,7 +118,7 @@ function drivetrain(nϴ::Int=1)::HybridSystem
         else
             i = 8
         end
-        while i < system_dimension
+        while i < n
             el = Int((i + 1 - 7)/2)
             A[i,i+1] = 1.
             A[i+1,5] = (1.0/J_arr[el])*k_arr[el]
@@ -137,33 +137,33 @@ function drivetrain(nϴ::Int=1)::HybridSystem
         x7_u = (1.0/(J_m*γ))*k_s*α
         x9_u = -(1.0/J_i)*k_s*α
 
-        return sparsevec([2, 4, 7, 9], [x2_u, x4_u, x7_u, x9_u], system_dimension)
+        return sparsevec([2, 4, 7, 9], [x2_u, x4_u, x7_u, x9_u], n)
     end
 
     # =============================
     # transition graph (automaton)
     # =============================
-    a = LightAutomaton(3);
+    automaton = LightAutomaton(3);
 
-    add_transition!(a, 1, 2, 1);
-    add_transition!(a, 2, 1, 1);
-    add_transition!(a, 2, 3, 1);
-    add_transition!(a, 3, 2, 1);
+    add_transition!(automaton, 1, 2, 1);
+    add_transition!(automaton, 2, 1, 1);
+    add_transition!(automaton, 2, 3, 1);
+    add_transition!(automaton, 3, 2, 1);
 
     # common U
     U = Singleton([1.0])
 
     # common resets
-    A_trans = system_dimension * I
-    
-    z = zeros(system_dimension)
+    A_trans = Matrix{Float64}(I, n, n) # use UniformScaling n * I ? not accepted since it doesn't subtype <:AbstractArray{T,2}
+
+    z = zeros(n)
 
     # negAngle
     A = get_dynamics(k_s, α_neg)
     B = get_b(k_s, α_neg)
 
     # identity matrix
-    E = Matrix{Float64}(I, system_dimension, system_dimension)
+    E = Matrix{Float64}(I, n, n)
 
     X = HPolyhedron([HalfSpace([1.; z], α_neg)]) # x <= -α
     m_negAngle = ConstrainedLinearControlContinuousSystem(A, E, X, B*U)
@@ -201,15 +201,15 @@ function drivetrain(nϴ::Int=1)::HybridSystem
     modes = [m_negAngle, m_deadzone, m_posAngle]
 
     # reset maps
-    r = [r1, r2, r3, r4]
+    resets = [r1, r2, r3, r4]
 
     # ===========
     # switchings
     # ===========
-    s = [HybridSystems.AutonomousSwitching()]
+    switchings = [HybridSystems.AutonomousSwitching()]
 
     # instantiate hybrid system
-    HS = HybridSystem(a, m, r, s)
+    HS = HybridSystem(automaton, modes, resets, switchings)
 
     return HS
 end

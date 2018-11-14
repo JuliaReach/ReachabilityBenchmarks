@@ -6,14 +6,14 @@ if VERSION >= v"0.7"
 end
 
 """
-    drivetrain(ϴ::Int)::HybridSystem
+    drivetrain(θ::Int)::HybridSystem
 
 Return the hybrid system that models a mechanical system with backlash
 (powertrain) from an automotive drivetrain problem.
 
 ### Input
 
-- `ϴ` -- (optional, default: `1`) number of rotating masses
+- `θ` -- (optional, default: `1`) number of rotating masses
 
 ### Output
 
@@ -39,10 +39,10 @@ of Technology, 2007.
 [3] E.-A. M. A. Rabeih. Torsional Vibration Analysis of Automotive Drivelines.
 PhD thesis, University of Leeds, 1997.
 """
-function drivetrain(ϴ::Int=1)::HybridSystem
+function drivetrain(θ::Int=1)::HybridSystem
 
     # dimension of state space
-    n = 2 * ϴ + 7
+    n = 2 * θ + 7
 
     # =========
     # constants
@@ -83,9 +83,9 @@ function drivetrain(ϴ::Int=1)::HybridSystem
         # common flow
         A = zeros(n, n) # use spzeros? => see #40 in MathematicalSystems.jl
 
-        J_arr = fill(J_i, ϴ)
-        b_arr = fill(b_i, ϴ)
-        k_arr = fill(k_i, ϴ)
+        J_arr = fill(J_i, θ)
+        b_arr = fill(b_i, θ)
+        k_arr = fill(k_i, θ)
 
         A[1,7] = 1.0/γ
         A[1,9] =  -1.
@@ -100,16 +100,16 @@ function drivetrain(ϴ::Int=1)::HybridSystem
 
         A[5,6] = 1.
 
-        A[6,5] = -(1.0/J_l) * k_arr[ϴ]
+        A[6,5] = -(1.0/J_l) * k_arr[θ]
         A[6,6] =  -(1.0/J_l) * b_l
-        A[6,2 * ϴ+6] = (1.0/J_l) * k_arr[ϴ]
+        A[6,2 * θ+6] = (1.0/J_l) * k_arr[θ]
 
         A[7,1] = -(1.0/(J_m*γ))*k_s
         A[7,2] = 1.0/J_m
         A[7,7] = -(1.0/J_m)*b_m
 
         i = 10
-        if (ϴ > 1)
+        if (θ > 1)
             A[8, 9] = 1.
             A[9,1] = (1.0/J_arr[1])*k_s
             A[9,8] = -(1.0/J_arr[1])*k_arr[1]

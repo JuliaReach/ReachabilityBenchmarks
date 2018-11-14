@@ -106,7 +106,7 @@ function drivetrain(nϴ::Int=1)::HybridSystem
             i = 8
         end
         while i < system_dimension
-            el = (system_dimension - i)/2
+            el = Int((i + 1 - 7)/2)
             A[i,i+1] = 1.
             A[i+1,5] = (1.0/J_arr[el])*k_arr[el]
             A[i+1,2*el+4] = (1.0/J_arr[el])*k_arr[el-1]

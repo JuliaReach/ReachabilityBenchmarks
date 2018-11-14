@@ -49,8 +49,8 @@ function drivetrain(θ::Int=1)::HybridSystem
     # =========
     α = 0.03 # backlash size (half gap width)
     α_neg = -0.03
-    τ_eng = 0.1 # engine time constant
-    γ = 12. # the gearbox ratio
+    τ_eng = 0.1 # engine time constant (s)
+    γ = 12. # the gearbox ratio (dimensionless)
     u = 5 # requested engine torque
 
     # indices m and l refer to the motor and the load
@@ -61,6 +61,7 @@ function drivetrain(θ::Int=1)::HybridSystem
     b_l = 5.6
     b_m = 0.
     b_i = 1.
+
     # moments of inertia are denoted by J [kg m²]
     J_l = 140.
     J_m = 0.3
@@ -72,14 +73,29 @@ function drivetrain(θ::Int=1)::HybridSystem
     k_s_zero = 0.
 
     # PID parameters
-    k_P = 0.5
-    k_I = 0.5
-    k_D = 0.5
+    k_P = 0.5  # [Nms / rad]
+    k_I = 0.5  # [Nm / rad]
+    k_D = 0.5  # [Nms^2 / rad]
 
     # =========
     # dynamics
     # =========
     function get_dynamics(k_s, α)
+
+        # physical units of the state variables
+        # [x₁] = rad
+        # [x₂] = Nm
+        # [x₃] = rad
+        # [x₄] = rad/s
+        # [x₅] = rad
+        # [x₆] = rad/s
+        # [x₇] = rad/s
+        # [x₈] = rad
+        # [x₉] = rad/s
+        # ...
+        # [x_(2θ+6)] = rad
+        # [x_(2θ+7)] = rad/s
+
         # common flow
         A = zeros(n, n) # use spzeros? => see #40 in MathematicalSystems.jl
 
@@ -89,12 +105,12 @@ function drivetrain(θ::Int=1)::HybridSystem
 
         A[1,7] = 1.0/γ
         A[1,9] =  -1.
-        A[2,1] = -(1.0/τ_eng)*k_I*γ+k_D*(1.0/(J_m*γ*τ_eng)*k_s)
-        A[2,2] = -k_D*(1.0/J_m - 1)/τ_eng
-        A[2,3] = (1.0/τ_eng)*k_I*γ
-        A[2,4] = (1.0/τ_eng)*k_P*γ
-        A[2,7] = (-k_P + k_D*(1.0/J_m)*b_m)/τ_eng
-        A[2,8] = -(1.0/τ_eng)*k_I
+        A[2,1] = -k_I*γ/τ_eng + k_D*k_s /(J_m*γ*τ_eng)
+        A[2,2] = -(1 + k_D/J_m)/τ_eng
+        A[2,3] = k_I*γ/τ_eng
+        A[2,4] = k_P*γ/τ_eng
+        A[2,7] = (-k_P + k_D * b_m /J_m)/τ_eng
+        A[2,8] = -γ*k_I/τ_eng
 
         A[3,4] = 1.
 

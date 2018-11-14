@@ -1,4 +1,4 @@
-using HybridSystems, LazySets
+using MathematicalSystems, HybridSystems, LazySets
 
 # compatibility of julia versions
 if VERSION >= v"0.7"

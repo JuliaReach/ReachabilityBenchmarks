@@ -179,7 +179,7 @@ function drivetrain(θ::Int=1)::HybridSystem
     # common resets
     A_trans = Matrix{Float64}(I, n, n) # use UniformScaling n * I ? not accepted since it doesn't subtype <:AbstractArray{T,2}
 
-    z = zeros(n)
+    z = zeros(n-1)
 
     # negAngle
     A = get_dynamics(k_s, α_neg)

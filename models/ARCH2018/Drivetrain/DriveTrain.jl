@@ -160,7 +160,10 @@ function drivetrain(θ::Int=1)::HybridSystem
         x7_u = (1.0/(J_m*γ))*k_s*α
         x9_u = -(1.0/J_i)*k_s*α
 
-        return sparsevec([2, 4, 7, 9], [x2_u, x4_u, x7_u, x9_u], n)
+        #return sparsevec([2, 4, 7, 9], [x2_u, x4_u, x7_u, x9_u], n)
+        res = zeros(n)
+        res[2],res[4],res[7],res[9] = x2_u, x4_u, x7_u, x9_u
+        return res
     end
 
     # =============================

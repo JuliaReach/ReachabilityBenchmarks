@@ -172,9 +172,9 @@ function drivetrain(θ::Int=1)::HybridSystem
     automaton = LightAutomaton(3);
 
     add_transition!(automaton, 1, 2, 1);
-    add_transition!(automaton, 2, 1, 1);
-    add_transition!(automaton, 2, 3, 1);
-    add_transition!(automaton, 3, 2, 1);
+    add_transition!(automaton, 2, 1, 2);
+    add_transition!(automaton, 2, 3, 3);
+    add_transition!(automaton, 3, 2, 4);
 
     # common U
     U = Singleton([1.0])

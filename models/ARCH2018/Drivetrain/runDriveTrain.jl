@@ -1,4 +1,5 @@
 using LazySets, Reachability, Polyhedra, Optim
+import LazySets.HalfSpace
 include("DriveTrain.jl");
 
 # compatibility of julia versions

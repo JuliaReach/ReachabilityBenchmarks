@@ -13,7 +13,7 @@ git clone https://github.com/JuliaReach/ReachabilityBenchmarks.git
 You need to have installed the Julia package [Reachability.jl](https://github.com/JuliaReach/Reachability.jl),
 by following the instruction in the [installation section](https://github.com/JuliaReach/Reachability.jl#installing).
 
-The models stored in MAT files are loaded using the [MAT.jl](https://github.com/JuliaIO/MAT.jl) Julia package. To install the `MAT` package, do:
+Some models are stored in MAT files. These can be loaded in Julia using the [MAT.jl](https://github.com/JuliaIO/MAT.jl) package. To install this package, do:
 
 ```julia
 julia> import Pkg; Pkg.add("MAT")

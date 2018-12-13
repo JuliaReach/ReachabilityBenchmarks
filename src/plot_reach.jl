@@ -8,14 +8,16 @@ import GR
 
 using Reachability, Plots
 
+import Reachability.@timing
+
 function plot_reach(result::AbstractSolution, name::String="plot")
     if result.options[:mode] != "reach"
         # ignore plotting command
         return
     end
     info("Plotting...")
-    tic()
-    plot(result)
-    savefig("$name.png")
-    tocc()
+    @timing begin
+        plot(result)
+        savefig("$name.png")
+    end
 end

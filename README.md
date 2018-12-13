@@ -13,7 +13,11 @@ git clone https://github.com/JuliaReach/ReachabilityBenchmarks.git
 You need to have installed the Julia package [Reachability.jl](https://github.com/JuliaReach/Reachability.jl),
 by following the instruction in the [installation section](https://github.com/JuliaReach/Reachability.jl#installing).
 
-The models stored in MAT files are loaded using the [MAT.jl](https://github.com/JuliaIO/MAT.jl) Julia package.
+The models stored in MAT files are loaded using the [MAT.jl](https://github.com/JuliaIO/MAT.jl) Julia package. To install the `MAT` package, do:
+
+```julia
+julia> import Pkg; Pkg.add("MAT")
+```
 
 There are also bash scripts to run [SpaceEx](http://spaceex.imag.fr/) for most of the models.
 These scripts assume that `spaceex` (and some other tools for creating plots) are added to the PATH.

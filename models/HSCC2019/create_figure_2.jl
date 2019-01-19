@@ -31,7 +31,7 @@ for (i, ε) in enumerate(εs)
     @time res[i] = overapproximate(π * Y, ε);
 end
 
-plot(res[1], color=:lightblue, opacity=0.5)
+plot(res[1], color=:lightblue, opacity=0.5, tickfont = font(14))
 plot!(res[2], color=:green, opacity=0.5)
 plot!(res[3], color=:red, opacity=0.5)
 

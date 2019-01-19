@@ -139,4 +139,4 @@ end
 
 example()
 
-savefig("Figure 3.png")
+savefig("Figure 3.pdf")

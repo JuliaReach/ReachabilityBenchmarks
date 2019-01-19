@@ -36,4 +36,4 @@ plot!(res[2], color=:green, opacity=0.5)
 plot!(res[3], color=:red, opacity=0.5)
 
 # optionally store the picture in a file
-savefig("Figure 2.png")
+savefig("Figure 2.pdf")

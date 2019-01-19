@@ -6,6 +6,11 @@
 # Note that the code uses random numbers, so the resulting plots and the runtime will likely differ.
 
 using LazySets, LazySets.Approximations, Plots
+if VERSION >= v"0.7"
+    using SparseArrays
+else
+    using Compat
+end
 
 ENV["GKSwstype"] = "100"
 
@@ -15,7 +20,7 @@ X0 = BallInf(ones(n), 0.1);
 U = Ball2(zeros(m), 1.2);
 Y = ConvexHull(SparseMatrixExp(A * δ) * X0 ⊕ δ * B *U, X0);
 π = spzeros(2, n) ; π[1, 1] = π[2, 50] = 1;
-res = Vector{HPolygon{Float64}}(3)
+res = Vector{HPolygon{Float64}}(undef, 3)
 εs = [Inf, 0.1, 0.01]
 println("warm-up runtimes:")
 for (i, ε) in enumerate(εs)

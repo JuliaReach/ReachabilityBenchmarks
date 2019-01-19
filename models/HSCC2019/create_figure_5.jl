@@ -26,10 +26,10 @@ end
 
 sol4 = filtered_oscillator(4, Reachability.ReachSets.ApproximatingDiscretePost(), 20., 20);
 sol_proj4 = get_projection(sol4, 7);
-plot(sol_proj4)
+plot(sol_proj4, tickfont = font(14))
 savefig("Figure 5 Left.png")
 
 sol16 = filtered_oscillator(16, Reachability.ReachSets.ApproximatingDiscretePost(), 99., 30);
 sol_proj16 = get_projection(sol16, 19);
-plot(sol_proj16)
+plot(sol_proj16, tickfont = font(14))
 savefig("Figure 5 Right.png")

@@ -27,4 +27,4 @@ plot!(x->-x, x->x+1, -1.2, .2, line=1., color="black", linestyle=:dashdot)
 plot!(x->x+.6, x->x+.6, -.1, .08, line=1, color="red", linestyle=:solid, arrow=true)
 
 # optionally store the picture in a file
-savefig("Figure 1.png")
+savefig("Figure 1.pdf")

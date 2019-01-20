@@ -2,6 +2,10 @@
 # See: https://flowstar.org/benchmarks/filtered-oscillator/
 # ============================
 
+@static if VERSION >= v"0.7.0"
+    using LinearAlgebra, SparseArrays
+end
+
 function filtered_oscillator(n0, opD, t, max_jumps)::AbstractSolution
     system_dimension = n0 + 3
     z = zeros(n0+1)
@@ -29,39 +33,39 @@ function filtered_oscillator(n0, opD, t, max_jumps)::AbstractSolution
     B = [1.4; -0.7; z]
     X = HPolyhedron([HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
                HalfSpace([1.0; 0.0; z], 0.0)])  # x <= 0
-    m_1 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
+    m_1 = ConstrainedLinearControlContinuousSystem(A, Matrix(1.0I, size(B, 1), size(B, 1)), X, B*U);
 
     #Mode 2
     B = [-1.4; 0.7; z]
     X = HPolyhedron([HalfSpace([1.0; 0.0; z], 0.0),  # x <= 0
                HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
-    m_2 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
+    m_2 = ConstrainedLinearControlContinuousSystem(A, Matrix(1.0I, size(B, 1), size(B, 1)), X, B*U);
 
     #Mode 3
     B = [1.4; -0.7; z]
     X = HPolyhedron([HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                HalfSpace([-0.714286; -1.0; z], 0.0)])  # 0.714286*x + y >= 0
-    m_3 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
+    m_3 = ConstrainedLinearControlContinuousSystem(A, Matrix(1.0I, size(B, 1), size(B, 1)), X, B*U);
 
     #Mode 4
     B = [-1.4; 0.7; z]
     X = HPolyhedron([HalfSpace([0.714286; 1.0; z], 0.0),  # 0.714286*x + y <= 0
                HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                HalfSpace([zeros(system_dimension-1); 1.], 2.1)])  # k <= 2 (2.1 for numerical issues)
-    m_4 = ConstrainedLinearControlContinuousSystem(A, eye(size(B, 1)), X, B*U);
+    m_4 = ConstrainedLinearControlContinuousSystem(A, Matrix(1.0I, size(B, 1), size(B, 1)), X, B*U);
 
     m = [m_1, m_2, m_3, m_4];
 
     #Transitions
 
     # common resets
-    A_trans = eye(system_dimension)
+    A_trans = Matrix(1.0I, system_dimension, system_dimension)
 
     # Transition l3 -> l4
     X_l3l4 = HPolyhedron([HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
                HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
-    A_trans_34 = eye(system_dimension)
+    A_trans_34 = Matrix(1.0I, system_dimension, system_dimension)
     A_trans_34[system_dimension, system_dimension] = 2.
     r1 = ConstrainedLinearDiscreteSystem(A_trans_34, X_l3l4);
     # Transition l4 -> l2
@@ -88,7 +92,7 @@ function filtered_oscillator(n0, opD, t, max_jumps)::AbstractSolution
 
     # initial condition in mode 1
     X0 = Hyperrectangle(low=[0.2; -0.1; zeros(n0); 1.0],
-                    high=[0.3; 0.1; zeros(n0); 1.0]);
+                        high=[0.3; 0.1; zeros(n0); 1.0]);
 
     system = InitialValueProblem(HS, [(3, X0)]);
     plot_vars = [1, 2]
@@ -99,7 +103,7 @@ function filtered_oscillator(n0, opD, t, max_jumps)::AbstractSolution
 
     # default algorithm
     @time begin
-        sol = solve(system, options, Reachability.BFFPSV18(), opD);
+        sol = solve(system, options, BFFPSV18(), opD);
     end
 
     return sol;

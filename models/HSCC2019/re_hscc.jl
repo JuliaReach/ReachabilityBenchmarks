@@ -1,12 +1,15 @@
 using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra, Optim
+
 import LazySets.HalfSpace
+import LazySets.Approximations: overapproximate, OctDirections
+
 include("FilteredOscillator.jl")
 
 N = Float64
 
-function get_projection(sol::AbstractSolution, system_dimension::Int64) ::AbstractSolution
+function get_projection(sol::AbstractSolution, system_dimension::Int64)::AbstractSolution
     sol_processed =  Reachability.ReachSolution([Reachability.ReachSet{CartesianProductArray{N}, N}(
-                CartesianProductArray{N, HPolytope{N}}([LazySets.Approximations.overapproximate(rs.X, LazySets.Approximations.OctDirections(system_dimension))]),
+                CartesianProductArray{N, HPolytope{N}}([overpproximate(rs.X, OctDirections(system_dimension))]),
                 rs.t_start, rs.t_end) for rs in sol.Xk], sol.options)
 
     sol_proj = Reachability.ReachSolution(Reachability.project_reach(
@@ -17,9 +20,9 @@ end
 
 # discrete post operators + short name + upper bound on dimensionality
 opDs = [
-        (Reachability.ReachSets.TextbookDiscretePost(),      "C",   8)
-        (Reachability.ReachSets.LazyTextbookDiscretePost(),  "L", 256)
-        (Reachability.ReachSets.ApproximatingDiscretePost(), "A", 256)
+        (ConcreteDiscretePost(),      "C",   8)
+        (LazyDiscretePost(),          "L", 256)
+        (ApproximatingDiscretePost(), "A", 256)
        ];
 
 #warmup run for each opD for low dimension

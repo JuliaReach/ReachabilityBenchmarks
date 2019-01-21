@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" version="0.2" math="SpaceEx">
+  <component id="laub_template">
+    <param name="x1" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x2" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x3" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x4" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x5" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x6" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x7" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <location id="1" name="always" x="331.5" y="104.5" width="233.0" height="187.0">
+      <flow>x1' == 1.4 * x3 - 0.9 * x1 &amp;
+x2' == 2.5 * x5 - 1.5 * x2 &amp;
+x3' == 0.6 * x7 - 0.8 * x2 * x3 &amp;
+x4' == 2 - 1.3 * x3 * x4 &amp;
+x5' == 0.7 * x1 - x4 * x5 &amp;
+x6' == 0.3 * x1 - 3.1 * x6 &amp;
+x7' == 1.8 * x6 - 1.5 * x2 * x7</flow>
+    </location>
+  </component>
+  <component id="clock">
+    <param name="t" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <location id="1" name="loc1" x="210.0" y="110.0">
+      <flow>t'==1</flow>
+    </location>
+  </component>
+  <component id="laub_timed">
+    <param name="x1" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x2" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x3" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x4" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x5" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x6" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x7" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="t" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <location id="1" name="always" x="331.5" y="104.5" width="233.0" height="187.0">
+      <flow>x1' == 1.4 * x3 - 0.9 * x1 &amp;
+x2' == 2.5 * x5 - 1.5 * x2 &amp;
+x3' == 0.6 * x7 - 0.8 * x2 * x3 &amp;
+x4' == 2 - 1.3 * x3 * x4 &amp;
+x5' == 0.7 * x1 - x4 * x5 &amp;
+x6' == 0.3 * x1 - 3.1 * x6 &amp;
+x7' == 1.8 * x6 - 1.5 * x2 * x7 &amp;
+t' ==1</flow>
+    </location>
+  </component>
+  <component id="system">
+    <note>A model of the van der Pol oscillator.
+Variables: x,y</note>
+    <param name="x1" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x2" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x3" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x4" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x5" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x6" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x7" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <bind component="laub_template" as="laub_template_1" x="315.0" y="225.0">
+      <map key="x1">x1</map>
+      <map key="x2">x2</map>
+      <map key="x3">x3</map>
+      <map key="x4">x4</map>
+      <map key="x5">x5</map>
+      <map key="x6">x6</map>
+      <map key="x7">x7</map>
+    </bind>
+  </component>
+  <component id="system_timed">
+    <note>A model of the van der Pol oscillator.
+Variables: x,y</note>
+    <param name="x1" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x2" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x3" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x4" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x5" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x6" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x7" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="t" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <bind component="laub_template" as="laub_template_1" x="315.0" y="225.0">
+      <map key="x1">x1</map>
+      <map key="x2">x2</map>
+      <map key="x3">x3</map>
+      <map key="x4">x4</map>
+      <map key="x5">x5</map>
+      <map key="x6">x6</map>
+      <map key="x7">x7</map>
+    </bind>
+    <bind component="clock" as="clock_1" x="313.0" y="453.0">
+      <map key="t">t</map>
+    </bind>
+  </component>
+</sspaceex>
+

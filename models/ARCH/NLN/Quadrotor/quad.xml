@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" version="0.2" math="SpaceEx">
+  <component id="quad_timed">
+    <param name="x1" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x2" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x3" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x4" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x5" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x6" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x7" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x8" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x9" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x10" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x11" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x12" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="g" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="m" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="J_x" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="J_y" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="J_z" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="t" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="u1" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="u2" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="u3" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <location id="1" name="always" x="599.5" y="311.5" width="833.0" height="307.0">
+      <flow>t'==1 &amp;
+
+x1' == cos(x8)*cos(x9)*x4 + (sin(x7)*sin(x8)*cos(x9) - cos(x7)*sin(x9))*x5 + (cos(x7)*sin(x8)*cos(x9) + sin(x7)*sin(x9))*x6 &amp;
+x2' == cos(x8)*sin(x9)*x4 + (sin(x7)*sin(x8)*sin(x9) + cos(x7)*cos(x9))*x5 + (cos(x7)*sin(x8)*sin(x9) - sin(x7)*cos(x9))*x6 &amp;
+x3' == sin(x8)*x4 - sin(x7)*cos(x8)*x5 - cos(x7)*cos(x8)*x6 &amp;
+
+x4' == x12*x5 - x11*x6 - g*sin(x8) &amp;
+x5' == x10*x6 - x12*x4 + g*cos(x8*sin(x7)) &amp;
+x6' == x11*x4 - x10*x5 + g*cos(x8*cos(x7)) - 1/m*(m*g - 10*(x3 - u1) + 3*x6) &amp;
+
+x7' == x10 + (sin(x7)*tan(x8))*x11 + (cos(x7)*tan(x8))*x12 &amp;
+x8' == cos(x7)*x11 - sin(x7)*x12 &amp;
+x9' == sin(x7)/cos(x8)*x11 + cos(x7)/cos(x8)*x12 &amp;
+
+x10' == (J_y - J_z)/J_x*x11*x12 + 1/J_x*(-(x7 - u2) - x10) &amp;
+x11' == (J_z - J_x)/J_y*x10*x12 + 1/J_y*(-(x8 - u3) - x11) &amp;
+x12' == (J_x - J_y)/J_z*x10*x11 + 1/J_z*0</flow>
+    </location>
+  </component>
+  <component id="quad">
+    <param name="x1" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x2" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x3" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x4" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x5" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x6" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x7" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x8" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x9" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x10" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x11" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x12" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="g" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="m" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="J_x" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="J_y" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="J_z" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="u1" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="u2" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="u3" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <location id="1" name="always" x="599.5" y="311.5" width="833.0" height="307.0">
+      <flow>
+x1' == cos(x8)*cos(x9)*x4 + (sin(x7)*sin(x8)*cos(x9) - cos(x7)*sin(x9))*x5 + (cos(x7)*sin(x8)*cos(x9) + sin(x7)*sin(x9))*x6 &amp;
+x2' == cos(x8)*sin(x9)*x4 + (sin(x7)*sin(x8)*sin(x9) + cos(x7)*cos(x9))*x5 + (cos(x7)*sin(x8)*sin(x9) - sin(x7)*cos(x9))*x6 &amp;
+x3' == sin(x8)*x4 - sin(x7)*cos(x8)*x5 - cos(x7)*cos(x8)*x6 &amp;
+
+x4' == x12*x5 - x11*x6 - g*sin(x8) &amp;
+x5' == x10*x6 - x12*x4 + g*cos(x8*sin(x7)) &amp;
+x6' == x11*x4 - x10*x5 + g*cos(x8*cos(x7)) - 1/m*(m*g - 10*(x3 - u1) + 3*x6) &amp;
+
+x7' == x10 + (sin(x7)*tan(x8))*x11 + (cos(x7)*tan(x8))*x12 &amp;
+x8' == cos(x7)*x11 - sin(x7)*x12 &amp;
+x9' == sin(x7)/cos(x8)*x11 + cos(x7)/cos(x8)*x12 &amp;
+
+x10' == (J_y - J_z)/J_x*x11*x12 + 1/J_x*(-(x7 - u2) - x10) &amp;
+x11' == (J_z - J_x)/J_y*x10*x12 + 1/J_y*(-(x8 - u3) - x11) &amp;
+x12' == (J_x - J_y)/J_z*x10*x11 + 1/J_z*0</flow>
+    </location>
+  </component>
+  <component id="system">
+    <note></note>
+    <param name="x1" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x2" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x3" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x4" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x5" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x6" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x7" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x8" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x9" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x10" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x11" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x12" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="g" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="m" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="J_x" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="J_y" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="J_z" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <bind component="quad" as="quad_1" x="283.0" y="206.0">
+      <map key="x1">x1</map>
+      <map key="x2">x2</map>
+      <map key="x3">x3</map>
+      <map key="x4">x4</map>
+      <map key="x5">x5</map>
+      <map key="x6">x6</map>
+      <map key="x7">x7</map>
+      <map key="x8">x8</map>
+      <map key="x9">x9</map>
+      <map key="x10">x10</map>
+      <map key="x11">x11</map>
+      <map key="x12">x12</map>
+      <map key="g">9.81</map>
+      <map key="m">1.4</map>
+      <map key="J_x">0.054</map>
+      <map key="J_y">0.054</map>
+      <map key="J_z">0.104</map>
+      <map key="u1">1</map>
+      <map key="u2">0</map>
+      <map key="u3">0</map>
+    </bind>
+  </component>
+  <component id="system_timed">
+    <note></note>
+    <param name="x1" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x2" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x3" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x4" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x5" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x6" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x7" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x8" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x9" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x10" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x11" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="x12" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="g" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="m" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="J_x" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="J_y" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="J_z" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="t" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <bind component="quad_timed" as="quad_1" x="283.0" y="206.0">
+      <map key="x1">x1</map>
+      <map key="x2">x2</map>
+      <map key="x3">x3</map>
+      <map key="x4">x4</map>
+      <map key="x5">x5</map>
+      <map key="x6">x6</map>
+      <map key="x7">x7</map>
+      <map key="x8">x8</map>
+      <map key="x9">x9</map>
+      <map key="x10">x10</map>
+      <map key="x11">x11</map>
+      <map key="x12">x12</map>
+      <map key="g">9.81</map>
+      <map key="m">1.4</map>
+      <map key="J_x">0.054</map>
+      <map key="J_y">0.054</map>
+      <map key="J_z">0.104</map>
+      <map key="t">t</map>
+      <map key="u1">1</map>
+      <map key="u2">0</map>
+      <map key="u3">0</map>
+    </bind>
+  </component>
+</sspaceex>
+

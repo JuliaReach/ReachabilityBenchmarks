@@ -30,7 +30,7 @@ println("warm-up run")
 for (opD, name, upper_bound) in opDs
     n0 = 2;
     while (n0 <= 4)
-        sol = filtered_oscillator(n0, opD, 20., 20);
+        sol = filtered_oscillator(n0, opD, 20.);
         n0 = n0*2;
     end
 end

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" version="0.2" math="SpaceEx">
+  <component id="vanderpol_template">
+    <param name="x" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="y" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="mu" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <location id="1" name="left" x="204.5" y="332.5" width="265.0" height="127.0">
+      <invariant>x &lt;= 1.2</invariant>
+      <flow>x' == y &amp; y' == mu*(1-x^2)*y-x</flow>
+    </location>
+    <location id="2" name="right" x="555.5" y="335.5" width="265.0" height="127.0">
+      <invariant>x &gt;= 1.2</invariant>
+      <flow>x' == y &amp; y' == mu*(1-x^2)*y-x</flow>
+    </location>
+    <transition source="1" target="2">
+      <guard>y &gt; 0</guard>
+      <labelposition x="-24.0" y="-61.0" />
+      <middlepoint x="379.0" y="301.0" />
+    </transition>
+    <transition source="2" target="1">
+      <guard>y &lt; 0</guard>
+      <labelposition x="-25.0" y="-2.0" />
+      <middlepoint x="384.0" y="376.0" />
+    </transition>
+  </component>
+  <component id="system">
+    <note>A model of the van der Pol oscillator.
+Variables: x,y</note>
+    <param name="x" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="y" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <bind component="vanderpol_template" as="vanderpol" x="238.0" y="106.0">
+      <map key="x">x</map>
+      <map key="y">y</map>
+      <map key="mu">1</map>
+    </bind>
+  </component>
+</sspaceex>
+

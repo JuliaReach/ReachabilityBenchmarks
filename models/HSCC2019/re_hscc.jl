@@ -26,7 +26,7 @@ opDs = [
        ];
 
 #warmup run for each opD for low dimension
-println("Warmup run just after restart REPL")
+println("warm-up run")
 for (opD, name, upper_bound) in opDs
     n0 = 2;
     while (n0 <= 4)
@@ -34,7 +34,7 @@ for (opD, name, upper_bound) in opDs
         n0 = n0*2;
     end
 end
-println("End of warmup run")
+println("end of warm-up run")
 
 project_and_store = false
 if project_and_store

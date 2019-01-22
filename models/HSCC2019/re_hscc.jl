@@ -52,23 +52,9 @@ while n0 <= 256
             continue
         end
         println("$name $(n0)")
-        if n0 == 2
+        if n0 <= 4
             T = 20.
-        elseif n0 == 4
-            T = 20.
-        elseif n0 == 8
-            T = 99.
-        elseif n0 == 16
-            T = 99.
-        elseif n0 == 32
-            T = 99.
-        elseif n0 == 64
-            T = 99.
-        elseif n0 == 128
-            T = 99.
-        elseif n0 == 196
-            T = 99.
-        elseif n0 == 256
+        else
             T = 99.
         end
         sol = filtered_oscillator(n0, opD, T);

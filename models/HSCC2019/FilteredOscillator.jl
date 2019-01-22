@@ -6,7 +6,7 @@
     using LinearAlgebra, SparseArrays
 end
 
-function filtered_oscillator(n0, opD, t, max_jumps)::AbstractSolution
+function filtered_oscillator(n0, opD, t)::AbstractSolution
     system_dimension = n0 + 3
     z = zeros(n0+1)
 
@@ -97,8 +97,8 @@ function filtered_oscillator(n0, opD, t, max_jumps)::AbstractSolution
     system = InitialValueProblem(HS, [(3, X0)]);
     plot_vars = [1, 2]
     options = Options(:mode=>"reach",:vars=>1:system_dimension, :T=>t, :δ=>0.01,
-                      :max_jumps=>max_jumps, :plot_vars=>plot_vars,
-                      :ε_proj=>0.001, :verbosity=>0, :project_reachset=>false);
+                      :plot_vars=>plot_vars, :ε_proj=>0.001, :verbosity=>0,
+                      :project_reachset=>false);
 
 
     # default algorithm

@@ -54,33 +54,24 @@ while n0 <= 256
         println("$name $(n0)")
         if n0 == 2
             T = 20.
-            max_jumps = 20
         elseif n0 == 4
             T = 20.
-            max_jumps = 20
         elseif n0 == 8
             T = 99.
-            max_jumps = 20
         elseif n0 == 16
             T = 99.
-            max_jumps = 30
         elseif n0 == 32
             T = 99.
-            max_jumps = 40
         elseif n0 == 64
             T = 99.
-            max_jumps = 40
         elseif n0 == 128
             T = 99.
-            max_jumps = 1000
         elseif n0 == 196
             T = 99.
-            max_jumps = 1000
         elseif n0 == 256
             T = 99.
-            max_jumps = 1000
         end
-        sol = filtered_oscillator(n0, opD, T, max_jumps);
+        sol = filtered_oscillator(n0, opD, T);
         if project_and_store
             sol_proj = get_projection(sol, n0+3);
             push!(results, (sol_proj, name));

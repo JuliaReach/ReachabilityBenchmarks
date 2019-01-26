@@ -7,24 +7,23 @@ include("FilteredOscillator.jl")
 
 function get_projection(sol::AbstractSolution, system_dimension::Int64)::AbstractSolution
     N = Float64
-    sol_processed =  Reachability.ReachSolution(
-        [Reachability.ReachSet{CartesianProductArray{N}, N}(
+    sol_processed =  ReachSolution(
+        [ReachSet{CartesianProductArray{N}, N}(
             CartesianProductArray{N, HPolytope{N}}(
                 [overapproximate(rs.X, OctDirections(system_dimension))]),
             rs.t_start, rs.t_end) for rs in sol.Xk],
         sol.options)
 
-    sol_proj = Reachability.ReachSolution(Reachability.project_reach(
-        sol_processed.Xk, [1,2], system_dimension, sol.options), sol.options);
+    sol_proj = ReachSolution(project_reach(
+        sol_processed.Xk, [1,2], system_dimension, sol.options), sol.options)
 
-    return sol_proj;
+    return sol_proj
 end
 
 function warmup(opDs)
-    # warmup run for each opD for low dimension
     println("warm-up runs")
-    run (2, opDs, false, nothing)
-    run (2, opDs, false, nothing)
+    run(2, opDs, false, nothing)
+    run(2, opDs, false, nothing)
     println("end of warm-up runs")
 end
 
@@ -41,11 +40,11 @@ function run(n0, opDs, project_and_store, results)
             T = 99.
         end
         @time begin
-            sol = filtered_oscillator(n0, opD, T);
+            sol = filtered_oscillator(n0, opD, T)
         end
         if project_and_store
-            sol_proj = get_projection(sol, n0+3);
-            push!(results, (sol_proj, name));
+            sol_proj = get_projection(sol, n0+3)
+            push!(results, (sol_proj, name))
         end
     end
 end
@@ -56,7 +55,7 @@ function benchmark(project_and_store::Bool=false)
             (ConcreteDiscretePost(),      "C",   8)
             (LazyDiscretePost(),          "L", 8)
             (ApproximatingDiscretePost(), "A", 8)
-           ];
+           ]
 
     warmup(opDs)
 
@@ -75,11 +74,11 @@ function benchmark(project_and_store::Bool=false)
         elseif n0 == 196
             n0 = 256
         else
-            n0 *= 2;
+            n0 *= 2
         end
     end
 
     return results
 end
 
-return benchmark(true)
+return benchmark(false)

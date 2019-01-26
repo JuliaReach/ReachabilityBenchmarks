@@ -5,12 +5,14 @@ import LazySets.Approximations: overapproximate, OctDirections
 
 include("FilteredOscillator.jl")
 
-N = Float64
-
 function get_projection(sol::AbstractSolution, system_dimension::Int64)::AbstractSolution
-    sol_processed =  Reachability.ReachSolution([Reachability.ReachSet{CartesianProductArray{N}, N}(
-                CartesianProductArray{N, HPolytope{N}}([overpproximate(rs.X, OctDirections(system_dimension))]),
-                rs.t_start, rs.t_end) for rs in sol.Xk], sol.options)
+    N = Float64
+    sol_processed =  Reachability.ReachSolution(
+        [Reachability.ReachSet{CartesianProductArray{N}, N}(
+            CartesianProductArray{N, HPolytope{N}}(
+                [overapproximate(rs.X, OctDirections(system_dimension))]),
+            rs.t_start, rs.t_end) for rs in sol.Xk],
+        sol.options)
 
     sol_proj = Reachability.ReachSolution(Reachability.project_reach(
         sol_processed.Xk, [1,2], system_dimension, sol.options), sol.options);
@@ -18,58 +20,66 @@ function get_projection(sol::AbstractSolution, system_dimension::Int64)::Abstrac
     return sol_proj;
 end
 
-# discrete post operators + short name + upper bound on dimensionality
-opDs = [
-        (ConcreteDiscretePost(),      "C",   8)
-        (LazyDiscretePost(),          "L", 256)
-        (ApproximatingDiscretePost(), "A", 256)
-       ];
-
-#warmup run for each opD for low dimension
-println("warm-up run")
-for (opD, name, upper_bound) in opDs
-    n0 = 2;
-    while (n0 <= 4)
-        sol = filtered_oscillator(n0, opD, 20.);
-        n0 = n0*2;
-    end
-end
-println("end of warm-up run")
-
-project_and_store = false
-if project_and_store
-    println("Note: using output projection and storage")
-else
-    println("Note: skipping output projection and storage")
+function warmup(opDs)
+    # warmup run for each opD for low dimension
+    println("warm-up runs")
+    run (2, opDs, false, nothing)
+    run (2, opDs, false, nothing)
+    println("end of warm-up runs")
 end
 
-results = Vector{Tuple{AbstractSolution, String}}()
-n0 = 2
-while n0 <= 256
+function run(n0, opDs, project_and_store, results)
     for (opD, name, upper_bound) in opDs
-        println("**********************************")
         if n0 > upper_bound
             continue
         end
+        println("**********************************")
         println("$name $(n0)")
         if n0 <= 4
             T = 20.
         else
             T = 99.
         end
-        sol = filtered_oscillator(n0, opD, T);
+        @time begin
+            sol = filtered_oscillator(n0, opD, T);
+        end
         if project_and_store
             sol_proj = get_projection(sol, n0+3);
             push!(results, (sol_proj, name));
         end
     end
-    if n0 == 128
-        n0 = 196
-    elseif n0 == 196
-        n0 = 256
-    else
-        n0 *= 2;
-    end
 end
 
-return results
+function benchmark(project_and_store::Bool=false)
+    # discrete-post operators + short name + upper bound on dimensionality
+    opDs = [
+            (ConcreteDiscretePost(),      "C",   8)
+            (LazyDiscretePost(),          "L", 8)
+            (ApproximatingDiscretePost(), "A", 8)
+           ];
+
+    warmup(opDs)
+
+    if project_and_store
+        println("Note: projecting and returning output")
+    else
+        println("Note: skipping projection and storage output")
+    end
+
+    results = Vector{Tuple{AbstractSolution, String}}()
+    n0 = 2
+    while n0 <= 256
+        run(n0, opDs, project_and_store, results)
+        if n0 == 128
+            n0 = 196
+        elseif n0 == 196
+            n0 = 256
+        else
+            n0 *= 2;
+        end
+    end
+
+    return results
+end
+
+return benchmark(true)

@@ -100,11 +100,7 @@ function filtered_oscillator(n0, opD, t)::AbstractSolution
                       :plot_vars=>plot_vars, :ε_proj=>0.001, :verbosity=>0,
                       :project_reachset=>false);
 
-
-    # default algorithm
-    @time begin
-        sol = solve(system, options, BFFPSV18(), opD);
-    end
+    sol = solve(system, options, BFFPSV18(), opD);
 
     return sol;
 end

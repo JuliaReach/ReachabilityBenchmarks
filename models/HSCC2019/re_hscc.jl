@@ -53,8 +53,8 @@ function benchmark(project_and_store::Bool=false)
     # discrete-post operators + short name + upper bound on dimensionality
     opDs = [
             (ConcreteDiscretePost(),      "C",   8)
-            (LazyDiscretePost(),          "L", 8)
-            (ApproximatingDiscretePost(), "A", 8)
+            (LazyDiscretePost(),          "L", 256)
+            (ApproximatingDiscretePost(), "A", 256)
            ]
 
     warmup(opDs)

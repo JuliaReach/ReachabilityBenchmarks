@@ -1,6 +1,10 @@
 # Filtered Oscillator
 # See: https://flowstar.org/benchmarks/filtered-oscillator/
 # ============================
+using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra, Optim
+
+import LazySets.HalfSpace
+import LazySets.Approximations: overapproximate, OctDirections
 
 @static if VERSION >= v"0.7.0"
     using LinearAlgebra, SparseArrays
@@ -103,4 +107,30 @@ function filtered_oscillator(n0, opD, t)::AbstractSolution
     sol = solve(system, options, BFFPSV18(), opD);
 
     return sol;
+end
+
+"""
+    get_projection(sol, n, projected_dims)
+
+Overapproximate and project a flowpipe.
+
+### Input
+
+- `sol`            -- a flowpipe solution
+- `n`              -- the system's dimension
+- `projected_dims` -- an integer vector of length 2 with the variables to project
+
+### Output
+
+A `ReachSolution` containing the overapproximated and projected set.
+
+### Notes
+
+The overapproximation used is octagonal directions.
+"""
+function get_projection(sol, n, projected_dims)
+    oa = x -> overapproximate(x, OctDirections(n))
+    sol_oa = ReachSolution([ReachSet(CartesianProductArray([oa(rs.X)]), rs.t_start, rs.t_end) for rs in sol.Xk], sol.options)
+    sol_proj = ReachSolution(project_reach(sol_oa.Xk, projected_dims, n, sol.options), sol.options)
+    return sol_proj
 end

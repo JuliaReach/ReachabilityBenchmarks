@@ -1,24 +1,4 @@
-using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra, Optim
-
-import LazySets.HalfSpace
-import LazySets.Approximations: overapproximate, OctDirections
-
 include("FilteredOscillator.jl")
-
-function get_projection(sol::AbstractSolution, system_dimension::Int64)::AbstractSolution
-    N = Float64
-    sol_processed =  ReachSolution(
-        [ReachSet{CartesianProductArray{N}, N}(
-            CartesianProductArray{N, HPolytope{N}}(
-                [overapproximate(rs.X, OctDirections(system_dimension))]),
-            rs.t_start, rs.t_end) for rs in sol.Xk],
-        sol.options)
-
-    sol_proj = ReachSolution(project_reach(
-        sol_processed.Xk, [1,2], system_dimension, sol.options), sol.options)
-
-    return sol_proj
-end
 
 function warmup(opDs)
     println("warm-up runs")
@@ -43,7 +23,7 @@ function run(n0, opDs, project_and_store, results)
             sol = filtered_oscillator(n0, opD, T)
         end
         if project_and_store
-            sol_proj = get_projection(sol, n0+3)
+            sol_proj = get_projection(sol, n0+3, [1, 2])
             push!(results, (sol_proj, name))
         end
     end

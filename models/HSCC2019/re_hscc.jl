@@ -32,7 +32,7 @@ end
 function benchmark(project_and_store::Bool=false)
     # discrete-post operators + short name + upper bound on dimensionality
     opDs = [
-            (ConcreteDiscretePost(),      "C",   8)
+            (ConcreteDiscretePost(),      "C", 256)
             (LazyDiscretePost(),          "L", 256)
             (ApproximatingDiscretePost(), "A", 256)
            ]

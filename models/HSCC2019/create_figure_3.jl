@@ -1,9 +1,13 @@
+# =============================================================================
 # To recreate Figure 3, run the following code from the REPL.
-# Just type:
 #
-#     include("create_figure_3.jl")
+# julia> include("create_figure_3.jl")
+#
+# By default, this script requires that you have installed the GR Plots backend.
+# See create_figure_5.jl for recommended setups of other plotting backends.
+# =============================================================================
 
-using LazySets, Plots
+using LazySets
 if VERSION >= v"0.7"
     using LinearAlgebra
     expm = exp
@@ -11,8 +15,7 @@ else
     using Compat
 end
 
-#disable graphics output in GR - https://github.com/JuliaPlots/Plots.jl/issues/1182
-ENV["GKSwstype"] = "100"
+include("plotting.jl")
 
 function reach_continuous(A, X0, δ, μ, T, max_order)
     # bloating factors
@@ -97,7 +100,9 @@ function plot_res(res)
         elseif res[i][2] == 2
             c = "red"
         end
-        plot!(p, reduce_order(res[i][1], 2), color=c, alpha=0.1, tickfont = font(14))
+        plot!(p, reduce_order(res[i][1], 2),
+              color=c, alpha=0.1, tickfont=font(15, "Times"), guidefontsize=30,
+              xtick=[-0.3, 0.3, 0.9], ytick=[-0.25, 0.25, 0.75])
     end
     return p
 end

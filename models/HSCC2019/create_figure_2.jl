@@ -43,8 +43,9 @@ for (i, ε) in enumerate(εs)
 end
 
 plot(res[1], color=:lightblue, opacity=0.5,
-             tickfont=font(20, "Times"),
-             guidefontsize=30, xlab=L"x_1", ylab=L"x_{50}",
+             tickfont=font(20, "Times"), guidefontsize=30,
+             xlab=L"x_1\raisebox{-1mm}{\textcolor{white}{.}}",
+             ylab=L"x_{50}\raisebox{2mm}{\textcolor{white}{.}}",
              xtick=[0.4, 0.8, 1.2], ytick=[0.8, 1.0, 1.2],
              bottom_margin=8mm, left_margin=8mm)
 plot!(res[2], color=:green, opacity=0.5)

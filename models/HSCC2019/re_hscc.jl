@@ -23,7 +23,7 @@ function run(n0, opDs, project_and_store, results)
             sol = filtered_oscillator(n0, opD, T)
         end
         if project_and_store
-            sol_proj = get_projection(sol, n0+3, [1, 2])
+            sol_proj = get_projection(sol, [1, 2])
             push!(results, (sol_proj, name))
         end
     end

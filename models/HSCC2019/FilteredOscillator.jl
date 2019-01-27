@@ -110,14 +110,13 @@ function filtered_oscillator(n0, opD, t)::AbstractSolution
 end
 
 """
-    get_projection(sol, n, projected_dims)
+    get_projection(sol, projected_dims)
 
 Overapproximate and project a flowpipe.
 
 ### Input
 
 - `sol`            -- a flowpipe solution
-- `n`              -- the system's dimension
 - `projected_dims` -- an integer vector of length 2 with the variables to project
 
 ### Output
@@ -128,7 +127,8 @@ A `ReachSolution` containing the overapproximated and projected set.
 
 The overapproximation used is octagonal directions.
 """
-function get_projection(sol, n, projected_dims)
+function get_projection(sol, projected_dims)
+    n = sol.options[:n] # system's dimension
     oa = x -> overapproximate(x, OctDirections(n))
     sol_oa = ReachSolution([ReachSet(CartesianProductArray([oa(rs.X)]), rs.t_start, rs.t_end) for rs in sol.Xk], sol.options)
     sol_proj = ReachSolution(project_reach(sol_oa.Xk, projected_dims, n, sol.options), sol.options)

@@ -5,19 +5,22 @@
 
 using LazySets, LazySets.Approximations, Plots
 
+using LaTeXStrings
 ENV["GKSwstype"] = "100"
 
 b = Ball2(zeros(2), 1.)
 
-plot(b, 1e-3, aspectratio=1, alpha=0.3, tickfont = font(14))
+plot(b, 1e-3, aspectratio=1, alpha=0.3,
+              tickfont=font(15, "Times"),
+              xtick=[-1.0, -0.5, 0.0, 0.5, 1.0], ytick=[-1.0, -0.5, 0.0, 0.5, 1.0])
 
-plot!(Singleton([1.0, 0.0]), annotations=(1.1, 0.1, text("p1")), color="green")
-plot!(Singleton([0.0, 1.0]), annotations=(0.1, 1.1, text("p2")), color="green")
-plot!(Singleton([1.0, 1.0]), annotations=(1.09, 1.1, text("q")))
-plot!(Singleton([0.0, 0.0]), annotations=(0.1, 0.0, text("0")), color="green")
-plot!(annotations=(1.4, 0.1, text("d1")))
-plot!(annotations=(0.1, 1.4, text("d2")))
-plot!(annotations=(0.75, 0.8, text("ndir")))
+plot!(Singleton([1.0, 0.0]), annotations=(1.1, 0.1, text(L"p_1")), color="green")
+plot!(Singleton([0.0, 1.0]), annotations=(0.1, 1.1, text(L"p_2")), color="green")
+plot!(Singleton([1.0, 1.0]), annotations=(1.09, 1.1, text(L"q")))
+plot!(Singleton([0.0, 0.0]), annotations=(0.1, 0.0, text(L"0")), color="green")
+plot!(annotations=(1.4, 0.1, text(L"d_1")))
+plot!(annotations=(0.1, 1.4, text(L"d_2")))
+plot!(annotations=(0.75, 0.8, text(L"ndir")))
 
 plot!(x->x, x->1., -0.8, 1.3, line=1, color="black", linestyle=:dash)
 plot!(x->1., x->x, -0.8, 1.3, line=1, color="black", linestyle=:dash)

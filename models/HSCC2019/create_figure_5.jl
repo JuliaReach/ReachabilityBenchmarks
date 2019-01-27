@@ -1,22 +1,13 @@
 # =============================================================================
-# To recreate Figure 3, run the following code from the REPL:
+# To recreate Figure 5, run the following code from the REPL:
 #
 # julia> include("create_figure_5.jl")
 #
 # By default, this script requires that you have installed the GR Plots backend.
-# See the bottom of this file for recommended setups for other plotting backends.
+# See the bottom of this file for recommended setups of other plotting backends.
 # =============================================================================
-using Plots
-using LaTeXStrings         # to write math labels using GR
-using Plots.PlotMeasures   # to specify margins units such as bottom_margin=8mm
 
-# select a plotting backend among: pyplot(), plotly(), gr()
-gr()
-
-if Plots.backend() == Plots.GRBackend()
-    # disable graphics output in GR - https://github.com/JuliaPlots/Plots.jl/issues/1182
-    ENV["GKSwstype"] = "100"
-end
+include("plotting.jl")
 
 include("FilteredOscillator.jl")
 

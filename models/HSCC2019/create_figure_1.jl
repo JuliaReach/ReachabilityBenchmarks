@@ -1,12 +1,15 @@
+# =============================================================================
 # To recreate Figure 1, run the following code from the REPL.
-# Just type:
 #
-#     include("create_figure_1.jl")
+# julia> include("create_figure_1.jl")
+#
+# By default, this script requires that you have installed the GR Plots backend.
+# See create_figure_5.jl for recommended setups of other plotting backends.
+# =============================================================================
 
-using LazySets, LazySets.Approximations, Plots
+using LazySets, LazySets.Approximations
 
-using LaTeXStrings
-ENV["GKSwstype"] = "100"
+include("plotting.jl")
 
 b = Ball2(zeros(2), 1.)
 

@@ -1,17 +1,20 @@
+# =============================================================================
 # To recreate Figure 2, run the following code from the REPL.
-# Just type:
 #
-#     include("create_figure_2.jl")
+# julia> include("create_figure_2.jl")
+#
+# By default, this script requires that you have installed the GR Plots backend.
+# See create_figure_5.jl for recommended setups of other plotting backends.
+# =============================================================================
 
-using LazySets, LazySets.Approximations, Plots, Random
+using LazySets, LazySets.Approximations, Random
 if VERSION >= v"0.7"
     using SparseArrays
 else
     using Compat
 end
 
-using LaTeXStrings
-ENV["GKSwstype"] = "100"
+include("plotting.jl")
 
 # set random seed
 rng = Random.GLOBAL_RNG

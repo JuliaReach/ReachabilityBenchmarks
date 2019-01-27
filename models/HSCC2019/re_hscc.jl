@@ -3,7 +3,7 @@ include("FilteredOscillator.jl")
 function warmup(opDs)
     println("warm-up runs")
     run(2, opDs, false, nothing)
-    run(2, opDs, false, nothing)
+    run(4, opDs, false, nothing)
     println("end of warm-up runs")
 end
 

@@ -100,7 +100,9 @@ function plot_res(res)
         elseif res[i][2] == 2
             c = "red"
         end
-        plot!(p, reduce_order(res[i][1], 2), color=c, alpha=0.1, tickfont = font(14))
+        plot!(p, reduce_order(res[i][1], 2),
+              color=c, alpha=0.1, tickfont=font(20, "Times"), guidefontsize=30,
+              xtick=[-0.3, 0.3, 0.9], ytick=[-0.25, 0.25, 0.75])
     end
     return p
 end

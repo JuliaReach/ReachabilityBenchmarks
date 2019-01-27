@@ -39,7 +39,7 @@ savefig("Figure 5 Right.pdf")
 #
 # Commands useful for plotly()
 # plot(sol_proj4, tickfont=font(18, "Times"), guidefontsize=18, xlab="x", ylab="x₄")
-#x16 = "x"*join(Char.(0x2080 .+ convert.(UInt16, [1, 6])))
+# x16 = "x"*join(Char.(0x2080 .+ convert.(UInt16, [1, 6])))
 # plot(sol_proj16, tickfont=font(18, "Times"), guidefontsize=18, xlab="x", ylab=x16)
 # The figures are opened in a browser tab; then click on the "Save as png" button.
 #
@@ -48,8 +48,9 @@ savefig("Figure 5 Right.pdf")
 # Commands useful for pyplot()
 # Plots.scalefontsizes() # restart to default values
 # Plots.scalefontsizes(4) # set font sizes x4 bigger
-# plot(sol_proj4) or plot(sol_proj4, xlab="x", ylab="x₄")
+# x16 = "x"*join(Char.(0x2080 .+ convert.(UInt16, [1, 6])))
+# plot(sol_proj4, xlab="x", ylab="x₄")
 # savefig("Figure 5 Left.pdf")
-# plot(sol_proj16) or plot(sol_proj4, xlab="x", ylab=x16)
+# plot(sol_proj4, xlab="x", ylab=x16)
 # savefig("Figure 5 Right.pdf")
 #

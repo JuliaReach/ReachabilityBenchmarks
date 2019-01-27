@@ -2,17 +2,25 @@
 # Just type:
 #
 #     include("create_figure_2.jl")
-#
-# Note that the code uses random numbers, so the resulting plots and the runtime will likely differ.
 
-using LazySets, LazySets.Approximations, Plots
+using LazySets, LazySets.Approximations, Plots, Random
 if VERSION >= v"0.7"
     using SparseArrays
 else
     using Compat
 end
 
+using LaTeXStrings
 ENV["GKSwstype"] = "100"
+
+# set random seed
+rng = Random.GLOBAL_RNG
+seed = 1234
+@static if VERSION < v"0.7-"
+    return Random.srand(rng, seed)
+else
+    return Random.seed!(rng, seed)
+end
 
 n = 1000; m = 2; δ = 0.1;
 A, B = sprandn(n, n, 0.01), randn(n, m);
@@ -31,9 +39,12 @@ for (i, ε) in enumerate(εs)
     @time res[i] = overapproximate(π * Y, ε);
 end
 
-plot(res[1], color=:lightblue, opacity=0.5, tickfont = font(14))
+plot(res[1], color=:lightblue, opacity=0.5,
+             tickfont=font(20, "Times"),
+             guidefontsize=30, xlab=L"x_1", ylab=L"x_{50}",
+             xtick=[0.4, 0.8, 1.2], ytick=[0.8, 1.0, 1.2],
+             bottom_margin=8mm, left_margin=8mm)
 plot!(res[2], color=:green, opacity=0.5)
 plot!(res[3], color=:red, opacity=0.5)
 
-# optionally store the picture in a file
 savefig("Figure 2.pdf")

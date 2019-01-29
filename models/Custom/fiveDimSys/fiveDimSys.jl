@@ -1,13 +1,17 @@
 #=
 Model:  fiveDimSys.jl
 
-This is a five-dimensional model taken from [Gir05]. This also appears as example
-4.1. page 57 in the thesis [ColasLeGuernicThesis].
+This is a five-dimensional model taken from [Gir05]. This also appears as Example
+4.1. page 57 in the thesis [LeGuernic09].
 
 See also Fig. 5.1. page 71 in the same thesis.
 
-[Gir05] -- Reachability of Linear Systems using support functions 
-[ColasLeGuernicThesis] -- Reachability of Linear Systems using support functions
+[Gir05]       -- Girard, Antoine. "Reachability of uncertain linear systems using zonotopes."
+                 International Workshop on Hybrid Systems: Computation and Control.
+                 Springer, Berlin, Heidelberg, 2005.
+[LeGuernic09] -- Le Guernic, Colas. Reachability analysis of hybrid systems
+                 with linear continuous dynamics. Diss.
+                 Université Joseph-Fourier-Grenoble I, 2009.
 =#
 using Reachability, Plots
 
@@ -21,10 +25,13 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     A = P * D * inv(P)
 
     # initial set
-    X0 = BallInf(ones(size(A, 1)), 0.1)
+    X0 = BallInf([1.0, 0.0, 0.0, 0.0, 0.0], 0.1)
+
+    # input set
+    U = Ball2(zeros(5), 0.01)
 
     # instantiate continuous LTI system
-    S = ContinuousSystem(A, X0)
+    S = ContinuousSystem(A, X0, U) # @system x' = A*x + u, u ∈ U
 
     # ===============
     # Problem solving
@@ -49,5 +56,5 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     end
 end # function
 
-compute(:N => 100, :T => 20.0); # warm-up
-compute(:δ => 0.01, :T => 20.0); # benchmark settings (long)
+compute(:N => 100, :T => 1.0); # warm-up
+compute(:δ => 0.01, :T => 5.0); # benchmark settings (long)

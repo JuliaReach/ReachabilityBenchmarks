@@ -1,17 +1,17 @@
 #=
 Model:  fiveDimSys.jl
 
-This is a five-dimensional model taken from [Gir05]. This also appears as Example
-4.1. page 57 in the thesis [LeGuernic09].
+This is a five-dimensional model taken from [Girard05]. This also appears as
+Example 4.1. page 57 in the thesis [LeGuernic09].
 
 See also Fig. 5.1. page 71 in the same thesis.
 
-[Gir05]       -- Girard, Antoine. "Reachability of uncertain linear systems using zonotopes."
-                 International Workshop on Hybrid Systems: Computation and Control.
-                 Springer, Berlin, Heidelberg, 2005.
-[LeGuernic09] -- Le Guernic, Colas. Reachability analysis of hybrid systems
-                 with linear continuous dynamics. Diss.
-                 Université Joseph-Fourier-Grenoble I, 2009.
+[Girard05]       -- Girard, Antoine. "Reachability of uncertain linear systems using zonotopes."
+                    International Workshop on Hybrid Systems: Computation and Control.
+                    Springer, Berlin, Heidelberg, 2005.
+[LeGuernic09]    -- Le Guernic, Colas. Reachability analysis of hybrid systems
+                    with linear continuous dynamics. Diss.
+                    Université Joseph-Fourier-Grenoble I, 2009.
 =#
 using Reachability, Plots
 

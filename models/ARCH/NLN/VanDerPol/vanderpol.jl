@@ -29,6 +29,7 @@ function vanderpol(; T=7.0,
     𝑂 = Options()
     x₁, x₂ = variables
     𝑂[:variables] = variables
+    𝑂[:vars] = [1, 2]
 
     # instantiate the polynomial system
     f = [x₂, x₂ - x₁ - x₁^2 * x₂]

@@ -3,48 +3,49 @@
 # See https://easychair.org/publications/paper/gjfh
 # =================================================================
 
-using Reachability, HybridSystems, MathematicalSystems, LazySets
+using Reachability: Options, LinearConstraintProperty
+using MathematicalSystems, LazySets
+using DynamicPolynomials, SemialgebraicSets
 
-function van_der_pol()
+"""
+    vanderpol(; [T], [X0])
 
-    # polynomial variables
-    @polyvar x₁ x₂
+Construct the Van der Pol model.
 
-    # instantiate the polynomial system
-    f = [x₂, -0.2*x₁ + x₂ - 0.2*x₁^2*x₂]
-    𝑃 = PolynomialContinuousSystem(f)
+### Input
 
-    # define the set of initial states X₀ = {x: V₀(x) <= 0}
-    V₀ = x₁^2 + x₂^2 - 0.25
-    X0 = @set V₀ <= 0
+- `T`  --  (optional, default: `7.0`) the time horizon for the initial
+           value problem
+- `X0` -- (optional, default: `[1.25, 1.55] × [2.35, 2.45]`) set of initial states
 
-    # instantiate the IVP
-    𝒮 = InitialValueProblem(𝑃, X0);
+### Output
+
+The tuple `(𝑃, 𝑂)` where `𝑃` is an initial-value problem and `𝑂` are the options.
+"""
+function vanderpol(; T=7.0,
+                     X0=Hyperrectangle(low=[1.25, 2.35], high=[1.55, 2.45]),
+                     variables=@polyvar x₁ x₂)
 
     𝑂 = Options()
+    x₁, x₂ = variables
+    𝑂[:variables] = variables
+
+    # instantiate the polynomial system
+    f = [x₂, x₂ - x₁ - x₁^2 * x₂]
+    𝐹 = PolynomialContinuousSystem(f)
+
+    # instantiate the IVP
+    𝑃 = InitialValueProblem(𝐹, X0)
 
     # time horizon
-    𝑂[:T] = 2.0
+    𝑂[:T] = T
 
-    # variables to comptute and to plot
-    𝑂[:vars] = [1, 2]
+    # variables to plot
     𝑂[:plot_vars] = [1, 2]
 
-    return (𝒮, 𝑂)
+    # safety property
+    𝑂[:property] = LinearConstraintProperty([0., 1.], 2.75)   # uses supp func evaluation
+    #𝑂[:property] = SubsetProperty(HalfSpace([0., 1.], 2.75)) # uses inclusion test
+
+    return (𝑃, 𝑂)
 end
-
-#=
-these are algorithm-specific options
-
-    # constraints Y = {x: g(x) >= 0} compact search space Y x [0, T]
-    g = 25 - x₁^2 - x₂^2
-    𝑂[:search_space] = g
-
-    # degree of the relaxation
-    k = 6
-    𝑂[:relaxation_degree] = k
-
-    # define the optimization solver
-    𝑂[:solver] = MosekOptimizer
-
-=#

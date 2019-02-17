@@ -66,7 +66,7 @@ function laubloomis(; T=20.0,
     𝑂[:plot_vars] = [1, 2]
 
     # safety property
-    𝑂[:property] = LinearConstraintProperty([0, 0, 0, -1., 0, 0, 0], unsafe_bound)
+    𝑂[:property] = LinearConstraintProperty([0, 0, 0, -1., 0, 0, 0], -unsafe_bound)
     # @set x₄ ≥ 0.01, vars=(x₁, x₂, x₃, x₄, x₅, x₆, x₇)
     return (𝑃, 𝑂)
 end

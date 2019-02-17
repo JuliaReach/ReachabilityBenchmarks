@@ -1,5 +1,5 @@
 # =================================================================
-# Van der Pol model
+# Laub-Loomis model
 # See https://easychair.org/publications/paper/gjfh
 # =================================================================
 

@@ -30,7 +30,7 @@ The tuple `(𝑃, 𝑂)` where `𝑃` is an initial-value problem and `𝑂` are
 """
 function laubloomis(; T=20.0,
                       W=0.01,
-                      X0=BallInf([1.2, 1.05, 1.5, 2.4, 1.0, 0.1, 0.45], W,),
+                      X0=BallInf([1.2, 1.05, 1.5, 2.4, 1.0, 0.1, 0.45], W),
                       unsafe_bound=4.5,
                       variables=@polyvar x₁ x₂ x₃ x₄ x₅ x₆ x₇)
 

@@ -22,6 +22,8 @@ end
 """
     laubloomis_TMJets(; [t0], [T], [abs_tol], [orderT], [orderQ], [maxsteps], [float_coeffs])
 
+Build and run the Laub-Loomis model.
+
 ### Input
 
 - `t0`       -- (optional, default: `0.0`) initial time
@@ -43,9 +45,9 @@ function laubloomis_TMJets(; t0=0.0, T=20.0, W=0.01, abs_tol=1e-20, orderT=18, o
     # Initial conditions as mid-point of provided intervals
     q0 = IntervalBox(1.2, 1.05, 1.5, 2.4, 1.0, 0.1, 0.45)
     if float_coeffs
-         # converts the IntervalBox into a 2-dimensional (static) array,
-         # the center of the box, in this case (1.4, 2.4)
-        q0 = mid.(q0)
+        # converts the IntervalBox into a 2-dimensional (static) array,
+        # the center of the box, in this case (1.4, 2.4)
+       q0 = mid.(q0)
     end
 
     # initial box (around `q0`) of the initial conditions

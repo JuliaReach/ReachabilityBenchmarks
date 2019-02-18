@@ -23,30 +23,38 @@ using MathematicalSystems, LazySets
 using DynamicPolynomials, SemialgebraicSets
 
 """
-    quadrotor(; [T], [X0], [W])
+    quadrotor(; [T], [X0], [variables], [controller_inputs])
 
 Construct the Quadrotor model.
 
 ### Input
 
-- `T`  --  (optional, default: `20.0`) the time horizon for the initial
-           value problem
-- `X0` --  (optional, default: an axis-aligned box centered at
-           `(1.2, 1.05, 1.5, 2.4, 1.0, 0.1, 0.45)` and radius `W`) set of initial states
-- `W`  --  (optional, default: `0.01`) width of the initial states
-- `unsafe_bound` -- (optional, default: `4.5`) bound for the variable `x₄` that
-                    defines the unsafe region, of the form `x₄ ≥ unsafe_bound`
+- `T`                 -- (optional, default: `5.0`) time horizon
+- `X0`                -- (optional, default: position is uncertain in all directions
+                          within `[-0.4, 0.4]m` and velocity is uncertain in all directions
+                          within `[-0.4, 0.4]m/s`) set of initial states
+- `variables`         -- (optional, default: `PolyVar` variables) the set of polynomal
+                          variables that are used in the equations
+- `controller_inputs` -- (optional, default: `(1.0, 0.0, 0.0)`) tuple with
+                         the controller inputs `u₁`, `u₂` and `u₃` which
+                         correspond to the desired values for height, roll and
+                         pitch respectively
 
 ### Output
 
 The tuple `(𝑃, 𝑂)` where `𝑃` is an initial-value problem and `𝑂` are the options.
+
+### Specification
+
+The task is to change the height from `0[m]` to `1[m]` within `5[s]`. A goal region
+`[0.98, 1.02]` of the height `x₃` has to be reached within `5[s]` and the height
+has to stay below 1.4 for all times. After `1[s]` the height should stay above
+`0.9[m]`.
 """
-function quadrotor(; T=20.0,
-                     X0=nothing,
-                     W=nothing,
-                     unsafe_bound=4.5,
-                     variables=@polyvar x[1:12],
-                     inputs=@polyvar u₁ u₂ u₃)
+function quadrotor(; T=5.0,
+                     X0=Hyperrectangle(zeros(12), [fill(0.4, 6); fill(0.0, 6)]),
+                     variables=(@polyvar x[1:12]),
+                     controller_inputs=(1.0, 0.0, 0.0))
 
     # parameters of the model
     g = 9.81           # gravity constant in m/s^2
@@ -65,7 +73,7 @@ function quadrotor(; T=20.0,
 
     # unrwap the variables and the inputs
     x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂ = variables[1] # or variables
-    u₁, u₂, u₃ = inputs[1]
+    u₁, u₂, u₃ = controller_inputs
 
     𝑂[:variables] = variables
     𝑂[:vars] = [1:12;]
@@ -94,14 +102,6 @@ function quadrotor(; T=20.0,
 
     𝐹 = PolynomialContinuousSystem(f)
 
-    # set default of initial states
-    if X0 == nothing
-        if W == nothing
-            W = 0.01
-        end
-        X0 = Hyperrectangle([1.2, 1.05, 1.5, 2.4, 1.0, 0.1, 0.45], fill(W, 7))
-    end
-
     # instantiate the IVP
     𝑃 = InitialValueProblem(𝐹, X0)
 
@@ -109,10 +109,11 @@ function quadrotor(; T=20.0,
     𝑂[:T] = T
 
     # variables to plot
-    𝑂[:plot_vars] = [1, 2]
+    𝑂[:plot_vars] = [0, 3]
 
     # safety property
-    𝑂[:property] = LinearConstraintProperty([0, 0, 0, -1., 0, 0, 0], -unsafe_bound)
+    # TODO: add specification
+    #𝑂[:property] = LinearConstraintProperty([0, 0, 0, -1., 0, 0, 0], -unsafe_bound)
     # @set x₄ ≥ 0.01, vars=(x₁, x₂, x₃, x₄, x₅, x₆, x₇)
     return (𝑃, 𝑂)
 end

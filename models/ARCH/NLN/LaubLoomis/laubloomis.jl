@@ -14,25 +14,29 @@ Construct the Laub-Loomis model.
 
 ### Input
 
-- `T`  --  (optional, default: `20.0`) the time horizon for the initial
-           value problem
+- `T`  --  (optional, default: `20.0`) the time horizon for the initial-value
+            problem
+- `W`  --  (optional, default: `0.01`) width of the initial states
 - `X0` --  (optional, default: an axis-aligned box centered at
            `(1.2, 1.05, 1.5, 2.4, 1.0, 0.1, 0.45)` and radius `W`) set of initial states
-- `W`  --  (optional, default: `0.01`) width of the initial states
 - `unsafe_bound` -- (optional, default: `4.5`) bound for the variable `x₄` that
                     defines the unsafe region, of the form `x₄ ≥ unsafe_bound`
+- `variables`    -- (optional, default: `PolyVar`) the set of variables used to
+                    describe the polynomial ODE
 
 ### Output
 
 The tuple `(𝑃, 𝑂)` where `𝑃` is an initial-value problem and `𝑂` are the options.
 """
 function laubloomis(; T=20.0,
-                      X0=nothing,
-                      W=nothing,
+                      W=0.01,
+                      X0=BallInf([1.2, 1.05, 1.5, 2.4, 1.0, 0.1, 0.45], W,),
                       unsafe_bound=4.5,
                       variables=@polyvar x₁ x₂ x₃ x₄ x₅ x₆ x₇)
 
     𝑂 = Options()
+
+    # unrwap the variables
     x₁, x₂, x₃, x₄, x₅, x₆, x₇ = variables
     𝑂[:variables] = variables
     𝑂[:vars] = [1:7;]
@@ -48,14 +52,6 @@ function laubloomis(; T=20.0,
 
     𝐹 = PolynomialContinuousSystem(f)
 
-    # set default of initial states
-    if X0 == nothing
-        if W == nothing
-            W = 0.01
-        end
-        X0 = Hyperrectangle([1.2, 1.05, 1.5, 2.4, 1.0, 0.1, 0.45], fill(W, 7))
-    end
-
     # instantiate the IVP
     𝑃 = InitialValueProblem(𝐹, X0)
 
@@ -63,7 +59,7 @@ function laubloomis(; T=20.0,
     𝑂[:T] = T
 
     # variables to plot
-    𝑂[:plot_vars] = [1, 2]
+    𝑂[:plot_vars] = [0, 4]
 
     # safety property
     𝑂[:property] = LinearConstraintProperty([0, 0, 0, -1., 0, 0, 0], -unsafe_bound)

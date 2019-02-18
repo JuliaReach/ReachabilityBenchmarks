@@ -14,10 +14,11 @@ Construct the Van der Pol model.
 
 ### Input
 
-- `T`  --  (optional, default: `7.0`) the time horizon for the initial
-           value problem
-- `X0` -- (optional, default: `[1.25, 1.55] × [2.35, 2.45]`) set of initial states
-
+- `T`         -- (optional, default: `7.0`) the time horizon for the initial
+                  value problem
+- `X0`        -- (optional, default: `[1.25, 1.55] × [2.35, 2.45]`) set of initial states
+- `variables` -- (optional, default: `PolyVar`) the set of polynoma variables that
+                  are used in the equations 
 ### Output
 
 The tuple `(𝑃, 𝑂)` where `𝑃` is an initial-value problem and `𝑂` are the options.
@@ -29,7 +30,6 @@ function vanderpol(; T=7.0,
     𝑂 = Options()
     x₁, x₂ = variables
     𝑂[:variables] = variables
-    𝑂[:vars] = [1, 2]
 
     # instantiate the polynomial system
     f = [x₂, x₂ - x₁ - x₁^2 * x₂]

@@ -20,7 +20,7 @@ end
 # TODO: use vanderpol.jl and wrap as an algo
 
 """
-    laubloomis_TMJets(; [t0], [T], [abs_tol], [orderT], [orderQ], [maxsteps], [float_coeffs])
+    laubloomis_TMJets(; [t0], [T], [W], [abs_tol], [orderT], [orderQ], [maxsteps], [float_coeffs])
 
 Build and run the Laub-Loomis model.
 

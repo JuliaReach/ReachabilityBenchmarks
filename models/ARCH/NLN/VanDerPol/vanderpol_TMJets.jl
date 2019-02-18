@@ -16,7 +16,7 @@ end
 # TODO: use vanderpol.jl and wrap as an algo
 
 """
-    vanderpol_TMJets(; [t0], [T], [abs_tol], [orderT], [orderQ], [maxsteps])
+    vanderpol_TMJets(; [t0], [T], [abs_tol], [orderT], [orderQ], [maxsteps], [float_coeffs])
 
 ### Input
 
@@ -28,22 +28,29 @@ end
                 variables
 - `maxsteps` -- (optional, default: `200`) use this maximum number of steps in
                 the validated integration
+- `float_coeffs` -- (optional, default: `true`) if `true`, use floating point numbers
+                    for the coefficients of the polynomial variables; otherwise
+                    use intervals
 """
 function vanderpol_TMJets(; t0=0.0, T=7.0, abs_tol=1e-20, orderT=18, orderQ=9,
-                            maxsteps=200)
+                            maxsteps=200, float_coeffs=true)
 
     # Initial conditions as mid-point of provided intervals
     q0 = IntervalBox(1.4, 2.4)
+    if float_coeffs
+         # converts the IntervalBox into a 2-dimensional (static) array,
+         # the center of the box, in this case (1.4, 2.4)
+        q0 = mid.(q0)
+    end
 
     # initial box (around `q0`) of the initial conditions
     δq0 = IntervalBox(-0.15..0.15, -0.05..0.05)
 
     # returns a TaylorN vector, each entry corresponding to an indep variable
-    δ₁, δ₂ = set_variables("δ", numvars=length(q0), order=2*orderQ)
+    #δ₁, δ₂ = set_variables("δ", numvars=length(q0), order=2*orderQ)
 
     # TODO: wrap as a Reachability algorithm
     tTM, xTM = validated_integ(vanderPol!, q0, δq0, t0, T, orderQ, orderT, abs_tol, maxsteps=maxsteps)
-
     return tTM, xTM
 end
 

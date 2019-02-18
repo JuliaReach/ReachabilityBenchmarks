@@ -1,6 +1,9 @@
+# ==============================================================================
 # Filtered Oscillator
+#
 # See: https://flowstar.org/benchmarks/filtered-oscillator/
-# ============================
+# ==============================================================================
+
 using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra, Optim
 
 import LazySets.HalfSpace
@@ -79,24 +82,28 @@ function filtered_oscillator(n0::Int=4,
                HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
     A_trans_34 = Matrix(1.0I, system_dimension, system_dimension)
     A_trans_34[system_dimension, system_dimension] = 2.
-    r1 = ConstrainedLinearDiscreteSystem(A_trans_34, X_l3l4)
+    r1 = ConstrainedLinearMap(A_trans_34, X_l3l4)
+
     # transition l4 -> l2
     X_l4l2 = HPolyhedron([HalfSpace([0.714286; 1.0; z], 0.0),  # 0.714286*x + y <= 0
                HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                HalfSpace([1.0; 0.0; z], 0.0)])  # x <= 0
-    r2 = ConstrainedLinearDiscreteSystem(A_trans, X_l4l2)
+    r2 = ConstrainedLinearMap(A_trans, X_l4l2)
+
     # transition l2 -> l1
     X_l2l1 = HPolyhedron([HalfSpace([1.0; 0.0; z], 0.0),  # x <= 0
                HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
                HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
-    r3 = ConstrainedLinearDiscreteSystem(A_trans, X_l2l1)
+    r3 = ConstrainedLinearMap(A_trans, X_l2l1)
+
     # transition l1 -> l3
     X_l1l3 = HPolyhedron([HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
                HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                HalfSpace([1.0; 0.0; z], 0.0)])  # x <= 0
-    r4 = ConstrainedLinearDiscreteSystem(A_trans, X_l1l3)
+    r4 = ConstrainedLinearMap(A_trans, X_l1l3)
 
     r = [r1, r2, r3, r4]
+
     # switchings
     s = [HybridSystems.AutonomousSwitching()]
 

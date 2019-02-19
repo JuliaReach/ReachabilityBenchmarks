@@ -53,6 +53,9 @@ function laubloomis_TMJets(; t0=0.0, T=20.0, W=0.01, abs_tol=1e-20, orderT=18, o
     # initial box (around `q0`) of the initial conditions
     δq0 = IntervalBox(-W..W, -W..W, -W..W, -W..W, -W..W, -W..W, -W..W)
 
+    # set variables
+    set_variables("x", numvars=7, order=2*orderQ)
+
     # TODO: wrap as a Reachability algorithm
     tTM, xTM = validated_integ(laubloomis!, q0, δq0, t0, T, orderQ, orderT, abs_tol, maxsteps=maxsteps)
     return tTM, xTM

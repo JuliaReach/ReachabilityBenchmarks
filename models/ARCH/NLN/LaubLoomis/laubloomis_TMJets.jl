@@ -17,7 +17,6 @@ using LinearAlgebra: norm
     return dx
 end
 
-# TODO: use vanderpol.jl and wrap as an algo
 
 """
     laubloomis_TMJets(; [t0], [T], [W], [abs_tol], [orderT], [orderQ], [maxsteps], [float_coeffs])

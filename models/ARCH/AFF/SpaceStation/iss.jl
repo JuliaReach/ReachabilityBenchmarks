@@ -34,7 +34,7 @@ sol = solve(problem_TV, Options(:T=>time_horizon, :mode=>"check", :property=>ISU
 SUITE["ISS"]["ISU01", "dense"] = @benchmarkable solve($problem_TV, Options(:T=>$time_horizon, :mode=>"check", :property=>$ISU01, :projection_matrix=>$C), op=BFFPSV18(:δ=>5e-3, :vars=>136:270, :assume_sparse=>true))
 
 sol = solve(problem_TV, Options(:T=>time_horizon, :mode=>"check", :property=>ISS01, :projection_matrix=>C), op=BFFPSV18(:δ=>6e-4, :vars=>136:270, :assume_sparse=>true, :lazy_inputs_interval=>-1, :partition=>[1:135, 136:270]))
-SUITE["ISS"]["ISS01", "dense"] = @benchmarkable solve(problem_TV, Options(:T=>time_horizon, :mode=>"check", :property=>ISS01, :projection_matrix=>C), op=BFFPSV18(:δ=>6e-4, :vars=>136:270, :assume_sparse=>true, :lazy_inputs_interval=>-1, :partition=>[1:135, 136:270]))
+SUITE["ISS"]["ISS01", "dense"] = @benchmarkable solve($problem_TV, Options(:T=>$time_horizon, :mode=>"check", :property=>$ISS01, :projection_matrix=>$C), op=BFFPSV18(:δ=>6e-4, :vars=>136:270, :assume_sparse=>true, :lazy_inputs_interval=>-1, :partition=>[1:135, 136:270]))
 
 sol = solve(problem_TV, Options(:T=>time_horizon, :mode=>"check", :property=>ISU01, :projection_matrix=>C), op=BFFPSV18(:approx_model=>"nobloating", :δ=>5e-3, :vars=> 136:270, :assume_sparse=>true))
 SUITE["ISS"]["ISU01", "discrete"] = @benchmarkable solve($problem_TV, Options(:T=>$time_horizon, :mode=>"check", :property=>$ISU01, :projection_matrix=>$C), op=BFFPSV18(:approx_model=>"nobloating", :δ=>5e-3, :vars=>136:270, :assume_sparse=>true))

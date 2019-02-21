@@ -1,7 +1,7 @@
 using BenchmarkTools: minimum, median
 
 # ==============================================================================
-# Include decomposition-based approach for the ISS model
+# Decomposition-based approach for the ISS model
 # ==============================================================================
 include("iss_BFFPSV18.jl")
 
@@ -18,5 +18,5 @@ results = run(SUITE, verbose=true)
 # return the sample with the smallest time value in each test
 println(minimum(results))
 
-# return the mean for each test
+# return the median for each test
 println(median(results))

@@ -7,7 +7,6 @@ using MAT, Reachability, MathematicalSystems
 using SparseArrays, LinearAlgebra, BenchmarkTools
 
 SUITE = BenchmarkGroup()
-
 SUITE["ISS"] = BenchmarkGroup()
 
 # ==============================

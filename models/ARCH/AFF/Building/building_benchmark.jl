@@ -3,7 +3,7 @@ using BenchmarkTools: minimum, median
 # ==============================================================================
 # Decomposition-based approach for the Building model
 # ==============================================================================
-include("building.jl")
+include("building_BFFPSV18.jl")
 
 # ==============================================================================
 # Execute benchmarks and save benchmark results

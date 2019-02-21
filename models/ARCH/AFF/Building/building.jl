@@ -19,7 +19,7 @@ H = readsxmodel(file, ST=ConstrainedLinearControlContinuousSystem)
 # BLDF01 - BDS01
 # ================
 
-n = size(H.modes[1].A, 1)-1 # the sx model has "time" as a state varaible
+n = size(H.modes[1].A, 1)-1 # the sx model has "time" as a state variable
 @assert n == 48
 A = H.modes[1].A[1:n, 1:n] 
 B = Matrix(1.0I, n, n)

@@ -1,3 +1,5 @@
+using BenchmarkTools: minimum, median
+
 # ==============================================================================
 # Include decomposition-based approach for the ISS model
 # ==============================================================================
@@ -17,4 +19,4 @@ results = run(SUITE, verbose=true)
 println(minimum(results))
 
 # return the mean for each test
-println(mean(results))
+println(median(results))

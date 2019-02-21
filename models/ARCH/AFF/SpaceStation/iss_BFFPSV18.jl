@@ -21,7 +21,7 @@ include("iss.jl")
 𝑂_ISU01 = merge(𝑂_iss, Options(:property=>ISU01))
 𝑂_ISS01 = merge(𝑂_iss, Options(:property=>ISS01))
 
-# get things compiled
+# single run
 sol_ISU01_dense = solve(iss_TV, 𝑂_ISU01, op=BFFPSV18(𝑂_dense))
 sol_ISS01_dense = solve(iss_TV, 𝑂_ISS01, op=BFFPSV18(𝑂_dense_improved_accuracy))
 sol_ISU01_discrete = solve(iss_TV, 𝑂_ISU01, op=BFFPSV18(𝑂_discrete))
@@ -47,7 +47,7 @@ SUITE["ISS"]["ISS01", "discrete"] = @benchmarkable solve($iss_TV, $𝑂_ISS01, o
 𝑂_ISU02 = merge(𝑂_iss, Options(:property=>ISU02))
 𝑂_ISS02 = merge(𝑂_iss, Options(:property=>ISS02))
 
-# get things compiled
+# single run
 sol_ISU02_dense = solve(iss_CONST, 𝑂_ISU02, op=BFFPSV18(𝑂_dense))
 sol_ISS02_dense = solve(iss_CONST, 𝑂_ISS02, op=BFFPSV18(merge(𝑂_dense_improved_accuracy, Options(:δ=>5e-3))))
 sol_ISU02_discrete = solve(iss_CONST, 𝑂_ISU02, op=BFFPSV18(𝑂_discrete))

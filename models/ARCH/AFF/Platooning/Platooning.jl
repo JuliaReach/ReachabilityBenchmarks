@@ -34,6 +34,7 @@ function platooning(;
     c1 = c2 = 5.   # clock constraints
     tb = 10.       # lower bound for loss of communication
     tc = tr = 20.  # upper bound for loss of communication (tc) and reset time (tr)
+    guard_bloating = 1e-10  # additional bloating to get a non-flat guard intersection
 
     # transition graph
     automaton = LightAutomaton(2)
@@ -79,14 +80,14 @@ function platooning(;
     # transition l1 -> l2
     # (using a hyperplane in the deterministic case causes floating-point issues)
     guard = deterministic_switching ?
-        HalfSpace(sparsevec([n], [-1.], n), -c1) :
+        HalfSpace(sparsevec([n], [-1.], n), -c1 + guard_bloating) :
         HPolyhedron([HalfSpace(sparsevec([n], [-1.], n), -tb),
                      HalfSpace(sparsevec([n], [1.], n), tc)])
     t1 = ConstrainedResetMap(n, guard, reset)
 
     # transition l2 -> l1
     guard = deterministic_switching ?
-        HalfSpace(sparsevec([n], [-1.], n), -c2) :
+        HalfSpace(sparsevec([n], [-1.], n), -c2 + guard_bloating) :
         HalfSpace(sparsevec([n], [1.], n), tr)
     t2 = ConstrainedResetMap(n, guard, reset)
 

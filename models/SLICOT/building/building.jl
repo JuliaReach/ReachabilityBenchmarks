@@ -1,7 +1,7 @@
 #=
 Model: Building (48 variables, 1 input)
 =#
-using Reachability, MAT
+using Reachability, MAT, SparseArrays
 
 building(o::Pair{Symbol, <:Any}...) = building(Options(Dict{Symbol, Any}(o)))
 

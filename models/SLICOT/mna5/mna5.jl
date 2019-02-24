@@ -1,7 +1,7 @@
 #=
 Model: MNA_5 (10913 variables, 9 inputs)
 =#
-using Reachability, MAT
+using Reachability, MAT, SparseArrays
 
 mna5(o::Pair{Symbol, <:Any}...) = mna5(Options(Dict{Symbol, Any}(o)))
 

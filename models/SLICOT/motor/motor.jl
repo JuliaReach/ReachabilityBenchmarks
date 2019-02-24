@@ -1,7 +1,7 @@
 #=
 Model: Motor (8 variables, 2 inputs)
 =#
-using Reachability
+using Reachability, SparseArrays
 
 motor(o::Pair{Symbol, <:Any}...) = motor(Options(Dict{Symbol, Any}(o)))
 

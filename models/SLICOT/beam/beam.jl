@@ -1,7 +1,7 @@
 #=
 Model: Beam (348 variables, 1 input)
 =#
-using Reachability, MAT
+using Reachability, MAT, SparseArrays
 
 beam(o::Pair{Symbol, <:Any}...) = beam(Options(Dict{Symbol, Any}(o)))
 

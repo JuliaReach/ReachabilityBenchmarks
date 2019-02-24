@@ -1,7 +1,7 @@
 #=
 Model: Heat (200 variables, 1 input)
 =#
-using Reachability, MAT
+using Reachability, MAT, SparseArrays
 
 heat(o::Pair{Symbol, <:Any}...) = heat(Options(Dict{Symbol, Any}(o)))
 

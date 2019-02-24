@@ -1,7 +1,7 @@
 #=
 Model: CD-Player (120 variables, 2 inputs)
 =#
-using Reachability, MAT
+using Reachability, MAT, SparseArrays
 
 cdplayer(o::Pair{Symbol, <:Any}...) = cdplayer(Options(Dict{Symbol, Any}(o)))
 

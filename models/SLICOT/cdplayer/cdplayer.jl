@@ -24,7 +24,7 @@ function cdplayer(input_options::Options)
 
     # prpoperty: 2*x1 -3*x2 < 450.8
     property =
-        LinearConstraintProperty(sparsevec([1, 2], [2., -3.], 120), 450.8)
+        SafeStatesProperty(HalfSpace(sparsevec([1, 2], [2., -3.], 120), 450.8))
 
     # =======================
     # Problem default options

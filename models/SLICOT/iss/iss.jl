@@ -24,8 +24,8 @@ function iss(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # property: y < 7e-4 for linear combination y
-    property = LinearConstraintProperty(
-        read(matopen(@relpath "out.mat"), "M")[1,:], 7e-4)
+    property = SafeStatesProperty(HalfSpace(
+        read(matopen(@relpath "out.mat"), "M")[1, :], 7e-4))
 
     # =======================
     # Problem default options

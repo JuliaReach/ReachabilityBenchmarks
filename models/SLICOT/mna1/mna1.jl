@@ -24,7 +24,7 @@ function mna1(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # property: x1 < 0.5
-    property = LinearConstraintProperty(sparsevec([1], [1.0], 578), 0.5)
+    property = SafeStatesProperty(HalfSpace(sparsevec([1], [1.0], 578), 0.5))
 
     # =======================
     # Problem default options

@@ -26,7 +26,7 @@ function beam(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # safety property: x89 < 2100
-    property = LinearConstraintProperty(sparsevec([89], [1.0], 348), 2100.)
+    property = SafeStatesProperty(HalfSpace(sparsevec([89], [1.0], 348), 2100.))
 
     # =======================
     # Problem default options

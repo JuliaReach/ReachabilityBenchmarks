@@ -23,8 +23,8 @@ function fom(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # property: y < 185
-    property = LinearConstraintProperty(
-        read(matopen(@relpath "out.mat"), "M")[1,:], 185.)
+    property = SafeStatesProperty(HalfSpace(
+        read(matopen(@relpath "out.mat"), "M")[1, :], 185.))
 
     # =======================
     # Problem default options

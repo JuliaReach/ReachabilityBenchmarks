@@ -1,7 +1,7 @@
 #=
 Model: Building (48 variables, 1 input)
 =#
-using Reachability, MAT
+using Reachability, MAT, SparseArrays
 
 building(o::Pair{Symbol, <:Any}...) = building(Options(Dict{Symbol, Any}(o)))
 
@@ -27,7 +27,7 @@ function building(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # property: x25 < 6e-3
-    property = LinearConstraintProperty(sparsevec([25], [1.0], 48), 6e-3)
+    property = SafeStatesProperty(HalfSpace(sparsevec([25], [1.0], 48), 6e-3))
 
     # =======================
     # Problem default options

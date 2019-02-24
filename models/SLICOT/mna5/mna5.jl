@@ -1,7 +1,7 @@
 #=
 Model: MNA_5 (10913 variables, 9 inputs)
 =#
-using Reachability, MAT
+using Reachability, MAT, SparseArrays
 
 mna5(o::Pair{Symbol, <:Any}...) = mna5(Options(Dict{Symbol, Any}(o)))
 
@@ -24,9 +24,9 @@ function mna5(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # property: x1 < 0.2 && x2 < 0.15
-    property = LinearConstraintProperty([
-        Clause([LinearConstraint(sparsevec([1], [1.0], 10913), 0.2)]),
-        Clause([LinearConstraint(sparsevec([2], [1.0], 10913), 0.15)])])
+    property = SafeStatesProperty(HPolyhedron([
+        HalfSpace(sparsevec([1], [1.0], 10913), 0.2),
+        HalfSpace(sparsevec([2], [1.0], 10913), 0.15)]))
 
     # =======================
     # Problem default options

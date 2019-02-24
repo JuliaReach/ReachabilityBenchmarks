@@ -1,7 +1,7 @@
 #=
 Model: MNA_1 (578 variables, 9 inputs)
 =#
-using Reachability, MAT
+using Reachability, MAT, SparseArrays
 
 mna1(o::Pair{Symbol, <:Any}...) = mna1(Options(Dict{Symbol, Any}(o)))
 
@@ -24,7 +24,7 @@ function mna1(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # property: x1 < 0.5
-    property = LinearConstraintProperty(sparsevec([1], [1.0], 578), 0.5)
+    property = SafeStatesProperty(HalfSpace(sparsevec([1], [1.0], 578), 0.5))
 
     # =======================
     # Problem default options

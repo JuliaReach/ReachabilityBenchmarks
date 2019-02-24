@@ -29,8 +29,8 @@ function pde(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # property: y < 12 for linear combination y
-    property = LinearConstraintProperty(
-        read(matopen(@relpath "out.mat"), "M")[1,:], 12.)
+    property = SafeStatesProperty(HalfSpace(
+        read(matopen(@relpath "out.mat"), "M")[1, :], 12.))
 
     # =======================
     # Problem default options

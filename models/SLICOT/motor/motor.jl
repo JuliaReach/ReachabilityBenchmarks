@@ -1,7 +1,7 @@
 #=
 Model: Motor (8 variables, 2 inputs)
 =#
-using Reachability
+using Reachability, SparseArrays
 
 motor(o::Pair{Symbol, <:Any}...) = motor(Options(Dict{Symbol, Any}(o)))
 
@@ -27,9 +27,9 @@ function motor(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # property: x1 < 0.35 || x5 < 0.45
-    property = LinearConstraintProperty(Clause([
-        LinearConstraint([1.; zeros(7)], 0.35),
-        LinearConstraint([zeros(4); 1.; zeros(3)], 0.45)]))
+    property = Disjunction([
+        SafeStatesProperty(HalfSpace([1.; zeros(7)], 0.35)),
+        SafeStatesProperty(HalfSpace([zeros(4); 1.; zeros(3)], 0.45))])
 
     # =======================
     # Problem default options

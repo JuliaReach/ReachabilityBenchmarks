@@ -1,7 +1,7 @@
 #=
 Model: ISS (270 variables, 3 inputs)
 =#
-using Reachability, MAT
+using Reachability, MAT, SparseArrays
 
 iss(o::Pair{Symbol, <:Any}...) = iss(Options(Dict{Symbol, Any}(o)))
 
@@ -24,8 +24,8 @@ function iss(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # property: y < 7e-4 for linear combination y
-    property = LinearConstraintProperty(
-        read(matopen(@relpath "out.mat"), "M")[1,:], 7e-4)
+    property = SafeStatesProperty(HalfSpace(
+        read(matopen(@relpath "out.mat"), "M")[1, :], 7e-4))
 
     # =======================
     # Problem default options

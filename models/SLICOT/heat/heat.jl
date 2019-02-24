@@ -1,7 +1,7 @@
 #=
 Model: Heat (200 variables, 1 input)
 =#
-using Reachability, MAT
+using Reachability, MAT, SparseArrays
 
 heat(o::Pair{Symbol, <:Any}...) = heat(Options(Dict{Symbol, Any}(o)))
 
@@ -26,7 +26,7 @@ function heat(input_options::Options)
     S = ContinuousSystem(A, X0, U)
 
     # property: x133 < 0.1
-    property = LinearConstraintProperty(sparsevec([133], [1.0], 200), 0.1)
+    property = SafeStatesProperty(HalfSpace(sparsevec([133], [1.0], 200), 0.1))
 
     # =======================
     # Problem default options

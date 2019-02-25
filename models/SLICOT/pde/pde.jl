@@ -16,9 +16,9 @@ function pde(input_options::Options)
     n = size(A, 1)
     center0 = zeros(n)
     radius0 = zeros(n)
-    center0[65:80] = 0.00125
-    center0[81:84] = -0.00175
-    radius0[65:84] = 0.00025
+    center0[65:80] .= 0.00125
+    center0[81:84] .= -0.00175
+    radius0[65:84] .= 0.00025
     X0 = Hyperrectangle(center0, radius0)
 
     # input set

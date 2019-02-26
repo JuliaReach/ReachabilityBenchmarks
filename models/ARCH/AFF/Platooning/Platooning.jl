@@ -109,8 +109,8 @@ function platooning(;
     d1 = zeros(n); d1[1] = -1.  # x1 >= -dmin
     d4 = zeros(n); d4[4] = -1.
     d7 = zeros(n); d7[7] = -1.
-    property = LinearConstraintProperty(
-        [Clause([HalfSpace(d, allowed_distance)]) for d in [d1, d4, d7]])
+    property = Conjunction(
+        [SafeStatesProperty(HalfSpace(d, allowed_distance)) for d in [d1, d4, d7]])
 
     # default options
     options = Options(:T=>time_horizon, :property=>property)

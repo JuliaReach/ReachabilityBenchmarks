@@ -6,14 +6,16 @@ using TaylorModels
 using LinearAlgebra: norm
 
 # Equations of motion
+# We write the function such that the operations are either unary or binary;
+# this is current a limitation of `@taylorize`:
 @taylorize function laubloomis!(t, x, dx)
     dx[1] = 1.4*x[3] - 0.9*x[1]
     dx[2] = 2.5*x[5] - 1.5*x[2]
-    dx[3] = 0.6*x[7] - 0.8*x[2]*x[3]
-    dx[4] = 2 - 1.3*x[3]*x[4]
-    dx[5] = 0.7*x[1] - x[4]*x[5]
+    dx[3] = 0.6*x[7] - 0.8*(x[2]*x[3])
+    dx[4] = 2 - 1.3*(x[3]*x[4])
+    dx[5] = 0.7*x[1] - (x[4]*x[5])
     dx[6] = 0.3*x[1] - 3.1*x[6]
-    dx[7] = 1.8*x[6] - 1.6*x[2]*x[7]
+    dx[7] = 1.8*x[6] - 1.6*(x[2]*x[7])
     return dx
 end
 

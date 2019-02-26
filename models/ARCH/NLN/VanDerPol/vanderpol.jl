@@ -3,12 +3,12 @@
 # See https://easychair.org/publications/paper/gjfh
 # =================================================================
 
-using Reachability: Options, LinearConstraintProperty
+using Reachability: Options, SafeStatesProperty
 using MathematicalSystems, LazySets
 using DynamicPolynomials, SemialgebraicSets
 
 """
-    vanderpol(; [T], [X0])
+    vanderpol(; [T], [X0], [variables])
 
 Construct the Van der Pol model.
 
@@ -45,8 +45,7 @@ function vanderpol(; T=7.0,
     𝑂[:plot_vars] = [1, 2]
 
     # safety property
-    𝑂[:property] = LinearConstraintProperty([0., 1.], 2.75)   # uses supp func evaluation
-    #𝑂[:property] = SubsetProperty(HalfSpace([0., 1.], 2.75)) # uses inclusion test
+    𝑂[:property] = SafeStatesProperty(HalfSpace([0., 1.], 2.75))
 
     return (𝑃, 𝑂)
 end

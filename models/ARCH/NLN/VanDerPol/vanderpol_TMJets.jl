@@ -1,11 +1,8 @@
 include("vanderpol.jl")
 
 using TaylorModels
-#using TaylorIntegration, TaylorSeries, IntervalArithmetic
+using TaylorModels: validated_integ, validated_integ2
 
-using LinearAlgebra: norm
-
-# Equations of motion
 @taylorize function vanderPol!(t, x, dx)
     local μ = 1.0
     dx[1] = x[2]
@@ -31,9 +28,14 @@ end
 - `float_coeffs` -- (optional, default: `true`) if `true`, use floating point numbers
                     for the coefficients of the polynomial variables; otherwise
                     use intervals
+- `sym_norm`
+- `check_property`
+- `jet_transport`
 """
 function vanderpol_TMJets(; t0=0.0, T=7.0, abs_tol=1e-20, orderT=13, orderQ=9,
-                            maxsteps=500, float_coeffs=true)
+                            maxsteps=500, float_coeffs=true, sym_norm=true,
+                            check_property=x->x[2] <= 2.75,
+                            jet_transport=true)
 
     # Initial conditions as mid-point of provided intervals
     q0 = IntervalBox(1.4, 2.4)
@@ -50,12 +52,23 @@ function vanderpol_TMJets(; t0=0.0, T=7.0, abs_tol=1e-20, orderT=13, orderQ=9,
     set_variables("x", numvars=2, order=2*orderQ)
 
     # TODO: wrap as a Reachability algorithm
-    tTM, xTM = validated_integ(vanderPol!, q0, δq0, t0, T, orderQ, orderT, abs_tol, maxsteps=maxsteps)
+    if jet_transport
+        tTM, xTM = validated_integ2(vanderPol!, q0, δq0, t0, T, orderQ, orderT,
+                                   abs_tol, maxsteps=maxsteps,
+                                   check_property=check_property,
+                                   sym_norm=sym_norm)
+    else
+        tTM, xTM = validated_integ(vanderPol!, q0, δq0, t0, T, orderQ, orderT,
+                                   abs_tol, maxsteps=maxsteps,
+                                   check_property=check_property,
+                                   sym_norm=sym_norm)
+    end
     return tTM, xTM
 end
 
 # return `true` if the specification is specification is satisfied and `false`
 # otherwise 
+#=
 function check_property(xTM)
     satisfied = true
     for ind in eachindex(xTM[:])
@@ -67,6 +80,7 @@ function check_property(xTM)
     end
     return satisfied
 end
+=#
 
 #=
 # TODO : outsource

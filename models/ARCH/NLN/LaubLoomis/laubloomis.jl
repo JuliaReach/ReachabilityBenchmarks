@@ -3,7 +3,7 @@
 # See https://easychair.org/publications/paper/gjfh
 # =================================================================
 
-using Reachability: Options, LinearConstraintProperty
+using Reachability: Options, SafeStatesProperty
 using MathematicalSystems, LazySets
 using DynamicPolynomials, SemialgebraicSets
 
@@ -62,7 +62,7 @@ function laubloomis(; T=20.0,
     𝑂[:plot_vars] = [0, 4]
 
     # safety property
-    𝑂[:property] = LinearConstraintProperty([0, 0, 0, -1., 0, 0, 0], -unsafe_bound)
+    𝑂[:property] = SafeStatesProperty(HalfSpace([0, 0, 0, -1., 0, 0, 0], -unsafe_bound))
     # @set x₄ ≥ 0.01, vars=(x₁, x₂, x₃, x₄, x₅, x₆, x₇)
     return (𝑃, 𝑂)
 end

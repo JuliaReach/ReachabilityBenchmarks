@@ -1,9 +1,7 @@
 include("laubloomis.jl")
 
 using TaylorModels
-#using TaylorIntegration, TaylorSeries, IntervalArithmetic
-
-using LinearAlgebra: norm
+using TaylorModels: validated_integ, validated_integ2
 
 # Equations of motion
 # We write the function such that the operations are either unary or binary;
@@ -21,7 +19,9 @@ end
 
 
 """
-    laubloomis_TMJets(; [t0], [T], [W], [abs_tol], [orderT], [orderQ], [maxsteps], [float_coeffs])
+    laubloomis_TMJets(; [t0], [T], [W], [abs_tol], [orderT], [orderQ],
+                        [maxsteps], [float_coeffs], [sym_norm],
+                        [check_property], [jet_transport])
 
 Build and run the Laub-Loomis model.
 
@@ -39,9 +39,14 @@ Build and run the Laub-Loomis model.
 - `float_coeffs` -- (optional, default: `true`) if `true`, use floating point numbers
                     for the coefficients of the polynomial variables; otherwise
                     use intervals
+- `sym_norm`
+- `check_property`
+- `jet_transport`
 """
-function laubloomis_TMJets(; t0=0.0, T=20.0, W=0.01, abs_tol=1e-20, orderT=18, orderQ=9,
-                            maxsteps=200, float_coeffs=true)
+function laubloomis_TMJets(; t0=0.0, T=20.0, W=0.01, abs_tol=1e-20,
+                             orderT=6, orderQ=3, maxsteps=1000, float_coeffs=true,
+                             sym_norm=true, check_property=x->x[4] <= 4.5,
+                             jet_transport=true)
 
     # Initial conditions as mid-point of provided intervals
     q0 = IntervalBox(1.2, 1.05, 1.5, 2.4, 1.0, 0.1, 0.45)
@@ -52,16 +57,27 @@ function laubloomis_TMJets(; t0=0.0, T=20.0, W=0.01, abs_tol=1e-20, orderT=18, o
     end
 
     # initial box (around `q0`) of the initial conditions
-    δq0 = IntervalBox(-W..W, -W..W, -W..W, -W..W, -W..W, -W..W, -W..W)
+    δq0 = IntervalBox(-W..W, Val(7))
 
     # set variables
     set_variables("x", numvars=7, order=2*orderQ)
 
     # TODO: wrap as a Reachability algorithm
-    tTM, xTM = validated_integ(laubloomis!, q0, δq0, t0, T, orderQ, orderT, abs_tol, maxsteps=maxsteps)
+    if jet_transport
+        tTM, xTM = validated_integ2(laubloomis!, q0, δq0, t0, T, orderQ, orderT,
+                                   abs_tol, maxsteps=maxsteps,
+                                   check_property=check_property,
+                                   sym_norm=sym_norm)
+    else
+        tTM, xTM = validated_integ(laubloomis!, q0, δq0, t0, T, orderQ, orderT,
+                                   abs_tol, maxsteps=maxsteps,
+                                   check_property=check_property,
+                                   sym_norm=sym_norm)
+    end
     return tTM, xTM
 end
 
+#=
 # return `true` if the specification is specification is satisfied and `false`
 # otherwise 
 function check_property(xTM)
@@ -75,6 +91,7 @@ function check_property(xTM)
     end
     return satisfied
 end
+=#
 
 #=
 # TODO : outsource

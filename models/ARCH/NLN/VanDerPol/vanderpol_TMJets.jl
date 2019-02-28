@@ -1,8 +1,10 @@
 include("vanderpol.jl")
 
 using TaylorModels
-using TaylorModels: validated_integ, validated_integ2
+using TaylorModels: validated_integ
 
+# Equations of motion
+# We write the function such that the operations are either unary or binary:
 @taylorize function vanderPol!(t, x, dx)
     local μ = 1.0
     dx[1] = x[2]
@@ -13,7 +15,8 @@ end
 # TODO: use vanderpol.jl and wrap as an algo
 
 """
-    vanderpol_TMJets(; [t0], [T], [abs_tol], [orderT], [orderQ], [maxsteps], [float_coeffs])
+    vanderpol_TMJets(; [t0], [T], [abs_tol], [orderT], [orderQ],
+                       [maxsteps], [property])
 
 ### Input
 
@@ -25,44 +28,23 @@ end
                 variables
 - `maxsteps` -- (optional, default: `500`) use this maximum number of steps in
                 the validated integration
-- `float_coeffs` -- (optional, default: `true`) if `true`, use floating point numbers
-                    for the coefficients of the polynomial variables; otherwise
-                    use intervals
-- `sym_norm`
-- `check_property`
-- `jet_transport`
+- `property` -- (optional, default: `x->x[2] <= 2.75`) safe states property
 """
-function vanderpol_TMJets(; t0=0.0, T=7.0, abs_tol=1e-20, orderT=13, orderQ=9,
-                            maxsteps=500, float_coeffs=true, sym_norm=true,
-                            check_property=x->x[2] <= 2.75,
-                            jet_transport=true)
+function vanderpol_TMJets(; t0=0.0, T=7.0, abs_tol=1e-20, orderT=13, orderQ=2,
+                            maxsteps=500, property=x->x[2] <= 2.75)
 
     # Initial conditions as mid-point of provided intervals
-    q0 = IntervalBox(1.4, 2.4)
-    if float_coeffs
-         # converts the IntervalBox into a 2-dimensional (static) array,
-         # the center of the box, in this case (1.4, 2.4)
-        q0 = mid.(q0)
-    end
+    q0 = [1.4, 2.4]
 
     # initial box (around `q0`) of the initial conditions
     δq0 = IntervalBox(-0.15..0.15, -0.05..0.05)
 
     # returns a TaylorN vector, each entry corresponding to an indep variable
-    set_variables("x", numvars=2, order=2*orderQ)
+    set_variables("δ", numvars=length(q0), order=2*orderQ)
 
-    # TODO: wrap as a Reachability algorithm
-    if jet_transport
-        tTM, xTM = validated_integ2(vanderPol!, q0, δq0, t0, T, orderQ, orderT,
-                                   abs_tol, maxsteps=maxsteps,
-                                   check_property=check_property,
-                                   sym_norm=sym_norm)
-    else
-        tTM, xTM = validated_integ(vanderPol!, q0, δq0, t0, T, orderQ, orderT,
-                                   abs_tol, maxsteps=maxsteps,
-                                   check_property=check_property,
-                                   sym_norm=sym_norm)
-    end
+    tTM, xTM = validated_integ(vanderPol!, q0, δq0, t0, T, orderQ, orderT,
+                               abs_tol, maxsteps=maxsteps,
+                               check_property=property)
     return tTM, xTM
 end
 

@@ -7,6 +7,10 @@ using Reachability: Options, SafeStatesProperty
 using MathematicalSystems, LazySets
 using DynamicPolynomials, SemialgebraicSets
 
+# ==============================
+# Load model
+# ==============================
+
 """
     laubloomis(; [T], [X0], [W])
 

@@ -18,9 +18,13 @@
 #  x₁₂ : yaw rate
 # =================================================================
 
-using Reachability: Options, LinearConstraintProperty
+using Reachability: Options, SafeStatesProperty
 using MathematicalSystems, LazySets
 using DynamicPolynomials, SemialgebraicSets
+
+# ==============================
+# Load model
+# ==============================
 
 """
     quadrotor(; [T], [X0], [variables], [controller_inputs])

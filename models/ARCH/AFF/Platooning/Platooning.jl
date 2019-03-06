@@ -34,7 +34,9 @@ function platooning(;
     c1 = c2 = 5.   # clock constraints
     tb = 10.       # lower bound for loss of communication
     tc = tr = 20.  # upper bound for loss of communication (tc) and reset time (tr)
-    guard_bloating = 1e-10  # additional bloating to get a non-flat guard intersection
+
+    # additional bloating to get a non-flat guard intersection
+    guard_bloating = sqrt(eps(Float64))
 
     # transition graph
     automaton = LightAutomaton(2)

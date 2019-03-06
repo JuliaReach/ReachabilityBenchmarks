@@ -35,6 +35,9 @@ function platooning(;
     tb = 10.       # lower bound for loss of communication
     tc = tr = 20.  # upper bound for loss of communication (tc) and reset time (tr)
 
+    # additional bloating to get a non-flat guard intersection
+    guard_bloating = sqrt(eps(Float64))
+
     # transition graph
     automaton = LightAutomaton(2)
     add_transition!(automaton, 1, 2, 1)
@@ -59,7 +62,7 @@ function platooning(;
     invariant = deterministic_switching ?
         HalfSpace(sparsevec([n], [1.], n), c1) :
         Universe(n)
-    m_1 = ConstrainedLinearControlContinuousSystem(A, BB, invariant, B*U)
+    m_1 = ConstrainedLinearControlContinuousSystem(A, BB, invariant, ConstantInput(B*U))
 
     # mode 2 ("not connected/connection broken")
     A = copy(A)
@@ -68,7 +71,7 @@ function platooning(;
     invariant = deterministic_switching ?
         HalfSpace(sparsevec([n], [1.], n), c2) :
         Universe(n)
-    m_2 = ConstrainedLinearControlContinuousSystem(A, BB, invariant, B*U)
+    m_2 = ConstrainedLinearControlContinuousSystem(A, BB, invariant, ConstantInput(B*U))
 
     # modes
     modes = [m_1, m_2]
@@ -79,14 +82,14 @@ function platooning(;
     # transition l1 -> l2
     # (using a hyperplane in the deterministic case causes floating-point issues)
     guard = deterministic_switching ?
-        HalfSpace(sparsevec([n], [-1.], n), -c1) :
+        HalfSpace(sparsevec([n], [-1.], n), -c1 + guard_bloating) :
         HPolyhedron([HalfSpace(sparsevec([n], [-1.], n), -tb),
                      HalfSpace(sparsevec([n], [1.], n), tc)])
     t1 = ConstrainedResetMap(n, guard, reset)
 
     # transition l2 -> l1
     guard = deterministic_switching ?
-        HalfSpace(sparsevec([n], [-1.], n), -c2) :
+        HalfSpace(sparsevec([n], [-1.], n), -c2 + guard_bloating) :
         HalfSpace(sparsevec([n], [1.], n), tr)
     t2 = ConstrainedResetMap(n, guard, reset)
 
@@ -108,8 +111,8 @@ function platooning(;
     d1 = zeros(n); d1[1] = -1.  # x1 >= -dmin
     d4 = zeros(n); d4[4] = -1.
     d7 = zeros(n); d7[7] = -1.
-    property = LinearConstraintProperty(
-        [Clause([HalfSpace(d, allowed_distance)]) for d in [d1, d4, d7]])
+    property = Conjunction(
+        [SafeStatesProperty(HalfSpace(d, allowed_distance)) for d in [d1, d4, d7]])
 
     # default options
     options = Options(:T=>time_horizon, :property=>property)
@@ -118,8 +121,8 @@ function platooning(;
 end
 
 function run_platooning(system, options)
-    opC = BFFPSV18(:δ => 0.01)
-    opD = LazyDiscretePost(:lazy_R⋂G => false)
+    opC = BFFPSV18(:δ => 0.01, :assume_sparse => true)
+    opD = LazyDiscretePost(:lazy_R⋂I => true, :lazy_R⋂G => false)
     options[:verbosity] = "info"
     options[:mode] = "check"
     options[:plot_vars] = [0, 1]

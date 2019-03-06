@@ -60,7 +60,7 @@ function platooning(;
     invariant = deterministic_switching ?
         HalfSpace(sparsevec([n], [1.], n), c1) :
         Universe(n)
-    m_1 = ConstrainedLinearControlContinuousSystem(A, BB, invariant, B*U)
+    m_1 = ConstrainedLinearControlContinuousSystem(A, BB, invariant, ConstantInput(B*U))
 
     # mode 2 ("not connected/connection broken")
     A = copy(A)
@@ -69,7 +69,7 @@ function platooning(;
     invariant = deterministic_switching ?
         HalfSpace(sparsevec([n], [1.], n), c2) :
         Universe(n)
-    m_2 = ConstrainedLinearControlContinuousSystem(A, BB, invariant, B*U)
+    m_2 = ConstrainedLinearControlContinuousSystem(A, BB, invariant, ConstantInput(B*U))
 
     # modes
     modes = [m_1, m_2]

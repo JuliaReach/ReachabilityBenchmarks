@@ -33,11 +33,11 @@ Build and run the Laub-Loomis model.
                 variables
 - `maxsteps` -- (optional, default: `200`) use this maximum number of steps in
                 the validated integration
-- `property` -- (optional, default: `x -> x[4] < 4.5`) safe states property
+- `property` -- (optional, default: `(t,x) -> x[4] < 4.5`) safe states property
 """
 function laubloomis_TMJets(; t0=0.0, T=20.0, W=0.01, abs_tol=1e-18,
                              orderT=12, orderQ=2, maxsteps=1000,
-                             property=x -> x[4] < 4.5)
+                             property=(t,x) -> x[4] < 4.5)
 
     # center of initial conditions
     q0 = [1.2, 1.05, 1.5, 2.4, 1.0, 0.1, 0.45]

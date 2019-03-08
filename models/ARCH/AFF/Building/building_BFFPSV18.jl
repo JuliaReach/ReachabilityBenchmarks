@@ -8,8 +8,8 @@ include("building.jl")
 𝑂_BLDF01 = Options(:T=>time_horizon, :mode=>"check", :property => pBDS01)
 
 # algorithm-specific options
-𝑂_dense = Options(:δ=>0.004, :vars=>[25], :block_options=>Interval, :lazy_inputs_interval=>-1)
-𝑂_discrete = Options(:δ=>0.004, :vars=>[25], :block_options=>Interval, :discretization=>"nobloating", :lazy_inputs_interval=>-1)
+𝑂_dense = Options(:δ=>0.0009, :vars=>[25], :lazy_inputs_interval=>-1) # is block options needed at all ? => default is Interval?
+𝑂_discrete = Options(:δ=>0.001, :vars=>[25], :discretization=>"nobloating", :lazy_inputs_interval=>-1)
 
 # single run
 sol_BLDF01_dense = solve(build_TV, 𝑂_BLDF01, op=BFFPSV18(𝑂_dense))
@@ -31,8 +31,8 @@ SUITE["Build"]["BLDF01-BDS01", "discrete"] = @benchmarkable solve($build_TV, $�
 𝑂_BLDC01 = Options(:T=>time_horizon, :mode=>"check", :property=>pBLDC01)
 
 # algorithm-specific options
-𝑂_dense = Options(:δ=>0.004, :vars=>[25], :block_options=>Interval, :lazy_inputs_interval=>-1)
-𝑂_discrete = Options(:δ=>0.004, :vars=>[25], :block_options=>Interval, :discretization=>"nobloating", :lazy_inputs_interval=>-1)
+𝑂_dense = Options(:δ=>0.0009, :vars=>[25], :lazy_inputs_interval=>-1)
+𝑂_discrete = Options(:δ=>0.001, :vars=>[25], :discretization=>"nobloating", :lazy_inputs_interval=>-1)
 
 # single run
 sol_BLDC01_dense = solve(build_CONST, 𝑂_BLDC01, op=BFFPSV18(𝑂_dense))

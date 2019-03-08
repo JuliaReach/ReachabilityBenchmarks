@@ -11,7 +11,7 @@ include("vanderpol_TMJets.jl")
 
 # benchmark settings
 𝑂 = Options(:t0=>0.0, :T=>7.0, :abs_tol=>1e-1, :orderT=>2, :orderQ=>2,
-            :maxsteps=>500, :property=>x->x[2] < 2.75)
+            :maxsteps=>500, :property=>(t, x) -> x[2] < 2.75)
 
 # first run
 tTM, xTM = vanderpol_TMJets(; t0=𝑂[:t0], T=𝑂[:T], abs_tol=𝑂[:abs_tol],

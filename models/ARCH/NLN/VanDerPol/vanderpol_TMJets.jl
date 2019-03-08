@@ -28,10 +28,10 @@ end
                 variables
 - `maxsteps` -- (optional, default: `500`) use this maximum number of steps in
                 the validated integration
-- `property` -- (optional, default: `x->x[2] <= 2.75`) safe states property
+- `property` -- (optional, default: `(t,x)->x[2] <= 2.75`) safe states property
 """
 function vanderpol_TMJets(; t0=0.0, T=7.0, abs_tol=1e-20, orderT=13, orderQ=2,
-                            maxsteps=500, property=x->x[2] <= 2.75)
+                            maxsteps=500, property=(t,x)->x[2] <= 2.75)
 
     # Initial conditions as mid-point of provided intervals
     q0 = [1.4, 2.4]

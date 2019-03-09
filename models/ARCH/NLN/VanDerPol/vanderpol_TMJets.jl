@@ -22,15 +22,15 @@ end
 
 - `t0`       -- (optional, default: `0.0`) initial time
 - `T`        -- (optional, default: `7.0`) time horizon
-- `abs_tol`  -- (optional, default: `1e-20`) absolute tolerance used for time step
-- `orderT`   -- (optional, default: `13`) order of the Taylor model in t
-- `orderQ`   -- (optional, default: `9`) order of the Taylor model for Jet transport
+- `abs_tol`  -- (optional, default: `1e-10`) absolute tolerance used for time step
+- `orderT`   -- (optional, default: `10`) order of the Taylor model in t
+- `orderQ`   -- (optional, default: `2`) order of the Taylor model for Jet transport
                 variables
 - `maxsteps` -- (optional, default: `500`) use this maximum number of steps in
                 the validated integration
 - `property` -- (optional, default: `(t,x)->x[2] <= 2.75`) safe states property
 """
-function vanderpol_TMJets(; t0=0.0, T=7.0, abs_tol=1e-20, orderT=13, orderQ=2,
+function vanderpol_TMJets(; t0=0.0, T=7.0, abs_tol=1e-10, orderT=10, orderQ=2,
                             maxsteps=500, property=(t,x)->x[2] <= 2.75)
 
     # Initial conditions as mid-point of provided intervals
@@ -48,9 +48,10 @@ function vanderpol_TMJets(; t0=0.0, T=7.0, abs_tol=1e-20, orderT=13, orderQ=2,
     return tTM, xTM
 end
 
-# return `true` if the specification is specification is satisfied and `false`
-# otherwise 
 #=
+# return `true` if the specification is satisfied and `false`
+# otherwise
+
 function check_property(xTM)
     satisfied = true
     for ind in eachindex(xTM[:])
@@ -62,10 +63,7 @@ function check_property(xTM)
     end
     return satisfied
 end
-=#
 
-#=
-# TODO : outsource
 using Plots
 
 # plot solution and spec
@@ -76,4 +74,5 @@ function plot_solution(xTM)
     ylims!(p, -3,3)
     return p
 end
+
 =#

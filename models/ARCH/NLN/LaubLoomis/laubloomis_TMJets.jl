@@ -27,16 +27,16 @@ Build and run the Laub-Loomis model.
 - `t0`       -- (optional, default: `0.0`) initial time
 - `T`        -- (optional, default: `20.0`) time horizon
 - `W`        -- (optional, default: `0.01`) width of the initial states
-- `abs_tol`  -- (optional, default: `1e-20`) absolute tolerance used for time step
-- `orderT`   -- (optional, default: `18`) order of the Taylor model in t
-- `orderQ`   -- (optional, default: `9`) order of the Taylor model for Jet transport
+- `abs_tol`  -- (optional, default: `1e-10`) absolute tolerance used for time step
+- `orderT`   -- (optional, default: `7`) order of the Taylor model in t
+- `orderQ`   -- (optional, default: `2`) order of the Taylor model for Jet transport
                 variables
 - `maxsteps` -- (optional, default: `200`) use this maximum number of steps in
                 the validated integration
 - `property` -- (optional, default: `(t,x) -> x[4] < 4.5`) safe states property
 """
-function laubloomis_TMJets(; t0=0.0, T=20.0, W=0.01, abs_tol=1e-18,
-                             orderT=12, orderQ=2, maxsteps=1000,
+function laubloomis_TMJets(; t0=0.0, T=20.0, W=0.01, abs_tol=1e-10,
+                             orderT=7, orderQ=2, maxsteps=1000,
                              property=(t,x) -> x[4] < 4.5)
 
     # center of initial conditions
@@ -69,10 +69,7 @@ function check_property(xTM)
     end
     return satisfied
 end
-=#
 
-#=
-# TODO : outsource
 using Plots
 
 # plot solution and spec
@@ -83,4 +80,8 @@ function plot_solution(xTM)
     ylims!(p, -3,3)
     return p
 end
+
+julia> data = [IntervalBox(IntervalArithmetic.Interval(tTM[i], tTM[i+1]), xTM[i][4]) for i in 1:length(tTM)-1];
+julia> plot(data[:], legend=false, xlab="time", ylab="x4")
+
 =#

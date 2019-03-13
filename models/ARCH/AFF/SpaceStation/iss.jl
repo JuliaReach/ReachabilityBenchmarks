@@ -3,11 +3,7 @@
 # See https://easychair.org/publications/open/4cGr
 # ==============================================================================
 
-using MAT, Reachability, MathematicalSystems
-using SparseArrays, LinearAlgebra, BenchmarkTools
-
-SUITE = BenchmarkGroup()
-SUITE["ISS"] = BenchmarkGroup()
+using MAT, Reachability, MathematicalSystems, SparseArrays, LinearAlgebra
 
 # ==============================
 # Load model

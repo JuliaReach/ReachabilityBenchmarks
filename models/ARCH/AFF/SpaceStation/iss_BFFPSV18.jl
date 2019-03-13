@@ -1,3 +1,8 @@
+using BenchmarkTools
+
+SUITE = BenchmarkGroup()
+SUITE["ISS"] = BenchmarkGroup()
+
 include("iss.jl")
 
 # ==============================

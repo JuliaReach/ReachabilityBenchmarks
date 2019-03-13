@@ -2,11 +2,7 @@
 include("SpaceStation/iss_benchmark.jl")
 
 # Spacecraft Rendezvous benchmark
-include("Rendezvous/SpacecraftRendezvous.jl")
-system, options = spacecraft()
-res = run_spacecraft(system, options)
-@assert res.satisfied
-@time run_spacecraft(system, options)
+include("Rendezvous/SpacecraftRendezvous_benchmark.jl")
 
 # Powertrain benchmark
 # N/A

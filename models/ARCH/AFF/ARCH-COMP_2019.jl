@@ -11,11 +11,7 @@ include("Rendezvous/SpacecraftRendezvous_benchmark.jl")
 include("Building/building_benchmark.jl")
 
 # Platooning benchmark
-include("Platooning/Platooning.jl")
-system, options = platooning()
-res = run_platooning(system, options)
-@assert res.satisfied
-@time run_platooning(system, options)
+include("Platooning/Platooning_benchmark.jl")
 
 # Gearbox benchmark
 include("Gearbox/Gearbox.jl")

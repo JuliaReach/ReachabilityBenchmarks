@@ -109,8 +109,8 @@ function platooning(;
 
     # safety property
     d1 = zeros(n); d1[1] = -1.  # x1 >= -dmin
-    d4 = zeros(n); d4[4] = -1.
-    d7 = zeros(n); d7[7] = -1.
+    d4 = zeros(n); d4[4] = -1.  # x4 >= -dmin
+    d7 = zeros(n); d7[7] = -1.  # x7 >= -dmin
     property = Conjunction(
         [SafeStatesProperty(HalfSpace(d, allowed_distance)) for d in [d1, d4, d7]])
 

@@ -25,12 +25,15 @@ X0 = BallInf(zeros(n), 0.0001)
 # Time-varying input
 # ==============================
 U = Hyperrectangle(low=[0.0, 0.8, 0.9], high=[0.1, 1., 1.])
-S = ConstrainedLinearControlContinuousSystem(A, Matrix(1.0I, n, n), nothing, ConstantInput(B * U))
+S = ConstrainedLinearControlContinuousSystem(
+    A, Matrix(1.0I, n, n), nothing, B * U)
 iss_TV = InitialValueProblem(S, X0)
 
 # specifications for time-varying input
-ISU01 = LinearConstraintProperty([Clause(LinearConstraint(Cvec, 0.0005)), Clause(LinearConstraint(-Cvec, 0.0005))])
-ISS01 = LinearConstraintProperty([Clause(LinearConstraint(Cvec, 0.0007)), Clause(LinearConstraint(-Cvec, 0.0007))])
+ISU01 = SafeStatesProperty(HPolyhedron([LinearConstraint(Cvec, 0.0005),
+                                        LinearConstraint(-Cvec, 0.0005)]))
+ISS01 = SafeStatesProperty(HPolyhedron([LinearConstraint(Cvec, 0.0007),
+                                        LinearConstraint(-Cvec, 0.0007)]))
 
 # ==============================
 # Constant input
@@ -46,5 +49,7 @@ C = hcat(C, [0.0 0.0 0.0])
 Cvec = C[1, :]
 
 # specifications for constant input
-ISU02 = LinearConstraintProperty([Clause(LinearConstraint(Cvec, 0.00017)), Clause(LinearConstraint(-Cvec, 0.00017))])
-ISS02 = LinearConstraintProperty([Clause(LinearConstraint(Cvec, 0.0005)), Clause(LinearConstraint(-Cvec, 0.0005))])
+ISU02 = SafeStatesProperty(HPolyhedron([LinearConstraint(Cvec, 0.00017),
+                                        LinearConstraint(-Cvec, 0.00017)]))
+ISS02 = SafeStatesProperty(HPolyhedron([LinearConstraint(Cvec, 0.0005),
+                                        LinearConstraint(-Cvec, 0.0005)]))

@@ -10,8 +10,8 @@ include("iss.jl")
 # algorithm-specific options
 𝑂_dense = Options(:δ=>5e-3, :vars=>136:270, :assume_sparse=>true)
 𝑂_dense_improved_accuracy = Options(:δ=>6e-4, :vars=>136:270, :assume_sparse=>true, :lazy_inputs_interval=>-1, :partition=>[1:135, 136:270])
-𝑂_discrete = Options(:approx_model=>"nobloating", :δ=>5e-3, :vars=>136:270, :assume_sparse=>true)
-𝑂_discrete_improved_accuracy = Options(:approx_model=>"nobloating", :δ=>5e-3, :vars=>136:270, :assume_sparse=>true, :lazy_inputs_interval=>-1, :partition=>[1:135, 136:270])
+𝑂_discrete = Options(:discretization=>"nobloating", :δ=>5e-3, :vars=>136:270, :assume_sparse=>true)
+𝑂_discrete_improved_accuracy = Options(:discretization=>"nobloating", :δ=>5e-3, :vars=>136:270, :assume_sparse=>true, :lazy_inputs_interval=>-1, :partition=>[1:135, 136:270])
 
 # ==============================
 # ISU01 and ISS01

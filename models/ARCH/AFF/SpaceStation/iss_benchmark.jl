@@ -16,7 +16,7 @@ tune!(SUITE)
 results = run(SUITE, verbose=true)
 
 # return the sample with the smallest time value in each test
-println(minimum(results))
+println("minimum: ", minimum(results))
 
 # return the median for each test
-println(median(results))
+println("median: ", median(results))

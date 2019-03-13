@@ -1,4 +1,4 @@
-using BenchmarkTools
+using BenchmarkTools, Plots, Plots.PlotMeasures, LaTeXStrings
 using BenchmarkTools: minimum, median
 
 SUITE = BenchmarkGroup()
@@ -83,3 +83,33 @@ println("minimum: ", minimum(results))
 
 # return the median for each test
 println("median: ", median(results))
+
+# ==============================================================================
+# Create plots
+# ==============================================================================
+
+options_PLAD01_BND42[:mode] = "reach"
+options_PLAD01_BND42[:plot_vars] = [0, 1]
+options_PLAD01_BND42[:project_reachset] = true
+res = solve(PLAD01_BND42, options_PLAD01_BND42, opC_dense_PLAD01_BND42, opD)
+plot(res,
+     tickfont=font(30, "Times"), guidefontsize=45,
+     xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",
+     ylab=L"x_1\raisebox{2mm}{\textcolor{white}{.}}",
+     xtick=[0., 10., 20.], ytick=[-40., -20., 0., 20.],
+     bottom_margin=6mm, left_margin=2mm,
+     size=(1000, 1000))
+savefig("PLAD01_BND42.png")
+
+options_PLAN01_UNB50[:mode] = "reach"
+options_PLAN01_UNB50[:plot_vars] = [0, 1]
+options_PLAN01_UNB50[:project_reachset] = true
+res = solve(PLAN01_UNB50, options_PLAN01_UNB50, opC_dense_PLAN01_UNB50, opD)
+plot(res,
+     tickfont=font(30, "Times"), guidefontsize=45,
+     xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",
+     ylab=L"x_1\raisebox{2mm}{\textcolor{white}{.}}",
+     xtick=[0., 100., 200.], ytick=[-40., -20., 0., 20.],
+     bottom_margin=6mm, left_margin=2mm,
+     size=(1000, 1000))
+savefig("PLAN01_UNB50.png")

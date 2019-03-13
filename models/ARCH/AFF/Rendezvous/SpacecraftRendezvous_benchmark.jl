@@ -1,4 +1,4 @@
-using BenchmarkTools
+using BenchmarkTools, Plots, Plots.PlotMeasures, LaTeXStrings
 using BenchmarkTools: minimum, median
 
 SUITE = BenchmarkGroup()
@@ -58,3 +58,35 @@ println("minimum: ", minimum(results))
 
 # return the median for each test
 println("median: ", median(results))
+
+# ==============================================================================
+# Create plots
+# ==============================================================================
+
+options_SR01[:mode] = "reach"
+options_SR01[:plot_vars] = [1, 2]
+options_SR01[:project_reachset] = true
+res = solve(SR01, options_SR01, opC_dense, opD)
+plot(res,
+     tickfont=font(30, "Times"), guidefontsize=45,
+     xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",
+     ylab=L"x_1\raisebox{2mm}{\textcolor{white}{.}}",
+     xtick=[-1000., -500., 0.], ytick=[-400., -300., -200., -100., 0.],
+     xlims=(-1000., 0.), ylims=(-450., 50.),
+     bottom_margin=6mm, left_margin=6mm,
+     size=(1000, 1000))
+savefig("SRNA01_SR01.png")
+
+options_SR02[:mode] = "reach"
+options_SR02[:plot_vars] = [1, 2]
+options_SR02[:project_reachset] = true
+res = solve(SR02, options_SR02, opC_dense, opD)
+plot(res,
+     tickfont=font(30, "Times"), guidefontsize=45,
+     xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",
+     ylab=L"x_1\raisebox{2mm}{\textcolor{white}{.}}",
+     xtick=[-1000., -500., 0.], ytick=[-400., -300., -200., -100., 0.],
+     xlims=(-1000., 150.), ylims=(-450., 50.),
+     bottom_margin=6mm, left_margin=6mm,
+     size=(1000, 1000))
+savefig("SRA01_SR02.png")

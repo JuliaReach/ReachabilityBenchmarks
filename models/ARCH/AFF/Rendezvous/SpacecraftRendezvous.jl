@@ -179,7 +179,6 @@ end
 function run_spacecraft(system, options)
     opC = BFFPSV18(:partition => [1:5], :δ => 0.04)
     opD = LazyDiscretePost(:lazy_R⋂I => true, :lazy_R⋂G => true)
-    options[:verbosity] = "info"
     options[:mode] = "check"
     options[:plot_vars] = [1, 2]
     options[:project_reachset] = true

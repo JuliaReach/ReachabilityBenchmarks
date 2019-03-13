@@ -123,7 +123,6 @@ end
 function run_platooning(system, options)
     opC = BFFPSV18(:δ => 0.01, :assume_sparse => true)
     opD = LazyDiscretePost(:lazy_R⋂I => true, :lazy_R⋂G => false)
-    options[:verbosity] = "info"
     options[:mode] = "check"
     options[:plot_vars] = [0, 1]
 

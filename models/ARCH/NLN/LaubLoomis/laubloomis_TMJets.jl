@@ -43,7 +43,7 @@ function laubloomis_TMJets(; t0=0.0, T=20.0, W=0.01, abs_tol=1e-10,
     q0 = [1.2, 1.05, 1.5, 2.4, 1.0, 0.1, 0.45]
 
     # initial box (around `q0`) of the initial conditions
-    δq0 = IntervalBox(-W..W, Val(7))
+    δq0 = IntervalBox(-W..W, 7)
 
     # set variables
     set_variables("δ", numvars=length(q0), order=2orderQ)

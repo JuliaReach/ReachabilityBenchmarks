@@ -112,7 +112,7 @@ Build and run the quadrotor model.
 - `orderT`   -- (optional, default: `5`) order of the Taylor model in t
 - `orderQ`   -- (optional, default: `2`) order of the Taylor model for Jet transport
                 variables
-- `maxsteps` -- (optional, default: `500`) use this maximum number of steps in
+- `maxsteps` -- (optional, default: `1000`) use this maximum number of steps in
                 the validated integration
 - `property` -- (optional, default: see `quad_property`) safe states property;
                 see below

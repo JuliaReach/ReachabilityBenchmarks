@@ -100,7 +100,7 @@ end
 
 """
     quad_TMJets(; t0=0.0, T=5.0, abs_tol=1e-7, orderT=5, orderQ=2, maxsteps=500,
-                  property=(t,x) -> quad_property(t, x))
+                  property=quad_property)
 
 Build and run the quadrotor model.
 
@@ -127,7 +127,7 @@ all directions. All other values are initialized as 0.
 """
 function quad_TMJets(; t0=0.0, T=5.0, abs_tol=1e-7,
                        orderT=5, orderQ=2, maxsteps=1000,
-                       property=(t,x) -> quad_property(t, x))
+                       property=quad_property)
 
     # initial conditions, deviations and initial box
     Wpos = 0.4

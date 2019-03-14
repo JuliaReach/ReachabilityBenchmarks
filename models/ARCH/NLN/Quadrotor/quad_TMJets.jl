@@ -132,19 +132,10 @@ function quad_TMJets(; t0=0.0, T=5.0, abs_tol=1e-7,
     # initial conditions, deviations and initial box
     Wpos = 0.4
     Wvel = 0.4
-    
-    #q0 = zeros(15)
-    #q0[13] = 1.0
-    
-    #δq0 = IntervalBox(-Wpos..Wpos, -Wpos..Wpos, -Wpos..Wpos, -Wvel..Wvel, -Wvel..Wvel, -Wvel..Wvel, 
-    #    0..0, 0..0, 0..0, 0..0, 0..0, 0..0, 0..0, 0..0, 0..0 )
-
-    #q0b = IntervalBox(q0.+δq0)
 
     q0 = zeros(12)
     δq0 = IntervalBox(-Wpos..Wpos, -Wpos..Wpos, -Wpos..Wpos, -Wvel..Wvel, -Wvel..Wvel, -Wvel..Wvel, 
-            0..0, 0..0, 0..0, 0..0, 0..0, 0..0 )
-     #q0b2 = IntervalBox(q0.+δq0)
+                      0..0, 0..0, 0..0, 0..0, 0..0, 0..0 )
 
     # set variables
     set_variables("δ", numvars=length(q0), order=orderQ)

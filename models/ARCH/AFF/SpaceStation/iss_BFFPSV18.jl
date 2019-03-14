@@ -10,7 +10,7 @@ include("iss.jl")
 # ==============================
 
 # general options
-𝑂_iss = Options(:T=>time_horizon, :mode=>"check", :projection_matrix=>C)
+𝑂_iss = Options(:T=>time_horizon, :mode=>"check")
 
 # algorithm-specific options
 𝑂_dense_ISU = Options(:δ=>5e-3, :vars=>136:270, :assume_sparse=>true)

@@ -20,10 +20,11 @@ function beam(input_options::Options)
 
     # input set
     B = read(file, "B")
-    U = B * BallInf([0.5], 0.3)
+    U = BallInf([0.5], 0.3)
 
     # instantiate continuous LTI system
-    S = ContinuousSystem(A, X0, U)
+    S = InitialValueProblem(
+        ConstrainedLinearControlContinuousSystem(A, B, nothing, U), X0)
 
     # safety property: x89 < 2100
     property = SafeStatesProperty(HalfSpace(sparsevec([89], [1.0], 348), 2100.))

@@ -18,10 +18,11 @@ function iss(input_options::Options)
 
     # input set
     B = read(file, "B")
-    U = B * Hyperrectangle([0.05, 0.9, 0.95], [0.05, 0.1, 0.05])
+    U = Hyperrectangle([0.05, 0.9, 0.95], [0.05, 0.1, 0.05])
 
     # instantiate continuous LTI system
-    S = ContinuousSystem(A, X0, U)
+    S = InitialValueProblem(
+        ConstrainedLinearControlContinuousSystem(A, B, nothing, U), X0)
 
     # property: y < 7e-4 for linear combination y
     property = SafeStatesProperty(HalfSpace(

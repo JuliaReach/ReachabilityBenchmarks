@@ -21,10 +21,11 @@ function motor(input_options::Options)
 
     # input set
     B = sparse([4, 8], [1, 2], [-1.0, -1.0])
-    U = B * Hyperrectangle([0.23, 0.3], [0.07, 0.1])
+    U = Hyperrectangle([0.23, 0.3], [0.07, 0.1])
 
     # instantiate continuous LTI system
-    S = ContinuousSystem(A, X0, U)
+    S = InitialValueProblem(
+        ConstrainedLinearControlContinuousSystem(A, B, nothing, U), X0)
 
     # property: x1 < 0.35 || x5 < 0.45
     property = Disjunction([

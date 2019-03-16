@@ -23,10 +23,11 @@ function pde(input_options::Options)
 
     # input set
     B = read(file, "B")
-    U = B * BallInf([0.75], .25)
+    U = BallInf([0.75], .25)
 
     # instantiate continuous LTI system
-    S = ContinuousSystem(A, X0, U)
+    S = InitialValueProblem(
+        ConstrainedLinearControlContinuousSystem(A, B, nothing, U), X0)
 
     # property: y < 12 for linear combination y
     property = SafeStatesProperty(HalfSpace(

@@ -21,10 +21,11 @@ function building(input_options::Options)
 
     # input set
     B = read(file, "B")
-    U = B * BallInf([0.9], .1)
+    U = BallInf([0.9], .1)
 
     # instantiate continuous LTI system
-    S = ContinuousSystem(A, X0, U)
+    S = InitialValueProblem(
+        ConstrainedLinearControlContinuousSystem(A, B, nothing, U), X0)
 
     # property: x25 < 6e-3
     property = SafeStatesProperty(HalfSpace(sparsevec([25], [1.0], 48), 6e-3))

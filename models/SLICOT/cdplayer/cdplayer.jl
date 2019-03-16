@@ -17,10 +17,11 @@ function cdplayer(input_options::Options)
 
     # input set
     B = read(file, "B")
-    U = B * BallInf([0.0, 0.0], 1.0)
+    U = BallInf([0.0, 0.0], 1.0)
 
     # instantiate continuous LTI system
-    S = ContinuousSystem(A, X0, U)
+    S = InitialValueProblem(
+        ConstrainedLinearControlContinuousSystem(A, B, nothing, U), X0)
 
     # prpoperty: 2*x1 -3*x2 < 450.8
     property =

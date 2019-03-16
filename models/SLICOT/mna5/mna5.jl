@@ -18,10 +18,11 @@ function mna5(input_options::Options)
 
     # input set
     B = sparse(19:27, 1:9, fill(-1., 9), size(A, 1), 9)
-    U = B * Hyperrectangle([fill(0.1, 5); fill(0.2, 4)], zeros(9))
+    U = Hyperrectangle([fill(0.1, 5); fill(0.2, 4)], zeros(9))
 
     # instantiate continuous LTI system
-    S = ContinuousSystem(A, X0, U)
+    S = InitialValueProblem(
+        ConstrainedLinearControlContinuousSystem(A, B, nothing, U), X0)
 
     # property: x1 < 0.2 && x2 < 0.15
     property = SafeStatesProperty(HPolyhedron([

@@ -19,10 +19,10 @@ H = readsxmodel(file, ST=ConstrainedLinearControlContinuousSystem)
 n = size(H.modes[1].A, 1)-1 # the sx model has "time" as a state variable
 @assert n == 48
 A = H.modes[1].A[1:n, 1:n] 
-B = Matrix(1.0I, n, n)
+B = H.modes[1].B[1:n, 1]
 U = Hyperrectangle(low=[0.8], high=[1.0])
-X, Uin = nothing, ConstantInput(H.modes[1].B[1:n, 1] * U)
-S = ConstrainedLinearControlContinuousSystem(A, B, X, Uin)
+X = nothing
+S = ConstrainedLinearControlContinuousSystem(A, B, X, U)
 
 # specify initial states
 center_X0 = [fill(0.000225, 10); fill(0.0, 38)]

@@ -17,10 +17,11 @@ function fom(input_options::Options)
 
     # input set
     B = read(file, "B")
-    U = B * BallInf([0.0], 1.0)
+    U = BallInf([0.0], 1.0)
 
     # instantiate continuous LTI system
-    S = ContinuousSystem(A, X0, U)
+    S = InitialValueProblem(
+        ConstrainedLinearControlContinuousSystem(A, B, nothing, U), X0)
 
     # property: y < 185
     property = SafeStatesProperty(HalfSpace(

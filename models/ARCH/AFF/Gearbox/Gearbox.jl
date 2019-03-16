@@ -45,7 +45,6 @@ function gearbox()
     add_transition!(automaton, 1, 2, 3)
 
     # common inputs
-    BB = Diagonal(ones(n))
     U = Singleton([1.])
 
     # mode 1 ("free")
@@ -60,13 +59,13 @@ function gearbox()
     # TODO The SpaceEx model adds more constraints, possibly to help with the
     # guard intersection:
     # py <= -px * tan(θ)  &  py >= px * tan(θ)
-    m_1 = ConstrainedLinearControlContinuousSystem(A, BB, invariant, B*U)
+    m_1 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
 
     # mode 2 ("meshed")
     A = zeros(n, n)
     B = zeros(n, 1)
     invariant = Universe(n)
-    m_2 = ConstrainedLinearControlContinuousSystem(A, BB, invariant, B*U)
+    m_2 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
 
     # modes
     modes = [m_1, m_2]

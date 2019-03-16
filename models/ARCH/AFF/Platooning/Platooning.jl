@@ -45,7 +45,6 @@ function platooning(;
 
     # common inputs
     B = sparse([2, n], [1, 2], [1., 1.], n, 2)
-    BB = Matrix(1.0I, size(B, 1), size(B, 1))
     U = Hyperrectangle(low=[-9., 1.], high=[1., 1.])  # acceleration of the lead vehicle + time
 
     # mode 1 ("connected")
@@ -62,7 +61,7 @@ function platooning(;
     invariant = deterministic_switching ?
         HalfSpace(sparsevec([n], [1.], n), c1) :
         Universe(n)
-    m_1 = ConstrainedLinearControlContinuousSystem(A, BB, invariant, ConstantInput(B*U))
+    m_1 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
 
     # mode 2 ("not connected/connection broken")
     A = copy(A)
@@ -71,7 +70,7 @@ function platooning(;
     invariant = deterministic_switching ?
         HalfSpace(sparsevec([n], [1.], n), c2) :
         Universe(n)
-    m_2 = ConstrainedLinearControlContinuousSystem(A, BB, invariant, ConstantInput(B*U))
+    m_2 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
 
     # modes
     modes = [m_1, m_2]

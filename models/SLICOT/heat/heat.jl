@@ -20,10 +20,11 @@ function heat(input_options::Options)
 
     # input set
     B = sparse([67], [1], [1.0], size(A, 1), 1)
-    U = B * BallInf([0.0], 0.5)
+    U = BallInf([0.0], 0.5)
 
     # instantiate continuous LTI system
-    S = ContinuousSystem(A, X0, U)
+    S = InitialValueProblem(
+        ConstrainedLinearControlContinuousSystem(A, B, nothing, U), X0)
 
     # property: x133 < 0.1
     property = SafeStatesProperty(HalfSpace(sparsevec([133], [1.0], 200), 0.1))

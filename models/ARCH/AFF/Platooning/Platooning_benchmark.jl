@@ -13,7 +13,7 @@ PLAD01_BND30, options_PLAD01_BND30 =
     platooning(; deterministic_switching=true, time_horizon=20.,
                  allowed_distance=30.)
 PLAN01_UNB50, options_PLAN01_UNB50 =
-    platooning(; deterministic_switching=true, time_horizon=10000.,
+    platooning(; deterministic_switching=true, time_horizon=Inf,
                  allowed_distance=50.)
 
 # ==============================================================================
@@ -24,7 +24,6 @@ PLAN01_UNB50, options_PLAN01_UNB50 =
 options_PLAD01_BND42[:mode] = "check"
 options_PLAD01_BND30[:mode] = "check"
 options_PLAN01_UNB50[:mode] = "check"
-options_PLAN01_UNB50[:verbosity] = "info"  # temporary output that there has been a fixpoint
 
 𝑂_common = Options(:partition => [1:10])
 𝑂_dense_options_PLAD01_BND42 = merge(𝑂_common, Options(:δ => 0.01))
@@ -51,8 +50,6 @@ res = solve(PLAN01_UNB50, options_PLAN01_UNB50, opC_dense_PLAN01_UNB50, opD)
 @assert res.satisfied
 res = solve(PLAN01_UNB50, options_PLAN01_UNB50, opC_discrete, opD)
 @assert res.satisfied
-
-pop!(options_PLAN01_UNB50.dict, :verbosity)  # remove temporary output again
 
 # benchmark
 SUITE["Platooning"]["PLAD01_BND42", "dense"] =

@@ -29,6 +29,10 @@ function spacecraft(aborting::Bool=false)
     # discrete structure (graph)
     automaton = LightAutomaton(aborting ? 3 : 2)
 
+    # common inputs for time
+    B = sparse([t], [1], [1.], n, 1)
+    U = Singleton([1.])
+
     # mode 1 ("Mode 1")
     A = spzeros(n, n)
     A[x, vx] = 1.
@@ -41,7 +45,6 @@ function spacecraft(aborting::Bool=false)
     A[vy, y] = -0.0665123984901026
     A[vy, vx] = -0.00875351105536225
     A[vy, vy] = -2.90300269286856
-    A[t, t] = 1.
     invariant = HalfSpace(sparsevec([x], [1.], n), -100.)  # x <= -100
     if aborting
         invariant = HPolyhedron([
@@ -49,7 +52,7 @@ function spacecraft(aborting::Bool=false)
             HalfSpace(sparsevec([t], [1.], n), t_abort)  # t <= t_abort
            ])
     end
-    m_1 = ConstrainedLinearContinuousSystem(A, invariant)
+    m_1 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
 
     # mode 2 ("Mode 2")
     A = spzeros(n, n)
@@ -63,7 +66,6 @@ function spacecraft(aborting::Bool=false)
     A[vy, y] = -0.575999940191886
     A[vy, vx] = -0.00876276068239993
     A[vy, vy] = -19.2299765959399
-    A[t, t] = 1.
     invariant = HPolyhedron([
         HalfSpace(sparsevec([x], [-1.], n), 100.),           # x >= -100
         HalfSpace(sparsevec([x], [1.], n), 100.),            # x <= 100
@@ -77,7 +79,7 @@ function spacecraft(aborting::Bool=false)
     if aborting
         addconstraint!(invariant, HalfSpace(sparsevec([t], [1.], n), t_abort))  # t <= t_abort
     end
-    m_2 = ConstrainedLinearContinuousSystem(A, invariant)
+    m_2 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
 
     # mode 3 ("Passive")
     A = spzeros(n, n)
@@ -86,9 +88,8 @@ function spacecraft(aborting::Bool=false)
     A[vx, x] = 0.0000575894721132
     A[vx, vy] = 0.00876276
     A[vy, vx] = -0.00876276
-    A[t, t] = 1.
     invariant = Universe(n)
-    m_3 = ConstrainedLinearContinuousSystem(A, invariant)
+    m_3 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
 
     # modes
     modes = aborting ? [m_1, m_2, m_3] : [m_1, m_2]

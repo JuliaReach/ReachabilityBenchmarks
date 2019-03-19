@@ -41,37 +41,37 @@ res = solve(SRA01, options, opC_dense, opD)
 res = solve(SRA01, options, opC_discrete, opD)
 @assert res.satisfied
 res = solve(SRA02, options, opC_dense, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRA02, options, opC_discrete, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRA03, options, opC_dense, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRA03, options, opC_discrete, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRA04, options, opC_dense, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRA04, options, opC_discrete, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRA05, options, opC_dense, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRA05, options, opC_discrete, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRA06, options, opC_dense, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRA06, options, opC_discrete, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRA07, options, opC_dense, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRA07, options, opC_discrete, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRA08, options, opC_dense, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRA08, options, opC_discrete, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRU01, options, opC_dense, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRU01, options, opC_discrete, opD)
-@assert res.satisfied
+@assert res.satisfied  # TODO NEW SETTING
 res = solve(SRU02, options, opC_dense, opD)
 @assert !res.satisfied
 res = solve(SRU02, options, opC_discrete, opD)

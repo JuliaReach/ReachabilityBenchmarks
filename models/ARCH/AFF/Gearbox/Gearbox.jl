@@ -58,12 +58,15 @@ function gearbox()
     invariant = HalfSpace(sparsevec([px], [1.], n), Δp)
     # TODO The SpaceEx model adds more constraints, possibly to help with the
     # guard intersection:
-    # py <= -px * tan(θ)  &  py >= px * tan(θ)
+    invariant = HPolyhedron([invariant,
+        HalfSpace(sparsevec([px, py], [tan(θ), 1.], n), 0.),    # py <= -px * tan(θ)
+        HalfSpace(sparsevec([px, py], [tan(θ), -1.], n), 0.)])  # py >= px * tan(θ)
     m_1 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
 
     # mode 2 ("meshed")
     A = zeros(n, n)
     B = zeros(n, 1)
+    B[t, 1] = 1.
     invariant = Universe(n)
     m_2 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
 
@@ -86,7 +89,7 @@ function gearbox()
     # transition l1 -> l1
     # TODO what happened to the term '2nb' and the whole second constraint in the paper?
     guard = HPolyhedron([
-        HalfSpace(sparsevec([px, py], [-tan(θ), -1.], n), 0.),  # px * tan(θ) + py >= 0
+        HalfSpace(sparsevec([px, py], [-tan(θ), -1.], n), 0.),  # py >= -px * tan(θ)
         HalfSpace(sparsevec([vx, vy], [-sin(θ), -cos(θ)], n), 0.)  # vx * sin(θ) + vy * cos(θ) >= 0
         ])
     A = copy(A_template)
@@ -95,7 +98,7 @@ function gearbox()
     # transition l1 -> l1
     # TODO same remark as with the other guard
     guard = HPolyhedron([
-        HalfSpace(sparsevec([px, py], [-tan(θ), 1.], n), 0.),  # -px * tan(θ) + py <= 0
+        HalfSpace(sparsevec([px, py], [-tan(θ), 1.], n), 0.),  # py <= px * tan(θ)
         HalfSpace(sparsevec([vx, vy], [-sin(θ), cos(θ)], n), 0.)  # vx * sin(θ) - vy * cos(θ) >= 0
         ])
     A = copy(A_template)
@@ -114,7 +117,7 @@ function gearbox()
     A[𝐼, vx] = A[𝐼, vy] = ms
     t3 = ConstrainedLinearMap(A, guard)
     # TODO The SpaceEx model uses four transitions for this one, possibly to
-    # help with the signs:
+    # help with the signs; note that the assignments are different:
     # * guard = px >= Δp & vx >= 0 & vy >= 0
     #   assignment = I:=I+ms*vx+ms*vy & vx:=0 & vy:=0
     # * guard = px >= Δp & vx >= 0 & vy <= 0

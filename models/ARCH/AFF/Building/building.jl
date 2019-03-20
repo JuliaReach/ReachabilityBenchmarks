@@ -19,9 +19,9 @@ H = readsxmodel(file, ST=ConstrainedLinearControlContinuousSystem)
 n = size(H.modes[1].A, 1)-1 # the sx model has "time" as a state variable
 @assert n == 48
 A = H.modes[1].A[1:n, 1:n] 
-B = H.modes[1].B[1:n, 1]
-U = Hyperrectangle(low=[0.8], high=[1.0])
+B = hcat(H.modes[1].B[1:n, 1])
 X = nothing
+U = Hyperrectangle(low=[0.8], high=[1.0])
 S = ConstrainedLinearControlContinuousSystem(A, B, X, U)
 
 # specify initial states

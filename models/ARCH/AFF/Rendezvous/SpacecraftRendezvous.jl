@@ -8,11 +8,19 @@ using SparseArrays, HybridSystems, MathematicalSystems, LazySets, Reachability
 using LazySets: HalfSpace  # resolve name-space conflicts with Polyhedra
 
 """
-    spacecraft()
+    spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
 
 Construct the spacecraft-rendezvous model.
+
+### Input
+
+- `abort_time` -- (optional, default: `-1.`) time of abort; can be either a
+                  number (time point) or an interval (time range); an interval
+                  is given as a vector `[l, u]` containing the lower (`l`) and
+                  the upper (`u`) bound; a negative number is interpreted as a
+                  *no-abort* scenario
 """
-function spacecraft(aborting::Bool=false)
+function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
     # variables
     x = 1  # x position (negative!)
     y = 2  # y position (negative!)
@@ -23,15 +31,26 @@ function spacecraft(aborting::Bool=false)
     # number of variables
     n = 4 + 1
 
-    # constants
-    t_abort = 120.  # time of abort
+    # flag for activating the "rendezvous abort" scenario
+    aborting = true
+    if abort_time isa Number
+        if abort_time < 0.
+            aborting = false
+        else
+            t_abort_lower = abort_time
+            t_abort_upper = abort_time
+        end
+    else
+        @assert length(abort_time) == 2 "abort time must be a point or an interval"
+        t_abort_lower = abort_time[1]
+        t_abort_upper = abort_time[2]
+    end
 
     # discrete structure (graph)
     automaton = LightAutomaton(aborting ? 3 : 2)
 
-    # common inputs for time
-    B = sparse([t], [1], [1.], n, 1)
-    U = Singleton([1.])
+    # common vector of affine dynamics
+    b = sparsevec([t], [1.], n)
 
     # mode 1 ("Mode 1")
     A = spzeros(n, n)
@@ -49,10 +68,10 @@ function spacecraft(aborting::Bool=false)
     if aborting
         invariant = HPolyhedron([
             invariant,
-            HalfSpace(sparsevec([t], [1.], n), t_abort)  # t <= t_abort
+            HalfSpace(sparsevec([t], [1.], n), t_abort_upper)  # t <= t_abort_upper
            ])
     end
-    m_1 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
+    m_1 = CACS(A, b, invariant)
 
     # mode 2 ("Mode 2")
     A = spzeros(n, n)
@@ -77,9 +96,9 @@ function spacecraft(aborting::Bool=false)
         HalfSpace(sparsevec([x, y], [-1., 1.], n), 141.1)    # -x + y <= 141.1
        ])
     if aborting
-        addconstraint!(invariant, HalfSpace(sparsevec([t], [1.], n), t_abort))  # t <= t_abort
+        addconstraint!(invariant, HalfSpace(sparsevec([t], [1.], n), t_abort_upper))  # t <= t_abort_upper
     end
-    m_2 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
+    m_2 = CACS(A, b, invariant)
 
     # mode 3 ("Passive")
     A = spzeros(n, n)
@@ -89,7 +108,7 @@ function spacecraft(aborting::Bool=false)
     A[vx, vy] = 0.00876276
     A[vy, vx] = -0.00876276
     invariant = Universe(n)
-    m_3 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
+    m_3 = CACS(A, b, invariant)
 
     # modes
     modes = aborting ? [m_1, m_2, m_3] : [m_1, m_2]
@@ -112,11 +131,11 @@ function spacecraft(aborting::Bool=false)
 
     if aborting
         add_transition!(automaton, 1, 3, 2)
-        guard = HalfSpace(sparsevec([t], [-1.], n), -t_abort)  # t >= t_abort
+        guard = HalfSpace(sparsevec([t], [-1.], n), -t_abort_lower)  # t >= t_abort_lower
         t2 = ConstrainedIdentityMap(n, guard)
 
         add_transition!(automaton, 2, 3, 3)
-        guard = HalfSpace(sparsevec([t], [-1.], n), -t_abort)  # t >= t_abort
+        guard = HalfSpace(sparsevec([t], [-1.], n), -t_abort_lower)  # t >= t_abort_lower
         t3 = ConstrainedIdentityMap(n, guard)
     end
 
@@ -139,24 +158,23 @@ function spacecraft(aborting::Bool=false)
     velocity = 0.055 * 60.  # meters per minute
     cx = velocity * cos(π / 8)  # x-coordinate of the octagon's first (ENE) corner
     cy = velocity * sin(π / 8)  # y-coordinate of the octagon's first (ENE) corner
-    octagon = HPolytope([
-        HalfSpace(sparsevec([vx], [1.], n), cx),                # vx <= cx
+    octagon = [
+        HalfSpace(sparsevec([vx], [1.], n), cx),                 # vx <= cx
         HalfSpace(sparsevec([vx, vy], [1., 1.], n), cy + cx),    # vx + vy <= cy + cx
-        HalfSpace(sparsevec([vy], [1.], n), cx),                # vy <= cx
+        HalfSpace(sparsevec([vy], [1.], n), cx),                 # vy <= cx
         HalfSpace(sparsevec([vx, vy], [-1., 1.], n), cy + cx),   # -vx + vy <= cy + cx
-        HalfSpace(sparsevec([vx], [-1.], n), cx),               # vx >= -cx
+        HalfSpace(sparsevec([vx], [-1.], n), cx),                # vx >= -cx
         HalfSpace(sparsevec([vx, vy], [-1., -1.], n), cy + cx),  # -vx - vy <= cy + cx
-        HalfSpace(sparsevec([vy], [-1.], n), cx),               # vy >= -cx
+        HalfSpace(sparsevec([vy], [-1.], n), cx),                # vy >= -cx
         HalfSpace(sparsevec([vx, vy], [1., -1.], n), cy + cx)    # vx - vy <= cy + cx
-       ])
+       ]
     tan30 = tan(π/6)
-    cone = HPolytope([
+    cone = [
         HalfSpace(sparsevec([x], [-1.], n), 100.),          # x >= -100
         HalfSpace(sparsevec([x, y], [tan30, -1.], n), 0.),  # -x tan(30°) + y >= 0
-        HalfSpace(sparsevec([x, y], [tan30, 1.], n), 0.),  # -x tan(30°) - y >= 0
-       ])
-    property_rendezvous = Conjunction([SafeStatesProperty(octagon),
-                                       SafeStatesProperty(cone)])
+        HalfSpace(sparsevec([x, y], [tan30, 1.], n), 0.),   # -x tan(30°) - y >= 0
+       ]
+    property_rendezvous = SafeStatesProperty(HPolytope([octagon; cone]))
     # safety property in "Passive"
     target = HPolytope([
         HalfSpace(sparsevec([x], [1.], n), 0.2),   # x <= 0.2
@@ -166,13 +184,11 @@ function spacecraft(aborting::Bool=false)
        ])
     property_aborting = BadStatesProperty(target)
     # safety properties
-    property = Dict{Int, Property}(2 => property_rendezvous)
-    if aborting
-        property[3] = property_aborting
-    end
+    property = Dict{Int, Property}(2 => property_rendezvous,
+                                   3 => property_aborting)
 
     # default options
-    options = Options(:T=>200., :property=>property)
+    options = Options(:T=>300., :property=>property)
 
     return (system, options)
 end

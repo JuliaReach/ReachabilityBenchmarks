@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" math="SpaceEx" version="0.2">
+  <component id="root_sys">
+    <note>Created by Hyst v1.5
+Hybrid Automaton in SpaceEx
+Converted from file: 
+Command Line arguments: -gen drivetrain "-theta 22 -init_scale 0.3 -reverse_errors" -passes sub_constants "" simplify -p -o drivetrain_22theta_30percent.xml -tool spaceex ""</note>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x1" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x2" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x3" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x4" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x5" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x6" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x7" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x8" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x9" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x10" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x11" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x12" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x13" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x14" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x15" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x16" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x17" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x18" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x19" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x20" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x21" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x22" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x23" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x24" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x25" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x26" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x27" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x28" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x29" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x30" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x31" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x32" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x33" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x34" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x35" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x36" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x37" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x38" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x39" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x40" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x41" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x42" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x43" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x44" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x45" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x46" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x47" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x48" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x49" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x50" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x51" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="t" type="real"/>
+    <location id="1" name="negAngle">
+      <invariant>x1 &lt;= -0.03</invariant>
+      <flow>x1' == 0.0833333333333333 * x7 - 1.0 * x9 &amp;
+ x2' == 13828.8888888889 * x1 - 26.6666666666667 * x2 + 60.0 * x3 + 60.0 * x4 - 5.0 * x7 - 60.0 * x8 + 716.666666666667 &amp;
+ x3' == x4 &amp;
+ x4' == 5.0 &amp;
+ x5' == x6 &amp;
+ x6' == -714.285714285714 * x5 + 714.285714285714 * x50 - 0.04 * x6 &amp;
+ x7' == -2777.77777777778 * x1 + 3.33333333333333 * x2 - 83.3333333333333 &amp;
+ x8' == x9 &amp;
+ x9' == 100.0 * x1 + 1000.0 * x10 - 1000.0 * x8 - 0.01 * x9 + 3.0 &amp;
+ x10' == x11 &amp;
+ x11' == -2000.0 * x10 - 0.01 * x11 + 1000.0 * x12 + 1000.0 * x8 &amp;
+ x12' == x13 &amp;
+ x13' == 1000.0 * x10 - 2000.0 * x12 - 0.01 * x13 + 1000.0 * x14 &amp;
+ x14' == x15 &amp;
+ x15' == 1000.0 * x12 - 2000.0 * x14 - 0.01 * x15 + 1000.0 * x16 &amp;
+ x16' == x17 &amp;
+ x17' == 1000.0 * x14 - 2000.0 * x16 - 0.01 * x17 + 1000.0 * x18 &amp;
+ x18' == x19 &amp;
+ x19' == 1000.0 * x16 - 2000.0 * x18 - 0.01 * x19 + 1000.0 * x20 &amp;
+ x20' == x21 &amp;
+ x21' == 1000.0 * x18 - 2000.0 * x20 - 0.01 * x21 + 1000.0 * x22 &amp;
+ x22' == x23 &amp;
+ x23' == 1000.0 * x20 - 2000.0 * x22 - 0.01 * x23 + 1000.0 * x24 &amp;
+ x24' == x25 &amp;
+ x25' == 1000.0 * x22 - 2000.0 * x24 - 0.01 * x25 + 1000.0 * x26 &amp;
+ x26' == x27 &amp;
+ x27' == 1000.0 * x24 - 2000.0 * x26 - 0.01 * x27 + 1000.0 * x28 &amp;
+ x28' == x29 &amp;
+ x29' == 1000.0 * x26 - 2000.0 * x28 - 0.01 * x29 + 1000.0 * x30 &amp;
+ x30' == x31 &amp;
+ x31' == 1000.0 * x28 - 2000.0 * x30 - 0.01 * x31 + 1000.0 * x32 &amp;
+ x32' == x33 &amp;
+ x33' == 1000.0 * x30 - 2000.0 * x32 - 0.01 * x33 + 1000.0 * x34 &amp;
+ x34' == x35 &amp;
+ x35' == 1000.0 * x32 - 2000.0 * x34 - 0.01 * x35 + 1000.0 * x36 &amp;
+ x36' == x37 &amp;
+ x37' == 1000.0 * x34 - 2000.0 * x36 - 0.01 * x37 + 1000.0 * x38 &amp;
+ x38' == x39 &amp;
+ x39' == 1000.0 * x36 - 2000.0 * x38 - 0.01 * x39 + 1000.0 * x40 &amp;
+ x40' == x41 &amp;
+ x41' == 1000.0 * x38 - 2000.0 * x40 - 0.01 * x41 + 1000.0 * x42 &amp;
+ x42' == x43 &amp;
+ x43' == 1000.0 * x40 - 2000.0 * x42 - 0.01 * x43 + 1000.0 * x44 &amp;
+ x44' == x45 &amp;
+ x45' == 1000.0 * x42 - 2000.0 * x44 - 0.01 * x45 + 1000.0 * x46 &amp;
+ x46' == x47 &amp;
+ x47' == 1000.0 * x44 - 2000.0 * x46 - 0.01 * x47 + 1000.0 * x48 &amp;
+ x48' == x49 &amp;
+ x49' == 1000.0 * x46 - 2000.0 * x48 - 0.01 * x49 + 1000.0 * x50 &amp;
+ x50' == x51 &amp;
+ x51' == 1000.0 * x48 + 1000.0 * x5 - 2000.0 * x50 - 0.01 * x51 &amp;
+ t' == 1.0</flow>
+    </location>
+    <location id="2" name="deadzone">
+      <invariant>-0.03 &lt;= x1 &amp;
+ x1 &lt;= 0.03</invariant>
+      <flow>x1' == 0.0833333333333333 * x7 - 1.0 * x9 &amp;
+ x2' == -60.0 * x1 - 26.6666666666667 * x2 + 60.0 * x3 + 60.0 * x4 - 5.0 * x7 - 60.0 * x8 + 300.0 &amp;
+ x3' == x4 &amp;
+ x4' == 5.0 &amp;
+ x5' == x6 &amp;
+ x6' == -714.285714285714 * x5 + 714.285714285714 * x50 - 0.04 * x6 &amp;
+ x7' == 3.33333333333333 * x2 &amp;
+ x8' == x9 &amp;
+ x9' == 1000.0 * x10 - 1000.0 * x8 - 0.01 * x9 &amp;
+ x10' == x11 &amp;
+ x11' == -2000.0 * x10 - 0.01 * x11 + 1000.0 * x12 + 1000.0 * x8 &amp;
+ x12' == x13 &amp;
+ x13' == 1000.0 * x10 - 2000.0 * x12 - 0.01 * x13 + 1000.0 * x14 &amp;
+ x14' == x15 &amp;
+ x15' == 1000.0 * x12 - 2000.0 * x14 - 0.01 * x15 + 1000.0 * x16 &amp;
+ x16' == x17 &amp;
+ x17' == 1000.0 * x14 - 2000.0 * x16 - 0.01 * x17 + 1000.0 * x18 &amp;
+ x18' == x19 &amp;
+ x19' == 1000.0 * x16 - 2000.0 * x18 - 0.01 * x19 + 1000.0 * x20 &amp;
+ x20' == x21 &amp;
+ x21' == 1000.0 * x18 - 2000.0 * x20 - 0.01 * x21 + 1000.0 * x22 &amp;
+ x22' == x23 &amp;
+ x23' == 1000.0 * x20 - 2000.0 * x22 - 0.01 * x23 + 1000.0 * x24 &amp;
+ x24' == x25 &amp;
+ x25' == 1000.0 * x22 - 2000.0 * x24 - 0.01 * x25 + 1000.0 * x26 &amp;
+ x26' == x27 &amp;
+ x27' == 1000.0 * x24 - 2000.0 * x26 - 0.01 * x27 + 1000.0 * x28 &amp;
+ x28' == x29 &amp;
+ x29' == 1000.0 * x26 - 2000.0 * x28 - 0.01 * x29 + 1000.0 * x30 &amp;
+ x30' == x31 &amp;
+ x31' == 1000.0 * x28 - 2000.0 * x30 - 0.01 * x31 + 1000.0 * x32 &amp;
+ x32' == x33 &amp;
+ x33' == 1000.0 * x30 - 2000.0 * x32 - 0.01 * x33 + 1000.0 * x34 &amp;
+ x34' == x35 &amp;
+ x35' == 1000.0 * x32 - 2000.0 * x34 - 0.01 * x35 + 1000.0 * x36 &amp;
+ x36' == x37 &amp;
+ x37' == 1000.0 * x34 - 2000.0 * x36 - 0.01 * x37 + 1000.0 * x38 &amp;
+ x38' == x39 &amp;
+ x39' == 1000.0 * x36 - 2000.0 * x38 - 0.01 * x39 + 1000.0 * x40 &amp;
+ x40' == x41 &amp;
+ x41' == 1000.0 * x38 - 2000.0 * x40 - 0.01 * x41 + 1000.0 * x42 &amp;
+ x42' == x43 &amp;
+ x43' == 1000.0 * x40 - 2000.0 * x42 - 0.01 * x43 + 1000.0 * x44 &amp;
+ x44' == x45 &amp;
+ x45' == 1000.0 * x42 - 2000.0 * x44 - 0.01 * x45 + 1000.0 * x46 &amp;
+ x46' == x47 &amp;
+ x47' == 1000.0 * x44 - 2000.0 * x46 - 0.01 * x47 + 1000.0 * x48 &amp;
+ x48' == x49 &amp;
+ x49' == 1000.0 * x46 - 2000.0 * x48 - 0.01 * x49 + 1000.0 * x50 &amp;
+ x50' == x51 &amp;
+ x51' == 1000.0 * x48 + 1000.0 * x5 - 2000.0 * x50 - 0.01 * x51 &amp;
+ t' == 1.0</flow>
+    </location>
+    <location id="3" name="posAngle">
+      <invariant>0.03 &lt;= x1</invariant>
+      <flow>x1' == 0.0833333333333333 * x7 - 1.0 * x9 &amp;
+ x2' == 13828.8888888889 * x1 - 26.6666666666667 * x2 + 60.0 * x3 + 60.0 * x4 - 5.0 * x7 - 60.0 * x8 - 116.666666666667 &amp;
+ x3' == x4 &amp;
+ x4' == 5.0 &amp;
+ x5' == x6 &amp;
+ x6' == -714.285714285714 * x5 + 714.285714285714 * x50 - 0.04 * x6 &amp;
+ x7' == -2777.77777777778 * x1 + 3.33333333333333 * x2 + 83.3333333333333 &amp;
+ x8' == x9 &amp;
+ x9' == 100.0 * x1 + 1000.0 * x10 - 1000.0 * x8 - 0.01 * x9 - 3.0 &amp;
+ x10' == x11 &amp;
+ x11' == -2000.0 * x10 - 0.01 * x11 + 1000.0 * x12 + 1000.0 * x8 &amp;
+ x12' == x13 &amp;
+ x13' == 1000.0 * x10 - 2000.0 * x12 - 0.01 * x13 + 1000.0 * x14 &amp;
+ x14' == x15 &amp;
+ x15' == 1000.0 * x12 - 2000.0 * x14 - 0.01 * x15 + 1000.0 * x16 &amp;
+ x16' == x17 &amp;
+ x17' == 1000.0 * x14 - 2000.0 * x16 - 0.01 * x17 + 1000.0 * x18 &amp;
+ x18' == x19 &amp;
+ x19' == 1000.0 * x16 - 2000.0 * x18 - 0.01 * x19 + 1000.0 * x20 &amp;
+ x20' == x21 &amp;
+ x21' == 1000.0 * x18 - 2000.0 * x20 - 0.01 * x21 + 1000.0 * x22 &amp;
+ x22' == x23 &amp;
+ x23' == 1000.0 * x20 - 2000.0 * x22 - 0.01 * x23 + 1000.0 * x24 &amp;
+ x24' == x25 &amp;
+ x25' == 1000.0 * x22 - 2000.0 * x24 - 0.01 * x25 + 1000.0 * x26 &amp;
+ x26' == x27 &amp;
+ x27' == 1000.0 * x24 - 2000.0 * x26 - 0.01 * x27 + 1000.0 * x28 &amp;
+ x28' == x29 &amp;
+ x29' == 1000.0 * x26 - 2000.0 * x28 - 0.01 * x29 + 1000.0 * x30 &amp;
+ x30' == x31 &amp;
+ x31' == 1000.0 * x28 - 2000.0 * x30 - 0.01 * x31 + 1000.0 * x32 &amp;
+ x32' == x33 &amp;
+ x33' == 1000.0 * x30 - 2000.0 * x32 - 0.01 * x33 + 1000.0 * x34 &amp;
+ x34' == x35 &amp;
+ x35' == 1000.0 * x32 - 2000.0 * x34 - 0.01 * x35 + 1000.0 * x36 &amp;
+ x36' == x37 &amp;
+ x37' == 1000.0 * x34 - 2000.0 * x36 - 0.01 * x37 + 1000.0 * x38 &amp;
+ x38' == x39 &amp;
+ x39' == 1000.0 * x36 - 2000.0 * x38 - 0.01 * x39 + 1000.0 * x40 &amp;
+ x40' == x41 &amp;
+ x41' == 1000.0 * x38 - 2000.0 * x40 - 0.01 * x41 + 1000.0 * x42 &amp;
+ x42' == x43 &amp;
+ x43' == 1000.0 * x40 - 2000.0 * x42 - 0.01 * x43 + 1000.0 * x44 &amp;
+ x44' == x45 &amp;
+ x45' == 1000.0 * x42 - 2000.0 * x44 - 0.01 * x45 + 1000.0 * x46 &amp;
+ x46' == x47 &amp;
+ x47' == 1000.0 * x44 - 2000.0 * x46 - 0.01 * x47 + 1000.0 * x48 &amp;
+ x48' == x49 &amp;
+ x49' == 1000.0 * x46 - 2000.0 * x48 - 0.01 * x49 + 1000.0 * x50 &amp;
+ x50' == x51 &amp;
+ x51' == 1000.0 * x48 + 1000.0 * x5 - 2000.0 * x50 - 0.01 * x51 &amp;
+ t' == 1.0</flow>
+    </location>
+    <location id="4" name="negAngleInit">
+      <invariant>t &lt;= 0.2</invariant>
+      <flow>x1' == 0.0833333333333333 * x7 - 1.0 * x9 &amp;
+ x2' == 13828.8888888889 * x1 - 26.6666666666667 * x2 + 60.0 * x3 + 60.0 * x4 - 5.0 * x7 - 60.0 * x8 + 116.666666666667 &amp;
+ x3' == x4 &amp;
+ x4' == -5.0 &amp;
+ x5' == x6 &amp;
+ x6' == -714.285714285714 * x5 + 714.285714285714 * x50 - 0.04 * x6 &amp;
+ x7' == -2777.77777777778 * x1 + 3.33333333333333 * x2 - 83.3333333333333 &amp;
+ x8' == x9 &amp;
+ x9' == 100.0 * x1 + 1000.0 * x10 - 1000.0 * x8 - 0.01 * x9 + 3.0 &amp;
+ x10' == x11 &amp;
+ x11' == -2000.0 * x10 - 0.01 * x11 + 1000.0 * x12 + 1000.0 * x8 &amp;
+ x12' == x13 &amp;
+ x13' == 1000.0 * x10 - 2000.0 * x12 - 0.01 * x13 + 1000.0 * x14 &amp;
+ x14' == x15 &amp;
+ x15' == 1000.0 * x12 - 2000.0 * x14 - 0.01 * x15 + 1000.0 * x16 &amp;
+ x16' == x17 &amp;
+ x17' == 1000.0 * x14 - 2000.0 * x16 - 0.01 * x17 + 1000.0 * x18 &amp;
+ x18' == x19 &amp;
+ x19' == 1000.0 * x16 - 2000.0 * x18 - 0.01 * x19 + 1000.0 * x20 &amp;
+ x20' == x21 &amp;
+ x21' == 1000.0 * x18 - 2000.0 * x20 - 0.01 * x21 + 1000.0 * x22 &amp;
+ x22' == x23 &amp;
+ x23' == 1000.0 * x20 - 2000.0 * x22 - 0.01 * x23 + 1000.0 * x24 &amp;
+ x24' == x25 &amp;
+ x25' == 1000.0 * x22 - 2000.0 * x24 - 0.01 * x25 + 1000.0 * x26 &amp;
+ x26' == x27 &amp;
+ x27' == 1000.0 * x24 - 2000.0 * x26 - 0.01 * x27 + 1000.0 * x28 &amp;
+ x28' == x29 &amp;
+ x29' == 1000.0 * x26 - 2000.0 * x28 - 0.01 * x29 + 1000.0 * x30 &amp;
+ x30' == x31 &amp;
+ x31' == 1000.0 * x28 - 2000.0 * x30 - 0.01 * x31 + 1000.0 * x32 &amp;
+ x32' == x33 &amp;
+ x33' == 1000.0 * x30 - 2000.0 * x32 - 0.01 * x33 + 1000.0 * x34 &amp;
+ x34' == x35 &amp;
+ x35' == 1000.0 * x32 - 2000.0 * x34 - 0.01 * x35 + 1000.0 * x36 &amp;
+ x36' == x37 &amp;
+ x37' == 1000.0 * x34 - 2000.0 * x36 - 0.01 * x37 + 1000.0 * x38 &amp;
+ x38' == x39 &amp;
+ x39' == 1000.0 * x36 - 2000.0 * x38 - 0.01 * x39 + 1000.0 * x40 &amp;
+ x40' == x41 &amp;
+ x41' == 1000.0 * x38 - 2000.0 * x40 - 0.01 * x41 + 1000.0 * x42 &amp;
+ x42' == x43 &amp;
+ x43' == 1000.0 * x40 - 2000.0 * x42 - 0.01 * x43 + 1000.0 * x44 &amp;
+ x44' == x45 &amp;
+ x45' == 1000.0 * x42 - 2000.0 * x44 - 0.01 * x45 + 1000.0 * x46 &amp;
+ x46' == x47 &amp;
+ x47' == 1000.0 * x44 - 2000.0 * x46 - 0.01 * x47 + 1000.0 * x48 &amp;
+ x48' == x49 &amp;
+ x49' == 1000.0 * x46 - 2000.0 * x48 - 0.01 * x49 + 1000.0 * x50 &amp;
+ x50' == x51 &amp;
+ x51' == 1000.0 * x48 + 1000.0 * x5 - 2000.0 * x50 - 0.01 * x51 &amp;
+ t' == 1.0</flow>
+    </location>
+    <location id="5" name="error">
+      <invariant>true</invariant>
+      <flow>x1' == 0.0 &amp;
+ x2' == 0.0 &amp;
+ x3' == 0.0 &amp;
+ x4' == 0.0 &amp;
+ x5' == 0.0 &amp;
+ x6' == 0.0 &amp;
+ x7' == 0.0 &amp;
+ x8' == 0.0 &amp;
+ x9' == 0.0 &amp;
+ x10' == 0.0 &amp;
+ x11' == 0.0 &amp;
+ x12' == 0.0 &amp;
+ x13' == 0.0 &amp;
+ x14' == 0.0 &amp;
+ x15' == 0.0 &amp;
+ x16' == 0.0 &amp;
+ x17' == 0.0 &amp;
+ x18' == 0.0 &amp;
+ x19' == 0.0 &amp;
+ x20' == 0.0 &amp;
+ x21' == 0.0 &amp;
+ x22' == 0.0 &amp;
+ x23' == 0.0 &amp;
+ x24' == 0.0 &amp;
+ x25' == 0.0 &amp;
+ x26' == 0.0 &amp;
+ x27' == 0.0 &amp;
+ x28' == 0.0 &amp;
+ x29' == 0.0 &amp;
+ x30' == 0.0 &amp;
+ x31' == 0.0 &amp;
+ x32' == 0.0 &amp;
+ x33' == 0.0 &amp;
+ x34' == 0.0 &amp;
+ x35' == 0.0 &amp;
+ x36' == 0.0 &amp;
+ x37' == 0.0 &amp;
+ x38' == 0.0 &amp;
+ x39' == 0.0 &amp;
+ x40' == 0.0 &amp;
+ x41' == 0.0 &amp;
+ x42' == 0.0 &amp;
+ x43' == 0.0 &amp;
+ x44' == 0.0 &amp;
+ x45' == 0.0 &amp;
+ x46' == 0.0 &amp;
+ x47' == 0.0 &amp;
+ x48' == 0.0 &amp;
+ x49' == 0.0 &amp;
+ x50' == 0.0 &amp;
+ x51' == 0.0 &amp;
+ t' == 0.0</flow>
+    </location>
+    <transition asap="false" bezier="false" source="4" target="1" timedriven="false">
+      <guard>t &gt;= 0.2</guard>
+      <labelposition/>
+      <middlepoint/>
+    </transition>
+    <transition asap="false" bezier="false" source="1" target="2" timedriven="false">
+      <guard>x1 &gt;= -0.03</guard>
+      <labelposition/>
+      <middlepoint/>
+    </transition>
+    <transition asap="false" bezier="false" source="2" target="3" timedriven="false">
+      <guard>x1 &gt;= 0.03</guard>
+      <labelposition/>
+      <middlepoint/>
+    </transition>
+    <transition asap="false" bezier="false" source="2" target="5" timedriven="false">
+      <guard>x1 &lt;= -0.03</guard>
+      <labelposition/>
+      <middlepoint/>
+    </transition>
+    <transition asap="false" bezier="false" source="3" target="5" timedriven="false">
+      <guard>x1 &lt;= 0.03</guard>
+      <labelposition/>
+      <middlepoint/>
+    </transition>
+  </component>
+  <component id="root_net">
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x1" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x2" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x3" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x4" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x5" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x6" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x7" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x8" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x9" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x10" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x11" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x12" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x13" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x14" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x15" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x16" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x17" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x18" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x19" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x20" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x21" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x22" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x23" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x24" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x25" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x26" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x27" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x28" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x29" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x30" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x31" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x32" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x33" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x34" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x35" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x36" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x37" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x38" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x39" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x40" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x41" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x42" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x43" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x44" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x45" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x46" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x47" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x48" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x49" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x50" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="x51" type="real"/>
+    <param controlled="true" d1="1" d2="1" dynamics="any" local="false" name="t" type="real"/>
+    <bind as="root" component="root_sys">
+      <map key="x1">x1</map>
+      <map key="x2">x2</map>
+      <map key="x3">x3</map>
+      <map key="x4">x4</map>
+      <map key="x5">x5</map>
+      <map key="x6">x6</map>
+      <map key="x7">x7</map>
+      <map key="x8">x8</map>
+      <map key="x9">x9</map>
+      <map key="x10">x10</map>
+      <map key="x11">x11</map>
+      <map key="x12">x12</map>
+      <map key="x13">x13</map>
+      <map key="x14">x14</map>
+      <map key="x15">x15</map>
+      <map key="x16">x16</map>
+      <map key="x17">x17</map>
+      <map key="x18">x18</map>
+      <map key="x19">x19</map>
+      <map key="x20">x20</map>
+      <map key="x21">x21</map>
+      <map key="x22">x22</map>
+      <map key="x23">x23</map>
+      <map key="x24">x24</map>
+      <map key="x25">x25</map>
+      <map key="x26">x26</map>
+      <map key="x27">x27</map>
+      <map key="x28">x28</map>
+      <map key="x29">x29</map>
+      <map key="x30">x30</map>
+      <map key="x31">x31</map>
+      <map key="x32">x32</map>
+      <map key="x33">x33</map>
+      <map key="x34">x34</map>
+      <map key="x35">x35</map>
+      <map key="x36">x36</map>
+      <map key="x37">x37</map>
+      <map key="x38">x38</map>
+      <map key="x39">x39</map>
+      <map key="x40">x40</map>
+      <map key="x41">x41</map>
+      <map key="x42">x42</map>
+      <map key="x43">x43</map>
+      <map key="x44">x44</map>
+      <map key="x45">x45</map>
+      <map key="x46">x46</map>
+      <map key="x47">x47</map>
+      <map key="x48">x48</map>
+      <map key="x49">x49</map>
+      <map key="x50">x50</map>
+      <map key="x51">x51</map>
+      <map key="t">t</map>
+    </bind>
+  </component>
+</sspaceex>
+

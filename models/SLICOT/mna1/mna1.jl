@@ -9,23 +9,21 @@ function mna1(input_options::Options)
     # =====================
     # Problem specification
     # =====================
+    # dynamics
     file = matopen(@relpath "mna1.mat")
     A = sparse(read(file, "A"))
+    n = size(A, 1)
+    b = sparsevec(570:578, [fill(-0.1, 5); fill(-0.2, 4)], n)
 
     # initial set
     X0 = Hyperrectangle([fill(0.00125, 2); zeros(576)],
                         [fill(0.00025, 2); zeros(576)])
 
-    # input set
-    B = sparse(570:578, 1:9, fill(-1.0, 9), size(A, 1), 9)
-    U = Hyperrectangle([fill(0.1, 5); fill(0.2, 4)], zeros(9))
-
     # instantiate continuous LTI system
-    S = InitialValueProblem(
-        ConstrainedLinearControlContinuousSystem(A, B, nothing, U), X0)
+    S = IVP(CACS(A, b, nothing), X0)
 
     # property: x1 < 0.5
-    property = SafeStatesProperty(HalfSpace(sparsevec([1], [1.0], 578), 0.5))
+    property = SafeStatesProperty(HalfSpace(sparsevec([1], [1.0], n), 0.5))
 
     # =======================
     # Problem default options

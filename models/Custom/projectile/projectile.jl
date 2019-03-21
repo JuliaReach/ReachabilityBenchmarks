@@ -1,22 +1,21 @@
 #=
 Model: projectile.jl
 =#
-using Reachability
+using Reachability, MathematicalSystems
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
     # Problem specification
     # =====================
+    # dynamics
     A = [0. 0.5 0. 0. ; 0. 0. 0. 0. ; 0. 0. 0. 0.7 ; 0. 0. 0. 0.]
+    b = [0., 0., 0., -9.81]
 
     # initial set
     X0 = Singleton([0.,5.,100.,0])
 
-    # input set
-    U = Singleton([0.,0.,0.,-9.81])
-
     # instantiate continuous LTI system
-    S = ContinuousSystem(A, X0, U)
+    S = IVP(AffineContinuousSystem(A, b), X0)
 
     # ===============
     # Problem solving
@@ -40,7 +39,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
         plot(result)
         @eval(savefig(@filename_to_png))
         toc()
-    en
+    end
 end # function
 
 compute(:N => 10, :T => 20.0); # warm-up

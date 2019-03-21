@@ -33,38 +33,35 @@ function filtered_oscillator(n0::Int=4,
         A[i,i-1], A[i,i] = 5., -5.
     end
 
-    # common U
-    U = Singleton([1.0])
-
     # modes
 
     # mode 1
-    B = [1.4; -0.7; z]
+    b = [1.4; -0.7; z]
     X = HPolyhedron([HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
                      HalfSpace([1.0; 0.0; z], 0.0)])  # x <= 0
-    m_1 = ConstrainedLinearControlContinuousSystem(A, B, X, U)
+    m_1 = CACS(A, b, X)
 
     # mode 2
-    B = [-1.4; 0.7; z]
+    b = [-1.4; 0.7; z]
     X = HPolyhedron([HalfSpace([1.0; 0.0; z], 0.0),  # x <= 0
                      HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
-    m_2 = ConstrainedLinearControlContinuousSystem(A, B, X, U)
+    m_2 = CACS(A, b, X)
 
     # mode 3
-    B = [1.4; -0.7; z]
+    b = [1.4; -0.7; z]
     X = HPolyhedron([HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                      HalfSpace([-0.714286; -1.0; z], 0.0)])  # 0.714286*x + y >= 0
-    m_3 = ConstrainedLinearControlContinuousSystem(A, B, X, U)
+    m_3 = CACS(A, b, X)
 
     # mode 4
-    B = [-1.4; 0.7; z]
+    b = [-1.4; 0.7; z]
     X = HPolyhedron([HalfSpace([0.714286; 1.0; z], 0.0),  # 0.714286*x + y <= 0
                      HalfSpace([-1.0; 0.0; z], 0.0)])  # x >= 0
     if one_loop_iteration
         # k <= 2 (2.1 to avoid numerical issues)
         addconstraint!(X, HalfSpace([zeros(n-1); 1.], 2.1))
     end
-    m_4 = ConstrainedLinearControlContinuousSystem(A, B, X, U)
+    m_4 = CACS(A, b, X)
 
     m = [m_1, m_2, m_3, m_4]
 

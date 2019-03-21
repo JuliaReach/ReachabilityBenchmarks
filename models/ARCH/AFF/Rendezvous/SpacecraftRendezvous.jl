@@ -49,9 +49,8 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
     # discrete structure (graph)
     automaton = LightAutomaton(aborting ? 3 : 2)
 
-    # common inputs for time
-    B = sparse([t], [1], [1.], n, 1)
-    U = Singleton([1.])
+    # common vector of affine dynamics
+    b = sparsevec([t], [1.], n)
 
     # mode 1 ("Mode 1")
     A = spzeros(n, n)
@@ -72,7 +71,7 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
             HalfSpace(sparsevec([t], [1.], n), t_abort_upper)  # t <= t_abort_upper
            ])
     end
-    m_1 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
+    m_1 = CACS(A, b, invariant)
 
     # mode 2 ("Mode 2")
     A = spzeros(n, n)
@@ -99,7 +98,7 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
     if aborting
         addconstraint!(invariant, HalfSpace(sparsevec([t], [1.], n), t_abort_upper))  # t <= t_abort_upper
     end
-    m_2 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
+    m_2 = CACS(A, b, invariant)
 
     # mode 3 ("Passive")
     A = spzeros(n, n)
@@ -109,7 +108,7 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
     A[vx, vy] = 0.00876276
     A[vy, vx] = -0.00876276
     invariant = Universe(n)
-    m_3 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
+    m_3 = CACS(A, b, invariant)
 
     # modes
     modes = aborting ? [m_1, m_2, m_3] : [m_1, m_2]

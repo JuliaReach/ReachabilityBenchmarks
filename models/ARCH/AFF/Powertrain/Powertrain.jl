@@ -1,19 +1,34 @@
-using MathematicalSystems, HybridSystems, LazySets
+using Reachability, MathematicalSystems, HybridSystems, LinearAlgebra,
+      SparseArrays
 
-# compatibility of julia versions
-if VERSION >= v"0.7"
-    using LinearAlgebra, SparseArrays
+
+function print_dynamics(A, b, location_name)
+    println("dynamics of location $location_name:")
+    for i in 1:size(A, 1)-1  # ignore the last dimension (time)
+        print("x_$i' = ")
+        for j in 1:size(A, 2)
+            if !iszero(A[i,j])
+                print("$(A[i,j]) x_$j + ")
+            end
+        end
+        println("$(b[i])\n")
+    end
 end
 
 """
-    drivetrain(θ::Int)::HybridSystem
+    powertrain(θ::Int)
 
 Return the hybrid system that models a mechanical system with backlash
-(powertrain) from an automotive drivetrain problem.
+(powertrain) from an automotive problem.
 
 ### Input
 
-- `θ` -- (optional, default: `1`) number of rotating masses
+- `θ`        -- (optional, default: `1`) number of rotating masses
+- `X0_scale` -- (optional, default: `1.0`) scaling factor in ``(0, 1]`` for
+                modifying the initial states; for value `1.0` we do not modify
+                the initial states and let `X0` be just a line segment;
+                otherwise we let `X0' = δ ⋅ X0 + ⊕ {(1-δ) · center(X0)}` where
+                `δ` is the factor
 
 ### Output
 
@@ -22,9 +37,9 @@ Hybrid system representing the powertrain model.
 ### Notes
 
 The model is based on [1], which is an extension with a parametric number of
-rotationg massesof the autmotive powertrain model presented in [2].
+rotating masses of the automotive powertrain model presented in [2].
 The parameters of the system's additional masses, which can be interpreted as
-rotating elements in a gearbox and further drivetrain elements, are taken from
+rotating elements in a gearbox and further powertrain elements, are taken from
 [3].
 
 [1] M. Althoff and B. H. Krogh, Avoiding Geometric Intersection Operations in
@@ -39,49 +54,41 @@ of Technology, 2007.
 [3] E.-A. M. A. Rabeih. Torsional Vibration Analysis of Automotive Drivelines.
 PhD thesis, University of Leeds, 1997.
 """
-function drivetrain(θ::Int=1)::HybridSystem
+function powertrain(θ::Int=1; X0_scale::Float64=1.0)
+    @assert θ > 0 "θ must be positive, but was $θ"
+    @assert (X0_scale > 0.0 && X0_scale <= 1.0) "scale $X0_scale ∉ (0, 1]"
 
-    # dimension of state space
-    n = 2 * θ + 7
+    # activate for printing the dynamics
+    display_dynamics = false
 
-    # =========
+    # dimension of state space (last dimension is time)
+    n = 2 * θ + 7 + 1
+
     # constants
-    # =========
-    α = 0.03 # backlash size (half gap width)
-    α_neg = -0.03
-    τ_eng = 0.1 # engine time constant (s)
-    γ = 12. # the gearbox ratio (dimensionless)
-    u = 5 # requested engine torque
-
-    # indices m and l refer to the motor and the load
-    # numbered indices refer to the numbering of additional rotating masses,
-    # which are currently generalized by i
-
-    # viscous friction constants by b [Nm/(s/rad)]
-    b_l = 5.6
-    b_m = 0.
-    b_i = 1.
-
-    # moments of inertia are denoted by J [kg m²]
-    J_l = 140.
-    J_m = 0.3
-    J_i = 0.01
-
-    # shaft stiffness by k [Nm/rad]
-    k_i = 100000.
-    k_s = 10000.
-    k_s_zero = 0.
-
+    # indices 'm' (ₘ) and 'l' (ₗ) refer to the motor and the load
+    # indices 'i' (ᵢ) refer to the numbering of additional rotating masses
+    t_init = 0.2  # time to stay in the initial location
+    α = 0.03  # backlash size (half of the gap width)
+    τ_eng = 0.1  # engine time constant
+    γ = 12.0 # gearbox ratio (dimensionless)
+    u = 5.0 # requested engine torque
+    # moments of inertia [kg m²]
+    Jₗ = 140.
+    Jₘ = 0.3
+    Jᵢ = 100.0  # TODO the paper says 0.01, the SpaceEx model uses 100
+    # viscous friction constants [Nm s/rad]
+    bₗ = 5.6
+    bₘ = 0.0
+    bᵢ = 1.0
+    # shaft stiffness [Nm/rad]
+    kᵢ = 1e5
+    kₛ = 1e4
     # PID parameters
-    k_P = 0.5  # [Nms / rad]
-    k_I = 0.5  # [Nm / rad]
-    k_D = 0.5  # [Nms^2 / rad]
+    k_P = 0.5  # [Nms/rad]
+    k_I = 0.5  # [Nm/rad]
+    k_D = 0.5  # [Nms²/rad]
 
-    # =========
-    # dynamics
-    # =========
-    function get_dynamics(k_s, α)
-
+    function get_dynamics(kₛ, α, u)
         # physical units of the state variables
         # [x₁] = rad
         # [x₂] = Nm
@@ -96,146 +103,175 @@ function drivetrain(θ::Int=1)::HybridSystem
         # [x_(2θ+6)] = rad
         # [x_(2θ+7)] = rad/s
 
-        # common flow
-        A = zeros(n, n) # use spzeros? => see #40 in MathematicalSystems.jl
+        # linear dynamics
+        A = spzeros(n, n)
 
-        J_arr = fill(J_i, θ)
-        b_arr = fill(b_i, θ)
-        k_arr = fill(k_i, θ)
+        A[1, 7] = 1.0 / γ
+        A[1, 9] = -1.0
 
-        A[1,7] = 1.0/γ
-        A[1,9] =  -1.
-        A[2,1] = -k_I*γ/τ_eng + k_D*k_s /(J_m*γ*τ_eng)
-        A[2,2] = -(1 + k_D/J_m)/τ_eng
-        A[2,3] = k_I*γ/τ_eng
-        A[2,4] = k_P*γ/τ_eng
-        A[2,7] = (-k_P + k_D * b_m /J_m)/τ_eng
-        A[2,8] = -γ*k_I/τ_eng
+        A[2, 1] = (-k_I * γ + k_D * kₛ / (γ * Jₘ)) / τ_eng
+        A[2, 2] = (-k_D / Jₘ - 1.0) / τ_eng
+        A[2, 3] = k_I * γ / τ_eng
+        A[2, 4] = k_P * γ / τ_eng
+        A[2, 7] = (-k_P + k_D * bₘ /Jₘ) / τ_eng
+        A[2, 8] = -k_I * γ / τ_eng
 
-        A[3,4] = 1.
+        A[3, 4] = 1.0
 
-        A[5,6] = 1.
+        A[5, 6] = 1.0
 
-        A[6,5] = -(1.0/J_l) * k_arr[θ]
-        A[6,6] =  -(1.0/J_l) * b_l
-        A[6,2 * θ+6] = (1.0/J_l) * k_arr[θ]
+        A[6, 5] = -kᵢ / Jₗ
+        A[6, 6] = -bₗ / Jₗ
+        A[6, 2*θ+6] = kᵢ / Jₗ
 
-        A[7,1] = -(1.0/(J_m*γ))*k_s
-        A[7,2] = 1.0/J_m
-        A[7,7] = -(1.0/J_m)*b_m
+        A[7, 1] = -kₛ / (Jₘ * γ)
+        A[7, 2] = 1.0 / Jₘ
+        A[7, 7] = -bₘ / Jₘ
 
-        i = 10
-        if (θ >= 1)
-            A[8, 9] = 1.
-            A[9,1] = (1.0/J_arr[1])*k_s
-            A[9,8] = -(1.0/J_arr[1])*k_arr[1]
-            A[9,9] = -(1.0/J_arr[1])*b_arr[1]
-            if (θ > 1)
-                A[9,10] = (1.0/J_arr[1])*k_arr[1]
+        i = 8
+        while i < n-1
+            A[i, i+1] = 1.0
+
+            if i == 8
+                # x9 has special dynamics
+                A[i+1, 1] = kₛ / Jᵢ
+                A[i+1, i] = -kᵢ / Jᵢ
             else
-                A[9,5] = (1.0/J_arr[1])*k_arr[1]
+                A[i+1, i-2] = kᵢ / Jᵢ
+                A[i+1, i] = -2. * kᵢ / Jᵢ
             end
-        end
-        el = 2 # returns the index of additional rotating mass
-        while i < n
-            A[i,i+1] = 1.
-            A[i+1,2*el+4] = (1.0/J_arr[el])*k_arr[el-1]
-            A[i+1,2*el+6] = -(1.0/J_arr[el])*(k_arr[el-1]+k_arr[el])
-            A[i+1,2*el+7] =  -(1.0/J_arr[el])*b_arr[el]
-            if el == θ
-                A[i+1,5] = (1.0/J_arr[el])*k_arr[el]
-            else
-                A[i+1,i+2] = (1.0/J_arr[el])*k_arr[el]
-            end
-            el +=1
+            A[i+1, i+1] = -bᵢ / Jᵢ
+
+            # wrap-around to x5 in the last step
+            j = (i == n-2) ? 5 : i+2
+            A[i+1, j] = kᵢ / Jᵢ
+
             i += 2
         end
-        return A
+
+        # affine vector
+        b = spzeros(n)
+        b[2] = k_D * (γ * u - kₛ * α / (Jₘ * γ)) / τ_eng
+        b[4] = u
+        b[7] = kₛ * α / (Jₘ * γ)
+        b[9] = -kₛ * α / Jᵢ
+        b[n] = 1.0  # time
+
+        return A, b
     end
 
-    function get_b(k_s, α)
-        x2_u = (k_D*γ*u-k_D*
-                (1.0/(J_m*γ))*k_s*α)/τ_eng
-        x4_u = u
-        x7_u = (1.0/(J_m*γ))*k_s*α
-        x9_u = -(1.0/J_i)*k_s*α
-
-        #return sparsevec([2, 4, 7, 9], [x2_u, x4_u, x7_u, x9_u], n)
-        res = zeros(n)
-        res[2],res[4],res[7],res[9] = x2_u, x4_u, x7_u, x9_u
-        return res
-    end
-
-    # =============================
-    # transition graph (automaton)
-    # =============================
-    automaton = LightAutomaton(3);
-
-    add_transition!(automaton, 1, 2, 1);
-    add_transition!(automaton, 2, 1, 2);
-    add_transition!(automaton, 2, 3, 3);
-    add_transition!(automaton, 3, 2, 4);
-
-    # common U
-    U = Singleton([1.0])
-
-    # common resets
-    A_trans = Matrix{Float64}(I, n, n) # use UniformScaling n * I ? not accepted since it doesn't subtype <:AbstractArray{T,2}
-
-    z = zeros(n-1)
+    # hybrid automaton
+    automaton = LightAutomaton(4)
 
     # negAngle
-    A = get_dynamics(k_s, α_neg)
-    B = get_b(k_s, α_neg)
-
-    # identity matrix
-    E = Matrix{Float64}(I, n, n)
-
-    X = HPolyhedron([HalfSpace([1.; z], α_neg)]) # x <= -α
-    m_negAngle = ConstrainedLinearControlContinuousSystem(A, E, X, B*U)
-
-    # transition negAngle -> deadzone
-    X_l1l2 = HPolyhedron([HalfSpace([-1.; z], α)])  # x >= -0.03
-    r1 = ConstrainedLinearDiscreteSystem(A_trans, X_l1l2);
+    A, b = get_dynamics(kₛ, -α, u)
+    X = HalfSpace(sparsevec([1], [1.], n), -α)  # x1 <= -α
+    m_negAngle = CACS(A, b, X)
+    if display_dynamics
+        print_dynamics(A, b, "negAngle")
+    end
 
     # deadzone
-    A = get_dynamics(k_s_zero, α_neg)
-    B = get_b(k_s_zero, α_neg)
-    X = HPolyhedron([HalfSpace([-1.; z], α),  # x >= -α
-                     HalfSpace([1.; z], α)])  # x <= 0.03
-    m_deadzone = ConstrainedLinearControlContinuousSystem(A, E, X, B*U)
+    A, b = get_dynamics(0., -α, u)
+    X = HPolyhedron([HalfSpace(sparsevec([1], [-1.], n), α),  # x1 >= -α
+                     HalfSpace(sparsevec([1], [1.], n), α)])  # x1 <= α
+    m_deadzone = CACS(A, b, X)
+    if display_dynamics
+        print_dynamics(A, b, "deadzone")
+    end
 
-    # transition deadzone -> negAngle
-    X_l2l1 = HPolyhedron([HalfSpace([1.; z], α_neg)])  # x <= -0.03
-    r2 = ConstrainedLinearDiscreteSystem(A_trans, X_l2l1)
+    # posAngle
+    A, b = get_dynamics(kₛ, α, u)
+    X = HalfSpace(sparsevec([1], [-1.], n), -α)  # x1 >= α
+    m_posAngle = CACS(A, b, X)
+    if display_dynamics
+        print_dynamics(A, b, "posAngle")
+    end
 
-    # transition deadzone -> posAngle
-    X_l2l3 = HPolyhedron([HalfSpace([-1.; z], α_neg)])  # x >= 0.03
-    r3 = ConstrainedLinearDiscreteSystem(A_trans, X_l2l3)
-
-    #posAngle
-    A = get_dynamics(k_s, α)
-    B = get_b(k_s, α)
-    X = HPolyhedron([HalfSpace([-1.; z], α_neg)])  # x >= α (2.1 for numerical issues)
-    m_posAngle = ConstrainedLinearControlContinuousSystem(A, E, X, B*U)
-
-    # transition posAngle -> deadzone
-    X_l3l2 = HPolyhedron([HalfSpace([1.; z], α)])  # x <= 0.03
-    r4 = ConstrainedLinearDiscreteSystem(A_trans, X_l3l2)
+    # negAngleInit
+    A, b = get_dynamics(kₛ, -α, -u)
+    X = HalfSpace(sparsevec([n], [1.], n), t_init)  # t <= t_init
+    m_negAngleInit = CACS(A, b, X)
+    if display_dynamics
+        print_dynamics(A, b, "negAngleInit")
+    end
 
     # modes
-    modes = [m_negAngle, m_deadzone, m_posAngle]
+    modes = [m_negAngle, m_deadzone, m_posAngle, m_negAngleInit]
 
-    # reset maps
-    resets = [r1, r2, r3, r4]
+    # transition negAngleInit -> negAngle
+    add_transition!(automaton, 4, 1, 1)
+    guard = HalfSpace(sparsevec([n], [-1.], n), -t_init)  # t >= t_init
+    r_41 = ConstrainedIdentityMap(n, guard)
 
-    # ===========
-    # switchings
-    # ===========
+    # transition negAngle -> deadzone
+    add_transition!(automaton, 1, 2, 2)
+    guard = HalfSpace(sparsevec([1], [-1.], n), α)  # x1 >= -α
+    r_12 = ConstrainedIdentityMap(n, guard)
+
+    # transition deadzone -> posAngle
+    add_transition!(automaton, 2, 3, 3)
+    guard = HalfSpace(sparsevec([1], [-1.], n), -α)  # x1 >= α
+    r_23 = ConstrainedIdentityMap(n, guard)
+
+    # TODO the SpaceEx model does not contain the following transitions
+#     # transition deadzone -> negAngle
+#     add_transition!(automaton, 2, 1, 4)
+#     guard = HalfSpace(sparsevec([1], [1.], n), -α)  # x1 <= -α
+#     r_21 = ConstrainedIdentityMap(n, guard)
+#     # transition posAngle -> deadzone
+#     add_transition!(automaton, 3, 2, 5)
+#     guard = HalfSpace(sparsevec([1], [1.], n), α)  # x1 <= α
+#     r_32 = ConstrainedIdentityMap(n, guard)
+
+    # transition annotations
+    resetmaps = [r_41, r_12, r_23]
+
+    # switching
     switchings = [HybridSystems.AutonomousSwitching()]
 
-    # instantiate hybrid system
-    HS = HybridSystem(automaton, modes, resets, switchings)
+    ℋ = HybridSystem(automaton, modes, resetmaps, switchings)
 
-    return HS
+    # initial condition in mode 1
+    c = Vector{Float64}(undef, n)
+    g = Vector{Float64}(undef, n)
+    c[1:7] = [-0.0432, -11., 0., 30., 0., 30., 360.]
+    g[1:7] = [0.0056, 4.67, 0., 10., 0., 10., 120.]
+    i = 8
+    while i < n
+        c[i] = -0.0013
+        g[i] = 0.0006
+        i += 1
+        c[i] = 30.
+        g[i] = 10.
+        i += 1
+    end
+    c[n] = 0.0
+    g[n] = 0.0
+    if X0_scale < 1.0
+        g = X0_scale * g
+    end
+    X0 = Zonotope(c, hcat(g))
+    initial_condition = [(4, X0)]
+
+    system = InitialValueProblem(ℋ, initial_condition)
+
+    # safety property
+    property_2 = BadStatesProperty(HalfSpace(sparsevec([1], [1.], n), -α))  # x1 <= -α
+    property_3 = BadStatesProperty(HalfSpace(sparsevec([1], [1.], n), α))   # x1 <= α
+    property = Dict(2 => property_2, 3 => property_3)
+
+    # default options
+    options = Options(:T=>2.0, :property=>property)
+
+    return (system, options)
+end
+
+function run_powertrain(system, options)
+    opC = BFFPSV18(:δ => 0.01, :assume_sparse => true)
+    opD = LazyDiscretePost(:lazy_R⋂I => true, :lazy_R⋂G => true)
+    options[:mode] = "check"
+    options[:plot_vars] = [1, 2]
+
+    solve(system, options, opC, opD)
 end

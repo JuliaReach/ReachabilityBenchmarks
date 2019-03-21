@@ -44,31 +44,28 @@ function gearbox()
     add_transition!(automaton, 1, 1, 2)
     add_transition!(automaton, 1, 2, 3)
 
-    # common inputs
-    U = Singleton([1.])
-
     # mode 1 ("free")
     A = zeros(n, n)
-    B = zeros(n, 1)
+    b = zeros(n)
     A[px, vx] = 1.
     A[py, vy] = 1.
-    B[vx, 1] = Fs / ms
-    B[vy, 1] = - (Rs * Tf) / Jg₂
-    B[t, 1] = 1.
+    b[vx] = Fs / ms
+    b[vy] = - (Rs * Tf) / Jg₂
+    b[t] = 1.
     invariant = HalfSpace(sparsevec([px], [1.], n), Δp)
     # TODO The SpaceEx model adds more constraints, possibly to help with the
     # guard intersection:
     invariant = HPolyhedron([invariant,
         HalfSpace(sparsevec([px, py], [tan(θ), 1.], n), 0.),    # py <= -px * tan(θ)
         HalfSpace(sparsevec([px, py], [tan(θ), -1.], n), 0.)])  # py >= px * tan(θ)
-    m_1 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
+    m_1 = CACS(A, b, invariant)
 
     # mode 2 ("meshed")
     A = zeros(n, n)
-    B = zeros(n, 1)
-    B[t, 1] = 1.
+    b = zeros(n)
+    b[t] = 1.
     invariant = Universe(n)
-    m_2 = ConstrainedLinearControlContinuousSystem(A, B, invariant, U)
+    m_2 = CACS(A, b, invariant)
 
     # modes
     modes = [m_1, m_2]

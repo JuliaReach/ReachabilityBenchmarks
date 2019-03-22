@@ -185,7 +185,7 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
 
     # posAngle
     A, b = get_dynamics(kₛ, α, u)
-    X = HalfSpace(sparsevec([1], [-1.], n), -α)  # x1 >= α
+    X = HalfSpace(sparsevec([1], [-1.], n), -α + guard_bloating)  # x1 >= α - ε
     m_posAngle = CACS(A, b, X)
     if display_dynamics
         print_dynamics(A, b, "posAngle")
@@ -271,7 +271,7 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
 end
 
 function run_powertrain(system, options)
-    opC = BFFPSV18(:δ => 0.01, :assume_sparse => true)
+    opC = BFFPSV18(:δ => 0.0005, :assume_sparse => true)
     opD = LazyDiscretePost(:lazy_R⋂I => true, :lazy_R⋂G => true)
     options[:mode] = "check"
     options[:plot_vars] = [1, 2]

@@ -14,10 +14,10 @@ include("Building/building_benchmark.jl")
 include("Platooning/Platooning_benchmark.jl")
 
 # Gearbox benchmark
-include("Gearbox/Gearbox.jl")
-system, options = gearbox()
-res = run_gearbox(system, options)
-@assert res.satisfied
-@time run_gearbox(system, options)
+# include("Gearbox/Gearbox.jl")
+# system, options = gearbox()
+# res = run_gearbox(system, options)
+# @assert res.satisfied
+# @time run_gearbox(system, options)
 
 nothing

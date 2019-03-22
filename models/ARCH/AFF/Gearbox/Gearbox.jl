@@ -105,7 +105,7 @@ function gearbox()
     t2 = ConstrainedLinearMap(A, guard)
 
     # transition l1 -> l2
-    guard = HalfSpace(sparsevec([px], [-1.], n), -Δp + guard_bloating)  # px >= Δp
+    guard = HalfSpace(sparsevec([px], [-1.], n), -Δp + guard_bloating)  # px >= Δp - ε
     A = copy(A_template)
     A[vx, vx] = 0.
     A[vx, vy] = 0.

@@ -88,6 +88,9 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
     k_I = 0.5  # [Nm/rad]
     k_D = 0.5  # [Nms²/rad]
 
+    # additional bloating to get a non-flat guard intersection
+    guard_bloating = sqrt(eps(Float64))
+
     function get_dynamics(kₛ, α, u)
         # physical units of the state variables
         # [x₁] = rad
@@ -201,7 +204,7 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
 
     # transition negAngleInit -> negAngle
     add_transition!(automaton, 4, 1, 1)
-    guard = HalfSpace(sparsevec([n], [-1.], n), -t_init)  # t >= t_init
+    guard = HalfSpace(sparsevec([n], [-1.], n), -t_init + guard_bloating)  # t >= t_init - ε
     r_41 = ConstrainedIdentityMap(n, guard)
 
     # transition negAngle -> deadzone

@@ -48,7 +48,8 @@ plot(res,
      xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",
      ylab=L"y_3\raisebox{2mm}{\textcolor{white}{.}}",
      xtick=[0., 10., 20.], ytick=[-7e-4, -5e-4, 0., 5e-4, 7e-4],
-     bottom_margin=6mm, left_margin=2mm,
+     xlims=(0., 20.), ylims=(-8e-4, 8e-4),
+     bottom_margin=6mm, left_margin=2mm, right_margin=2mm,
      size=(1000, 1000))
 plot_dashed_lines!(0.0005)
 plot_dashed_lines!(0.0007)
@@ -68,7 +69,8 @@ plot(res,
      xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",
      ylab=L"y_3\raisebox{2mm}{\textcolor{white}{.}}",
      xtick=[0., 10., 20.], ytick=[-17e-5, 0., 17e-5],
-     bottom_margin=6mm, left_margin=2mm,
+     xlims=(0., 20.), ylims=(-2e-4, 2e-4),
+     bottom_margin=6mm, left_margin=2mm, right_margin=2mm,
      size=(1000, 1000))
 plot_dashed_lines!(0.00017)
 savefig("ISSC01.png")

@@ -149,21 +149,21 @@ options[:project_reachset] = true
 res = solve(SRNA01, options, opC_dense, opD)
 plot(res,
      tickfont=font(30, "Times"), guidefontsize=45,
-     xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",
-     ylab=L"x_1\raisebox{2mm}{\textcolor{white}{.}}",
-     xtick=[-1000., -500., 0.], ytick=[-400., -300., -200., -100., 0.],
-     xlims=(-1000., 0.), ylims=(-450., 50.),
-     bottom_margin=6mm, left_margin=6mm,
+     xlab=L"s_x\raisebox{-1mm}{\textcolor{white}{.}}",
+     ylab=L"s_y\raisebox{-2mm}{\textcolor{white}{\rule{1mm}{4mm}}}",
+     xtick=[-1000., -500., 0.], ytick=[-400., -300., -200., -100., 0., 100.],
+     xlims=(-1000., 0.), ylims=(-500., 100.),
+     bottom_margin=10mm, left_margin=10mm, top_margin=3mm,
      size=(1000, 1000))
 savefig("SRNA01_SR02.png")
 
 res = solve(SRA01, options, opC_dense, opD)
 plot(res,
      tickfont=font(30, "Times"), guidefontsize=45,
-     xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",
-     ylab=L"x_1\raisebox{2mm}{\textcolor{white}{.}}",
-     xtick=[-1000., -500., 0.], ytick=[-400., -300., -200., -100., 0.],
-     xlims=(-1000., 150.), ylims=(-450., 50.),
-     bottom_margin=6mm, left_margin=6mm,
+     xlab=L"s_x\raisebox{-1mm}{\textcolor{white}{.}}",
+     ylab=L"s_y\raisebox{-2mm}{\textcolor{white}{\rule{1mm}{4mm}}}",
+     xtick=[-1000., -500., 0.], ytick=[-400., -300., -200., -100., 0., 100.],
+     xlims=(-1000., 400.), ylims=(-500., 100.),
+     bottom_margin=10mm, left_margin=10mm, top_margin=3mm,
      size=(1000, 1000))
 savefig("SRA01_SR02.png")

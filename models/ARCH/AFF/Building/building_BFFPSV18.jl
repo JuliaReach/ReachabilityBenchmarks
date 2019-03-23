@@ -33,7 +33,7 @@ SUITE["Build"]["BLDF01-BDS01", "discrete"] =
 𝑂_BLDC01 = Options(:T => time_horizon, :mode => "check", :property => pBLDC01)
 
 # algorithm-specific options
-𝑂_dense_BLDC01 = Options(:vars => [25], :partition => [1:24, [25], 26:48],
+𝑂_dense_BLDC01 = Options(:vars => [25], :partition => [1:24, [25], 26:48, [49]],
                          :δ => 0.005, :block_options_init => LazySets.LinearMap)
 𝑂_discrete_BLDC01 =
     merge(𝑂_dense_BLDC01, Options(:discretization => "nobloating", :δ => 0.005))

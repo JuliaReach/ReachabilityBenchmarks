@@ -85,6 +85,11 @@ println("median: ", median(results))
 # Create plots
 # ==============================================================================
 
+function plot_dashed_line!(v, time_horizon=20.)
+    plot!(x->x, x->v, 0.0, time_horizon, line=2, color="red", linestyle=:dash,
+          legend=nothing)
+end
+
 options_PLAD01_BND42[:mode] = "reach"
 options_PLAD01_BND42[:plot_vars] = [0, 1]
 options_PLAD01_BND42[:project_reachset] = true
@@ -96,12 +101,14 @@ plot(res,
      xtick=[0., 10., 20.], ytick=[-40., -20., 0., 20.],
      bottom_margin=6mm, left_margin=2mm,
      size=(1000, 1000))
+plot_dashed_line!(-42.)
 savefig("PLAD01_BND42.png")
 
 options_PLAN01_UNB50[:mode] = "reach"
 options_PLAN01_UNB50[:plot_vars] = [0, 1]
 options_PLAN01_UNB50[:project_reachset] = true
 res = solve(PLAN01_UNB50, options_PLAN01_UNB50, opC_dense_PLAN01_UNB50, opD)
+time_horizon = res.Xk[end].t_start
 plot(res,
      tickfont=font(30, "Times"), guidefontsize=45,
      xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",
@@ -109,4 +116,5 @@ plot(res,
      xtick=[0., 100., 200.], ytick=[-40., -20., 0., 20.],
      bottom_margin=6mm, left_margin=2mm,
      size=(1000, 1000))
+plot_dashed_line!(-50., time_horizon)
 savefig("PLAN01_UNB50.png")

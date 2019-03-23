@@ -274,7 +274,7 @@ function run_powertrain(system, options)
     opC = BFFPSV18(:δ => 0.0005, :assume_sparse => true)
     opD = LazyDiscretePost(:lazy_R⋂I => true, :lazy_R⋂G => true)
     options[:mode] = "check"
-    options[:plot_vars] = [1, 2]
+    options[:plot_vars] = [1, 3]
 
     solve(system, options, opC, opD)
 end

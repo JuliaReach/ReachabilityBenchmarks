@@ -56,7 +56,7 @@ plot(res,
      size=(1000, 1000))
 plot_dashed_lines!(0.0005)
 plot_dashed_lines!(0.0007)
-savefig("ISSF01.png")
+savefig(@relpath "ISSF01.png")
 
 𝑂_ISS02[:mode] = "reach"
 𝑂_ISS02[:projection_matrix] = projection_matrix
@@ -78,4 +78,4 @@ plot(res,
      bottom_margin=6mm, left_margin=2mm, right_margin=2mm,
      size=(1000, 1000))
 plot_dashed_lines!(0.00017)
-savefig("ISSC01.png")
+savefig(@relpath "ISSC01.png")

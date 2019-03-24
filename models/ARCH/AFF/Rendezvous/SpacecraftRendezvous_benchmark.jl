@@ -68,10 +68,10 @@ res = solve(SRA01, options, opC_discrete, opD)
 # @assert res.satisfied  # TODO NEW SETTING
 # res = solve(SRA08, options, opC_discrete, opD)
 # @assert res.satisfied  # TODO NEW SETTING
-# res = solve(SRU01, options, opC_dense, opD)
-# @assert res.satisfied  # TODO NEW SETTING
-# res = solve(SRU01, options, opC_discrete, opD)
-# @assert res.satisfied  # TODO NEW SETTING
+res = solve(SRU01, options, opC_dense, opD)
+@assert !res.satisfied
+res = solve(SRU01, options, opC_discrete, opD)
+@assert !res.satisfied
 res = solve(SRU02, options, opC_dense, opD)
 @assert !res.satisfied
 res = solve(SRU02, options, opC_discrete, opD)
@@ -114,7 +114,7 @@ SUITE["Spacecraft"]["SRA01-SR02", "discrete"] =
 #     @benchmarkable solve($SRA08, $options, $opC_dense, $opD)
 # SUITE["Spacecraft"]["SRA08-SR02", "discrete"] =
 #     @benchmarkable solve($SRA08, $options, $opC_discrete, $opD)
-# SUITE["Spacecraft"]["SRU01-SR02", "dense"] =
+SUITE["Spacecraft"]["SRU01-SR02", "dense"] =
     @benchmarkable solve($SRU01, $options, $opC_dense, $opD)
 SUITE["Spacecraft"]["SRU01-SR02", "discrete"] =
     @benchmarkable solve($SRU01, $options, $opC_discrete, $opD)

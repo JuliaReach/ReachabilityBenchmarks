@@ -19,7 +19,7 @@ include("vanderpol_TMJets.jl")
 sol = solve(𝑃, 𝑂, op=TMJets(𝑂jets))
 
 # verify that specification holds
-all([ρ([0.0, 1.0], sol.Xk[i].X) < 2.75 for i in eachindex(sol.Xk)])
+@assert all([ρ([0.0, 1.0], sol.Xk[i].X) < 2.75 for i in eachindex(sol.Xk)])
 
 # benchmark
 SUITE["VanDerPol"]["x[2] <= 2.75"] = @benchmarkable solve($𝑃, $𝑂, op=TMJets($𝑂jets))

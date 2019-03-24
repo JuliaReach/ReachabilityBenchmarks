@@ -1,4 +1,4 @@
-using BenchmarkTools
+using BenchmarkTools, Plots, Plots.PlotMeasures, LaTeXStrings
 using BenchmarkTools: minimum, median
 
 SUITE = BenchmarkGroup()
@@ -7,46 +7,36 @@ SUITE["LaubLoomis"] = BenchmarkGroup()
 # ==============================================================================
 # Jet-based approach using Taylor Models
 # ==============================================================================
-include("laubloomis_TMJets.jl")
+include("laubloomis.jl")
 
 # --- Case 1: smaller initial states ---
+𝑃, 𝑂 = laubloomis(W=0.01, property=(t,x)->x[4] < 4.5)
 
-𝑂₁ = Options(:t0=>0.0, :T=>20.0, :W=>0.01, :abs_tol=>1e-10,
-              :orderT=>7, :orderQ=>2, :max_steps=>1000, :property=>(t,x)->x[4] < 4.5)
+𝑂₁ = Options(:abs_tol=>1e-10, :orderT=>7, :orderQ=>2, :max_steps=>1000)
 
 # first run
-tTM, xTM = laubloomis_TMJets(; t0=𝑂₁[:t0], T=𝑂₁[:T], W=𝑂₁[:W],
-                abs_tol=𝑂₁[:abs_tol], orderT=𝑂₁[:orderT], orderQ=𝑂₁[:orderQ],
-                maxsteps=𝑂₁[:max_steps], property=𝑂₁[:property])
+sol = solve(𝑃, 𝑂, op=TMJets(𝑂₁))
 
 # verify that specification holds
-@assert all([xTM[ind][4] < 4.5 for ind in eachindex(xTM[:])])
+v4 = [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0]
+@assert all([ρ(v4, sol.Xk[i].X) < 4.5 for i in eachindex(sol.Xk)])
 
 # benchmark
-SUITE["LaubLoomis"]["W=0.01"] = @benchmarkable laubloomis_TMJets(; t0=$𝑂₁[:t0], T=$𝑂₁[:T], W=$𝑂₁[:W],
-                abs_tol=$𝑂₁[:abs_tol], orderT=$𝑂₁[:orderT], orderQ=$𝑂₁[:orderQ],
-                maxsteps=$𝑂₁[:max_steps], property=$𝑂₁[:property])
+SUITE["LaubLoomis"]["W=0.01"] = @benchmarkable solve($𝑃, $𝑂, op=TMJets($𝑂₁))
 
 # --- Case 2: larger initial states ---
+𝑃, 𝑂 = laubloomis(W=0.1, property=(t,x)->x[4] < 5.0)
 
-𝑂₂ = Options(:t0=>0.0, :T=>20.0, :W=>0.1, :abs_tol=>1e-10,
-              :orderT=>7, :orderQ=>2, :max_steps=>1000, :property=>(t,x)->x[4] < 5.0)
+𝑂₂ = copy(𝑂₁)
 
 # first run
-tTM, xTM = laubloomis_TMJets(; t0=𝑂₂[:t0], T=𝑂₂[:T], W=𝑂₂[:W],
-                abs_tol=𝑂₂[:abs_tol], orderT=𝑂₂[:orderT], orderQ=𝑂₂[:orderQ],
-                maxsteps=𝑂₂[:max_steps], property=𝑂₂[:property])
+sol = solve(𝑃, 𝑂, op=TMJets(𝑂₂))
 
 # verify that specification holds
-@assert all([xTM[ind][4] < 5.0 for ind in eachindex(xTM[:])])
-
-# verify tighter specification
-#@assert all([xTM[ind][4] < 4.4 for ind in eachindex(xTM[:])])
+@assert all([ρ(v4, sol.Xk[i].X) < 5.0 for i in eachindex(sol.Xk)])
 
 # benchmark
-SUITE["LaubLoomis"]["W=0.1"] = @benchmarkable tTM, xTM = laubloomis_TMJets(; t0=$𝑂₂[:t0], T=$𝑂₂[:T], W=$𝑂₂[:W],
-                abs_tol=$𝑂₂[:abs_tol], orderT=$𝑂₂[:orderT], orderQ=$𝑂₂[:orderQ],
-                maxsteps=$𝑂₂[:max_steps], property=$𝑂₂[:property])
+SUITE["LaubLoomis"]["W=0.1"] = @benchmarkable solve($𝑃, $𝑂, op=TMJets($𝑂₂))
 
 # ==============================================================================
 # Execute benchmarks and save benchmark results

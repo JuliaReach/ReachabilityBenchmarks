@@ -11,11 +11,15 @@ const μ = 3.986e14 * 60^2
 const r = 42164e3
 const mc = 500.0
 const n = sqrt(μ / r^3)
+K₁ = [-28.8287 0.1005 -1449.9754 0.0046;
+      -0.087 -33.2562 0.00462 -1451.5013]
+K₂ = [-288.0288 0.1312 -9614.9898 0.0;
+      -0.1312 -288.0 0.0 -9614.9883]
 
-# dynamics
-@taylorize function spacecraft_approaching!(t, x, dx, K)
+# dynamics in the 'approaching' mode
+@taylorize function spacecraft_approaching!(t, x, dx)
     local rc = sqrt((r + x[1])^2 + x[2]^2)
-    local uxy = K * x
+    local uxy = K₁ * x
 
     # x' = vx
     dx[1] = x[3]
@@ -35,7 +39,30 @@ const n = sqrt(μ / r^3)
     return dx
 end
 
-# dynamics in the aborting mode
+# dynamics in the 'rendezvous attempt' mode
+@taylorize function spacecraft_rendezvous_attempt!(t, x, dx)
+    local rc = sqrt((r + x[1])^2 + x[2]^2)
+    local uxy = K₂ * x
+
+    # x' = vx
+    dx[1] = x[3]
+
+    # y' = vy
+    dx[2] = x[4]
+
+    # vx' = n²x + 2n*vy + μ/(r^2) - μ/(rc^3)*(r+x) + ux/mc
+    dx[3] = (n^2*x[1] + 2*(n*x[4])) + ((μ/(r^2) - μ/(rc^3)*(r + x[1])) + uxy[1]/mc)
+
+    # vy' = n²y - 2n*vx - μ/(rc^3)y + uy/mc
+    dx[4] = (n^2*x[2] - 2*(n*x[3])) - (μ/(rc^3)*x[2] - uxy[2]/mc)
+
+    # t' = 1
+    dx[5] = 1.0
+
+    return dx
+end
+
+# dynamics in the 'aborting' mode
 @taylorize function spacecraft_aborting!(t, x, dx)
     local rc = sqrt((r + x[1])^2 + x[2]^2)
 
@@ -75,9 +102,7 @@ function spacecraft_rendezvous()
     automaton = LightAutomaton(3)
 
     # mode 1 ("approaching")
-    K₁ = [-28.8287 0.1005 -1449.9754 0.0046;
-          -0.087 -33.2562 0.00462 -1451.5013]
-    𝐹 = (t, x, dx) -> spacecraft_approaching!(t, x, dx, K₁)
+    𝐹 = (t, x, dx) -> spacecraft_approaching!(t, x, dx)
     invariant = HPolyhedron([
         HalfSpace(sparsevec([x], [1.], n), -100.),    # x <= -100
         HalfSpace(sparsevec([t], [1.], n), t_abort))  # t <= t_abort
@@ -85,9 +110,7 @@ function spacecraft_rendezvous()
     m₁ = CBBCS(𝐹, 5, invariant)
 
     # mode 2 ("rendezvous attempt")
-    K₂ = [-288.0288 0.1312 -9614.9898 0.0;
-          -0.1312 -288.0 0.0 -9614.9883]
-    𝐹 = (t, x, dx) -> spacecraft_approaching!(t, x, dx, K₂)
+    𝐹 = (t, x, dx) -> spacecraft_rendezvous_attempt!(t, x, dx)
     invariant = HPolyhedron([
         HalfSpace(sparsevec([x], [-1.], n), 100.),           # x >= -100
         HalfSpace(sparsevec([x], [1.], n), 100.),            # x <= 100

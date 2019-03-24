@@ -1,4 +1,4 @@
-using BenchmarkTools
+using BenchmarkTools, Plots, Plots.PlotMeasures, LaTeXStrings
 using BenchmarkTools: minimum, median
 
 SUITE = BenchmarkGroup()
@@ -10,21 +10,19 @@ SUITE["VanDerPol"] = BenchmarkGroup()
 include("vanderpol_TMJets.jl")
 
 # benchmark settings
-𝑂 = Options(:t0=>0.0, :T=>7.0, :abs_tol=>1e-1, :orderT=>2, :orderQ=>2,
-            :maxsteps=>500, :property=>(t, x) -> x[2] < 2.75)
+𝑂 = Options(:T=>7.0, :mode=>"check", :property=>(t, x) -> x[2] < 2.75)
+
+# algorithm-specific options
+𝑂jets = Options(:abs_tol=>1e-1, :orderT=>2, :orderQ=>2, :maxsteps=>500)
 
 # first run
-tTM, xTM = vanderpol_TMJets(; t0=𝑂[:t0], T=𝑂[:T], abs_tol=𝑂[:abs_tol],
-                orderT=𝑂[:orderT], orderQ=𝑂[:orderQ],
-                maxsteps=𝑂[:maxsteps], property=𝑂[:property])
+sol = solve(𝑃, 𝑂, op=TMJets(𝑂jets))
 
 # verify that specification holds
-@assert all([xTM[ind][2] < 2.75 for ind in eachindex(xTM[:])])
+all([ρ([0.0, 1.0], sol.Xk[i].X) < 2.75 for i in eachindex(sol.Xk)])
 
 # benchmark
-SUITE["VanDerPol"]["x[2] <= 2.75"] = @benchmarkable vanderpol_TMJets(; t0=$𝑂[:t0], T=$𝑂[:T],
-                abs_tol=$𝑂[:abs_tol], orderT=$𝑂[:orderT], orderQ=$𝑂[:orderQ],
-                maxsteps=$𝑂[:maxsteps], property=$𝑂[:property])
+SUITE["VanDerPol"]["x[2] <= 2.75"] = @benchmarkable solve($𝑃, $𝑂, op=TMJets($𝑂jets))
 
 # ==============================================================================
 # Execute benchmarks and save benchmark results
@@ -41,3 +39,7 @@ println("minimum time for each benchmark:\n", minimum(results))
 
 # return the median for each test
 println("median time for each benchmark:\n", median(results))
+
+# ==============================================================================
+# Create plots
+# ==============================================================================

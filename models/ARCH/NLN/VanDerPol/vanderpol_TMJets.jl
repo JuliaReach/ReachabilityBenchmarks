@@ -3,15 +3,6 @@ include("vanderpol.jl")
 using TaylorModels
 using TaylorModels: validated_integ
 
-# Equations of motion
-# We write the function such that the operations are either unary or binary:
-@taylorize function vanderPol!(t, x, dx)
-    local μ = 1.0
-    dx[1] = x[2]
-    dx[2] = (μ * x[2]) * (1 - x[1]^2) - x[1]
-    return dx
-end
-
 # TODO: use vanderpol.jl and wrap as an algo
 
 """

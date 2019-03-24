@@ -3,49 +3,23 @@
 # See https://easychair.org/publications/paper/gjfh
 # =================================================================
 
-using Reachability: Options, SafeStatesProperty
-using MathematicalSystems, LazySets
-using DynamicPolynomials, SemialgebraicSets
+using Reachability, MathematicalSystems, LazySets, TaylorIntegration
+using Reachability: solve
 
-"""
-    vanderpol(; [T], [X0], [variables])
-
-Construct the Van der Pol model.
-
-### Input
-
-- `T`         -- (optional, default: `7.0`) the time horizon for the initial
-                  value problem
-- `X0`        -- (optional, default: `[1.25, 1.55] × [2.35, 2.45]`) set of initial states
-- `variables` -- (optional, default: `PolyVar`) the set of polynoma variables that
-                  are used in the equations 
-### Output
-
-The tuple `(𝑃, 𝑂)` where `𝑃` is an initial-value problem and `𝑂` are the options.
-"""
-function vanderpol(; T=7.0,
-                     X0=Hyperrectangle(low=[1.25, 2.35], high=[1.55, 2.45]),
-                     variables=@polyvar x₁ x₂)
-
-    𝑂 = Options()
-    x₁, x₂ = variables
-    𝑂[:variables] = variables
-
-    # instantiate the polynomial system
-    f = [x₂, x₂ - x₁ - x₁^2 * x₂]
-    𝐹 = PolynomialContinuousSystem(f)
-
-    # instantiate the IVP
-    𝑃 = InitialValueProblem(𝐹, X0)
-
-    # time horizon
-    𝑂[:T] = T
-
-    # variables to plot
-    𝑂[:plot_vars] = [1, 2]
-
-    # safety property
-    𝑂[:property] = SafeStatesProperty(HalfSpace([0., 1.], 2.75))
-
-    return (𝑃, 𝑂)
+# Equations of motion: we write the function such that the operations are either
+# unary or binary
+@taylorize function vanderPol!(t, x, dx)
+    local μ = 1.0
+    dx[1] = x[2]
+    dx[2] = (μ * x[2]) * (1 - x[1]^2) - x[1]
+    return dx
 end
+
+# equations, x' = f(x(t))
+F = BlackBoxContinuousSystem(vanderPol!, 2)
+
+# initial states
+X0 = Hyperrectangle(low=[1.25, 2.35], high=[1.55, 2.45])
+
+# instantiate problem
+𝑃 = InitialValueProblem(F, X0)

@@ -1,4 +1,4 @@
-using BenchmarkTools
+using BenchmarkTools, Plots, Plots.PlotMeasures, LaTeXStrings
 using BenchmarkTools: minimum, median
 
 SUITE = BenchmarkGroup()
@@ -7,46 +7,36 @@ SUITE["LaubLoomis"] = BenchmarkGroup()
 # ==============================================================================
 # Jet-based approach using Taylor Models
 # ==============================================================================
-include("laubloomis_TMJets.jl")
+include("laubloomis.jl")
 
 # --- Case 1: smaller initial states ---
+𝑃, 𝑂 = laubloomis(W=0.01, property=(t,x)->x[4] < 4.5)
 
-𝑂₁ = Options(:t0=>0.0, :T=>20.0, :W=>0.01, :abs_tol=>1e-10,
-              :orderT=>7, :orderQ=>2, :maxsteps=>1000, :property=>(t,x)->x[4] < 4.5)
+𝑂₁ = Options(:abs_tol=>1e-10, :orderT=>7, :orderQ=>1, :max_steps=>1000)
 
 # first run
-tTM, xTM = laubloomis_TMJets(; t0=𝑂₁[:t0], T=𝑂₁[:T], W=𝑂₁[:W],
-                abs_tol=𝑂₁[:abs_tol], orderT=𝑂₁[:orderT], orderQ=𝑂₁[:orderQ],
-                maxsteps=𝑂₁[:maxsteps], property=𝑂₁[:property])
+sol_case_1 = solve(𝑃, 𝑂, op=TMJets(𝑂₁))
 
 # verify that specification holds
-@assert all([xTM[ind][4] < 4.5 for ind in eachindex(xTM[:])])
+v4 = [0.0, 1.0] # the flowpipe has been projected so we check for the second component which is x4
+@assert all([ρ(v4, sol_case_1.Xk[i].X) < 4.5 for i in eachindex(sol_case_1.Xk)])
 
 # benchmark
-SUITE["LaubLoomis"]["W=0.01"] = @benchmarkable laubloomis_TMJets(; t0=$𝑂₁[:t0], T=$𝑂₁[:T], W=$𝑂₁[:W],
-                abs_tol=$𝑂₁[:abs_tol], orderT=$𝑂₁[:orderT], orderQ=$𝑂₁[:orderQ],
-                maxsteps=$𝑂₁[:maxsteps], property=$𝑂₁[:property])
+SUITE["LaubLoomis"]["W=0.01"] = @benchmarkable solve($𝑃, $𝑂, op=TMJets($𝑂₁))
 
 # --- Case 2: larger initial states ---
+𝑃, 𝑂 = laubloomis(W=0.1, property=(t,x)->x[4] < 5.0)
 
-𝑂₂ = Options(:t0=>0.0, :T=>20.0, :W=>0.1, :abs_tol=>1e-10,
-              :orderT=>7, :orderQ=>2, :maxsteps=>1000, :property=>(t,x)->x[4] < 5.0)
+𝑂₂ = Options(:abs_tol=>1e-10, :orderT=>7, :orderQ=>2, :max_steps=>1000)
 
 # first run
-tTM, xTM = laubloomis_TMJets(; t0=𝑂₂[:t0], T=𝑂₂[:T], W=𝑂₂[:W],
-                abs_tol=𝑂₂[:abs_tol], orderT=𝑂₂[:orderT], orderQ=𝑂₂[:orderQ],
-                maxsteps=𝑂₂[:maxsteps], property=𝑂₂[:property])
+sol_case_2 = solve(𝑃, 𝑂, op=TMJets(𝑂₂))
 
 # verify that specification holds
-@assert all([xTM[ind][4] < 5.0 for ind in eachindex(xTM[:])])
-
-# verify tighter specification
-#@assert all([xTM[ind][4] < 4.4 for ind in eachindex(xTM[:])])
+@assert all([ρ(v4, sol_case_2.Xk[i].X) < 5.0 for i in eachindex(sol_case_2.Xk)])
 
 # benchmark
-SUITE["LaubLoomis"]["W=0.1"] = @benchmarkable tTM, xTM = laubloomis_TMJets(; t0=$𝑂₂[:t0], T=$𝑂₂[:T], W=$𝑂₂[:W],
-                abs_tol=$𝑂₂[:abs_tol], orderT=$𝑂₂[:orderT], orderQ=$𝑂₂[:orderQ],
-                maxsteps=$𝑂₂[:maxsteps], property=$𝑂₂[:property])
+SUITE["LaubLoomis"]["W=0.1"] = @benchmarkable solve($𝑃, $𝑂, op=TMJets($𝑂₂))
 
 # ==============================================================================
 # Execute benchmarks and save benchmark results
@@ -63,3 +53,33 @@ println("minimum time for each benchmark:\n", minimum(results))
 
 # return the median for each test
 println("median time for each benchmark:\n", median(results))
+
+# ==============================================================================
+# Execute benchmarks and save benchmark results
+# ==============================================================================
+
+plot(sol_case_1,
+     tickfont=font(30, "Times"), guidefontsize=45,
+     xlab=L"t\raisebox{2.0mm}{\textcolor{white}{.}}",
+     ylab=L"x_{4}\raisebox{1.2mm}{\textcolor{white}{.}}",
+     xtick=[0., 2., 4., 6., 8., 10., 12., 14., 16., 18., 20.],
+     ytick=[2, 2.5, 3, 3.5, 4, 4.5],
+     xlims=(0., 20.), ylims=(1.5, 4.5),
+     bottom_margin=6mm, left_margin=8mm, right_margin=4mm, top_margin=3mm,
+     size=(1000, 1000), linecolor="blue")
+
+plot!(x->x, x->4.5, 0., 20., line=2, color="red", linestyle=:dash, legend=nothing)
+savefig(@relpath "laubloomis_case_1.png")
+
+plot(sol_case_2,
+     tickfont=font(30, "Times"), guidefontsize=45,
+     xlab=L"t\raisebox{2.0mm}{\textcolor{white}{.}}",
+     ylab=L"x_{4}\raisebox{1.2mm}{\textcolor{white}{.}}",
+     xtick=[0., 2., 4., 6., 8., 10., 12., 14., 16., 18., 20.],
+     ytick=[2, 2.5, 3, 3.5, 4, 4.5, 5.0],
+     xlims=(0., 20.), ylims=(1.5, 5.0),
+     bottom_margin=6mm, left_margin=8mm, right_margin=4mm, top_margin=3mm,
+     size=(1000, 1000), linecolor="blue")
+
+plot!(x->x, x->5.0, 0., 20., line=2, color="red", linestyle=:dash, legend=nothing)
+savefig(@relpath "laubloomis_case_2.png")

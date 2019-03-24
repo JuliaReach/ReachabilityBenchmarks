@@ -2,28 +2,23 @@ using BenchmarkTools, Plots, Plots.PlotMeasures, LaTeXStrings
 using BenchmarkTools: minimum, median
 
 SUITE = BenchmarkGroup()
-SUITE["VanDerPol"] = BenchmarkGroup()
+SUITE["Quadrotor"] = BenchmarkGroup()
 
 # ==============================================================================
 # Jet-based approach using Taylor Models
 # ==============================================================================
-include("vanderpol.jl")
+include("quadrotor.jl")
 
-# benchmark settings
-time_horizon = 7.0
-𝑂 = Options(:T=>time_horizon, :mode=>"check", :property=>(t, x) -> x[2] < 2.75)
+𝑃, 𝑂 = quad(project_reachset=>false)
 
 # algorithm-specific options
-𝑂jets = Options(:abs_tol=>1e-10, :orderT=>10, :orderQ=>2, :max_steps=>500)
+𝑂jets = Options(:abs_tol=>1e-7, :orderT=>5, :orderQ=>1, :max_steps=>500)
 
 # first run
 sol = solve(𝑃, 𝑂, op=TMJets(𝑂jets))
 
-# verify that specification holds
-@assert all([ρ([0.0, 1.0], sol.Xk[i].X) < 2.75 for i in eachindex(sol.Xk)])
-
 # benchmark
-SUITE["VanDerPol"]["x[2] <= 2.75"] = @benchmarkable solve($𝑃, $𝑂, op=TMJets($𝑂jets))
+SUITE["Quadrotor"]["Specification"] = @benchmarkable solve($𝑃, $𝑂, op=TMJets($𝑂jets))
 
 # ==============================================================================
 # Execute benchmarks and save benchmark results
@@ -45,14 +40,21 @@ println("median time for each benchmark:\n", median(results))
 # Create plots
 # ==============================================================================
 
+𝑃, 𝑂 = quad(project_reachset=>true)
+sol = solve(𝑃, 𝑂, op=TMJets(𝑂jets))
+
 plot(sol,
      tickfont=font(30, "Times"), guidefontsize=45,
-     xlab=L"x_{1}\raisebox{-0.5mm}{\textcolor{white}{.}}",
-     ylab=L"x_{2}\raisebox{2mm}{\textcolor{white}{.}}",
-     xtick=[-3., -2., -1., 0., 1., 2., 3.], ytick=[-3., -2., -1., 0., 1., 2., 3.],
-     xlims=(-3., 3.), ylims=(-3., 3.),
-     bottom_margin=6mm, left_margin=2mm, right_margin=4mm, top_margin=3mm,
+     xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",
+     ylab=L"x_{3}\raisebox{1mm}{\textcolor{white}{.}}",
+     xtick=[0., 1, 2, 3, 4, 5], ytick=[0.5, 0., 0.5, 1.0, 1.5],
+     xlims=(0., 5.), ylims=(-0.5, 1.5),
+     bottom_margin=6mm, left_margin=6mm, right_margin=4mm, top_margin=3mm,
      size=(1000, 1000), linecolor="blue")
 
-plot!(x->x, x->2.75, -3., 3., line=2, color="red", linestyle=:dash, legend=nothing)
-savefig(@relpath "vanderpol.png")
+plot!(x->x, x->1.4, 0., 5., line=2, color="red", linestyle=:dash, legend=nothing)
+plot!(x->x, x->0.98, 0., 5., line=2, color="red", linestyle=:dash, legend=nothing)
+plot!(x->x, x->1.02, 0., 5., line=2, color="red", linestyle=:dash, legend=nothing)
+plot!(x->x, x->0.9, 0., 5., line=2, color="red", linestyle=:dash, legend=nothing)
+
+savefig(@relpath "quadrotor.png")

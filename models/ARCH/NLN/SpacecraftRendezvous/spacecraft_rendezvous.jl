@@ -102,7 +102,7 @@ function spacecraft_rendezvous()
         HalfSpace(sparsevec([x, y], [-1., -1.], n), 141.1),  # x + y >= -141.1
         HalfSpace(sparsevec([x, y], [1., 1.], n), 141.1),    # x + y <= 141.1
         HalfSpace(sparsevec([x, y], [1., -1.], n), 141.1),   # -x + y >= -141.1
-        HalfSpace(sparsevec([x, y], [-1., 1.], n), 141.1)   # -x + y <= 141.1
+        HalfSpace(sparsevec([x, y], [-1., 1.], n), 141.1)    # -x + y <= 141.1
        ])
     t₁ = ConstrainedIdentityMap(n, guard)
 

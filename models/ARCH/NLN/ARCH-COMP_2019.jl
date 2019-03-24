@@ -10,6 +10,6 @@ include("VanDerPol/vanderpol_benchmark.jl")
 include("LaubLoomis/laubloomis_benchmark.jl")
 
 # Quadrotor benchmark
-include("Quadrotor/quad_benchmark.jl")
+include("Quadrotor/quadrotor_benchmark.jl")
 
 nothing

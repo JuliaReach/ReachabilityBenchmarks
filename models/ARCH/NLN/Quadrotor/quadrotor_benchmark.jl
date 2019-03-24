@@ -47,7 +47,7 @@ plot(sol,
      xtick=[0., 1, 2, 3, 4, 5], ytick=[0.5, 0., 0.5, 1.0, 1.5],
      xlims=(0., 5.), ylims=(-0.5, 1.5),
      bottom_margin=6mm, left_margin=2mm, right_margin=4mm, top_margin=3mm,
-     size=(1000, 1000), linecolor="lightblue")
+     size=(1000, 1000), linecolor="blue")
 
 plot!(x->x, x->1.4, 0., 5., line=2, color="red", linestyle=:dash, legend=nothing)
 plot!(x->x, x->0.98, 0., 5., line=2, color="red", linestyle=:dash, legend=nothing)

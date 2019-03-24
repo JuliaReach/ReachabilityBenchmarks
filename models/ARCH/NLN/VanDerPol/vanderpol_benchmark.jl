@@ -14,7 +14,6 @@ time_horizon = 7.0
 𝑂 = Options(:T=>time_horizon, :mode=>"check", :property=>(t, x) -> x[2] < 2.75)
 
 # algorithm-specific options
-#𝑂jets = Options(:abs_tol=>1e-1, :orderT=>2, :orderQ=>2, :max_steps=>500)
 𝑂jets = Options(:abs_tol=>1e-10, :orderT=>10, :orderQ=>2, :max_steps=>500)
 
 # first run

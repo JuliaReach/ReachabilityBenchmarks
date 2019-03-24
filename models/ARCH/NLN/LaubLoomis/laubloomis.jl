@@ -34,7 +34,7 @@ function laubloomis(; T=20.0, W=0.01, plot_vars=[0, 4],
 
     # general options
     𝑂 = Options(:T=>T, :plot_vars=>plot_vars, :property=>property,
-                :project_reachset=project_reachset)
+                :project_reachset=>project_reachset)
 
     return (𝑃, 𝑂)
 end

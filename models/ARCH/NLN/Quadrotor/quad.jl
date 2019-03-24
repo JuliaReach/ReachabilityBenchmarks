@@ -3,123 +3,126 @@
 # See https://easychair.org/publications/paper/gjfh
 # =================================================================
 
-using Reachability: Options, SafeStatesProperty
-using MathematicalSystems, LazySets
-using DynamicPolynomials, SemialgebraicSets
+using Reachability, MathematicalSystems, LazySets, TaylorIntegration
+using Reachability: solve
 
-# ==============================
-# Load model
-# ==============================
+# parameters of the model
+const g = 9.81           # gravity constant in m/s^2
+const R = 0.1            # radius of center mass in m
+const l = 0.5            # distance of motors to center mass in m
+const Mrotor = 0.1       # motor mass in kg
+const M = 1.0            # center mass in kg
+const m = M + 4*Mrotor   # total mass in kg
+const mg = m*g
 
-"""
-    quadrotor(; [T], [X0], [variables], [controller_inputs])
+# moments of inertia
+const Jx = (2/5)*M*R^2 + 2*l^2*Mrotor
+const Jy = Jx
+const Jz = (2/5)*M*R^2 + 4*l^2*Mrotor
+const Cyzx = (Jy - Jz)/Jx
+const Czxy = (Jz - Jx)/Jy
+const Cxyz = 0.0 #(Jx - Jy)/Jz
 
-Construct the Quadrotor model.
+# considering the control parameters as *parameters*
+const u₁ = 1.0
+const u₂ = 0.0
+const u₃ = 0.0
 
-### Input
+@inline function quad_property(t, x)
+    b1 = (x[3] < 1.4)
+    b2 = t ≥ 1.0 ? (x[3] > 0.9) : true
+    b3 = t ≥ 5.0 ? (0.98 ≤ x[3] ≤ 1.02) : true
+    return b1 && b2 && b3
+end
 
-- `T`                 -- (optional, default: `5.0`) time horizon
-- `X0`                -- (optional, default: position is uncertain in all directions
-                          within `[-0.4, 0.4]m` and velocity is uncertain in all directions
-                          within `[-0.4, 0.4]m/s`) set of initial states
-- `variables`         -- (optional, default: `PolyVar` variables) the set of polynomal
-                          variables that are used in the equations
-- `controller_inputs` -- (optional, default: `(1.0, 0.0, 0.0)`) tuple with
-                         the controller inputs `u₁`, `u₂` and `u₃` which
-                         correspond to the desired values for height, roll and
-                         pitch respectively
-
-### Output
-
-The tuple `(𝑃, 𝑂)` where `𝑃` is an initial-value problem and `𝑂` are the options.
-
-### Notes
-
- Physical variables:
- 
--  x₁ : interitial (north) position
--  x₂ : intertial (east) position
--  x₃ : altitude
--  x₄ : longitudinal velocity
--  x₅ : lateral velocity
--  x₆ : vertical velocity
--  x₇ : roll angle
--  x₈ : pitch angle
--  x₉ : yaw angle
--  x₁₀ : roll rate
--  x₁₁ : pitch rate
--  x₁₂ : yaw rate
-
-### Specification
-
-The task is to change the height from `0[m]` to `1[m]` within `5[s]`. A goal region
-`[0.98, 1.02]` of the height `x₃` has to be reached within `5[s]` and the height
-has to stay below 1.4 for all times. After `1[s]` the height should stay above
-`0.9[m]`.
-"""
-function quadrotor(; T=5.0,
-                     X0=Hyperrectangle(zeros(12), [fill(0.4, 6); fill(0.0, 6)]),
-                     variables=(@polyvar x[1:12]),
-                     controller_inputs=(1.0, 0.0, 0.0))
-
-    # parameters of the model
-    g = 9.81           # gravity constant in m/s^2
-    R = 0.1            # radius of center mass in m
-    l = 0.5            # distance of motors to center mass in m
-    Mrotor = 0.1       # motor mass in kg
-    M = 1.             # center mass in kg
-    m = M + 4*Mrotor   # total mass in kg
-
-    # moments of inertia
-    Jx = 2/5*M*R^2 + 2*l^2*Mrotor
-    Jy = Jx
-    Jz = 2/5*M*R^2 + 4*l^2*Mrotor
-
-    𝑂 = Options()
-
-    # unrwap the variables and the inputs
-    x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂ = variables[1] # or variables
-    u₁, u₂, u₃ = controller_inputs
-
-    𝑂[:variables] = variables
-    𝑂[:vars] = [1:12;]
+@taylorize function quadrotor!(t, x, dx)
+    # unwrap the variables and the controllers; the last three are the controllers
+    # x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, u₁, u₂, u₃ = x
+    x₁  = x[1]
+    x₂  = x[2]
+    x₃  = x[3]
+    x₄  = x[4]
+    x₅  = x[5]
+    x₆  = x[6]
+    x₇  = x[7]
+    x₈  = x[8]
+    x₉  = x[9]
+    x₁₀ = x[10]
+    x₁₁ = x[11]
+    x₁₂ = x[12]
 
     # equations of the controllers
-    F = m*g - 10*(x₃ - u₁) + 3*x₆  # height control
-    τϕ = -(x₇-u₂) - x₁₀            # roll control
-    τθ = -(x₈ - u₃) - x₁₁          # pitch control
-    τψ = 0                         # heading is uncontrolled
+    F = (mg - 10*(x₃ - u₁)) + 3*x₆  # height control
+    τϕ = -(x₇ - u₂) - x₁₀            # roll control
+    τθ = -(x₈ - u₃) - x₁₁            # pitch control
+    local τψ = 0.0                   # heading is uncontrolled
+    #
+    Tx = τϕ/Jx
+    Ty = τθ/Jy
+    Tz = τψ/Jz
+    F_m = F/m
+
+    # Some abbreviations
+    sx7 = sin(x₇)
+    cx7 = cos(x₇)
+    sx8 = sin(x₈)
+    cx8 = cos(x₈)
+    sx9 = sin(x₉)
+    cx9 = cos(x₉)
+    #
+    sx7sx9 = sx7*sx9
+    sx7cx9 = sx7*cx9
+    cx7sx9 = cx7*sx9
+    cx7cx9 = cx7*cx9
+    sx7cx8 = sx7*cx8
+    cx7cx8 = cx7*cx8
+    sx7_cx8 = sx7/cx8
+    cx7_cx8 = cx7/cx8    
+    #
+    x4cx8 = cx8*x₄
+    #
+    p11 = sx7_cx8*x₁₁
+    p12 = cx7_cx8*x₁₂
+    xdot9 = p11 + p12
 
     # differential equations for the quadrotor
-    ẋ₁ = cos(x₈)*cos(x₉)*x₄ + (sin(x₇)*sin(x₈)*cos(x₉) - cos(x₇)*sin(x₉))*x₅
-         + (cos(x₇)*sin(x₈)*cos(x₉) + sin(x₇)*sin(x₉))*x₆
-    ẋ₂ = cos(x₈)*sin(x₉)*x₄ + (sin(x₇)*sin(x₈)*sin(x₉) + cos(x₇)*cos(x₉))*x₅
-         + (cos(x₇)*sin(x₈)*sin(x₉) - sin(x₇)*cos(x₉))*x₆
-    ẋ₃ = sin(x₈)*x₄ - sin(x₇)*cos(x₈)*x₅ - cos(x₇)*cos(x₈)*x₆
-    ẋ₄ = x₁₂*x₅ - x₁₁*x₆ - g*sin(x₈)
-    ẋ₅ = x₁₀*x₆ - x₁₂*x₄ + g*cos(x₈)*sin(x₇)
-    ẋ₆ = x₁₁*x₄ - x₁₀*x₅ + g*cos(x₈)*cos(x₇) - F/m
-    ẋ₇ = x₁₀ + sin(x₇)*tan(x₈)*x₁₁ + cos(x₇)*tan(x₈)*x₁₂
-    ẋ₈ = cos(x₇)*x₁₁ - sin(x₇)*x₁₂
-    ẋ₉ = (sin(x₇)/cos(x₈))*x₁₁ + (cos(x₇)/cos(x₈))*x₁₂
-    ẋ₁₀ = (Jy - Jz)/Jx * x₁₁ * x₁₂ + τϕ/Jx
-    ẋ₁₁ = (Jz - Jx)/Jy * x₁₀ * x₁₂ + τθ/Jy
-    ẋ₁₂ = (Jx - Jy)/Jz * x₁₀ * x₁₁ + τψ/Jz
+    #    
+    dx[1] = (cx9*x4cx8 + (sx7cx9*sx8 - cx7sx9)*x₅) + (cx7cx9*sx8 + sx7sx9)*x₆
+    dx[2] = (sx9*x4cx8 + (sx7sx9*sx8 + cx7cx9)*x₅) + (cx7sx9*sx8 - sx7cx9)*x₆
+    dx[3] = (sx8*x₄ - sx7cx8*x₅) - cx7cx8*x₆
+    dx[4] = (x₁₂*x₅ - x₁₁*x₆) - g*sx8
+    dx[5] = (x₁₀*x₆ - x₁₂*x₄) + g*sx7cx8
+    dx[6] = (x₁₁*x₄ - x₁₀*x₅) + (g*cx7cx8 - F_m)
+    dx[7] = x₁₀ + sx8*xdot9
+    dx[8] = cx7*x₁₁ - sx7*x₁₂
+    dx[9] = xdot9
+    dx[10] = Cyzx * (x₁₁ * x₁₂) + Tx
+    dx[11] = Czxy * (x₁₀ * x₁₂) + Ty
+    dx[12] = Cxyz * (x₁₀ * x₁₁) + Tz
+     #
+    return dx
+end
 
-    𝐹 = PolynomialContinuousSystem(f)
+function quad(; T=5.0, plot_vars=[0, 3],
+                property=quad_property,
+                project_reachset=true)
+
+    # equations, x' = f(x(t))
+    𝐹 = BlackBoxContinuousSystem(quadrotor!, 12)
+
+    # initial conditions
+    Wpos = 0.4
+    Wvel = 0.4
+    X0c = zeros(12)
+    ΔX0 = [Wpos, Wpos, Wpos, Wvel, Wvel, Wvel, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    X0 = Hyperrectangle(X0c, ΔX0)
 
     # instantiate the IVP
     𝑃 = InitialValueProblem(𝐹, X0)
 
-    # time horizon
-    𝑂[:T] = T
+    # general options
+    𝑂 = Options(:T=>T, :plot_vars=>plot_vars, :property=>property,
+                :project_reachset=>project_reachset)
 
-    # variables to plot
-    𝑂[:plot_vars] = [0, 3]
-
-    # safety property
-    # TODO: add specification
-    #𝑂[:property] = LinearConstraintProperty([0, 0, 0, -1., 0, 0, 0], -unsafe_bound)
-    # @set x₄ ≥ 0.01, vars=(x₁, x₂, x₃, x₄, x₅, x₆, x₇)
     return (𝑃, 𝑂)
 end

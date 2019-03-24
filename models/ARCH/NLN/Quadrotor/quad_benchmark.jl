@@ -1,6 +1,5 @@
-using BenchmarkTools
+using BenchmarkTools, Plots, Plots.PlotMeasures, LaTeXStrings
 using BenchmarkTools: minimum, median
-using Reachability: Options
 
 SUITE = BenchmarkGroup()
 SUITE["Quadrotor"] = BenchmarkGroup()

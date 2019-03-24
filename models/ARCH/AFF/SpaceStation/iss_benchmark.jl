@@ -49,12 +49,12 @@ plot(res,
      ylab=L"y_3\raisebox{2mm}{\textcolor{white}{.}}",
      xtick=[0., 10., 20.], ytick=[-7e-4, -5e-4, 0., 5e-4, 7e-4],
      xlims=(0., 20.), ylims=(-8e-4, 8e-4),
+     yformatter = yi -> yi == 0 ? "0" : latexstring("\$$(Int(yi*1e4))\\cdot10^{-4}\$"),
      bottom_margin=6mm, left_margin=2mm, right_margin=2mm,
      size=(1000, 1000))
 plot_dashed_lines!(0.0005)
 plot_dashed_lines!(0.0007)
 savefig("ISSF01.png")
-
 
 𝑂_ISS02[:mode] = "reach"
 𝑂_ISS02[:projection_matrix] = projection_matrix
@@ -70,6 +70,7 @@ plot(res,
      ylab=L"y_3\raisebox{2mm}{\textcolor{white}{.}}",
      xtick=[0., 10., 20.], ytick=[-17e-5, 0., 17e-5],
      xlims=(0., 20.), ylims=(-2e-4, 2e-4),
+     yformatter = yi -> yi == 0 ? "0" : latexstring("\$$(round(yi*1e4, digits=1))\\cdot10^{-4}\$"),
      bottom_margin=6mm, left_margin=2mm, right_margin=2mm,
      size=(1000, 1000))
 plot_dashed_lines!(0.00017)

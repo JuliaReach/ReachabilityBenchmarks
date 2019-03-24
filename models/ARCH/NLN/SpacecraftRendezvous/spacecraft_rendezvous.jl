@@ -95,14 +95,14 @@ function spacecraft_rendezvous()
     # transition 1 -> 2
     add_transition!(automaton, 1, 2, 1)
     guard = HPolyhedron([
-        HalfSpace(sparsevec([y], [-1.], n), 100.),           # y >= -100
-        HalfSpace(sparsevec([x, y], [-1., -1.], n), 141.1),  # x + y >= -141.1
         HalfSpace(sparsevec([x], [-1.], n), 100.),           # x >= -100
-        HalfSpace(sparsevec([x, y], [-1., 1.], n), 141.1),   # -x + y <= 141.1
-        HalfSpace(sparsevec([y], [1.], n), 100.),            # y <= 100
-        HalfSpace(sparsevec([x, y], [1., 1.], n), 141.1),    # x + y <= 141.1
         HalfSpace(sparsevec([x], [1.], n), 100.),            # x <= 100
+        HalfSpace(sparsevec([y], [-1.], n), 100.),           # y >= -100
+        HalfSpace(sparsevec([y], [1.], n), 100.),            # y <= 100
+        HalfSpace(sparsevec([x, y], [-1., -1.], n), 141.1),  # x + y >= -141.1
+        HalfSpace(sparsevec([x, y], [1., 1.], n), 141.1),    # x + y <= 141.1
         HalfSpace(sparsevec([x, y], [1., -1.], n), 141.1),   # -x + y >= -141.1
+        HalfSpace(sparsevec([x, y], [-1., 1.], n), 141.1)   # -x + y <= 141.1
        ])
     t₁ = ConstrainedIdentityMap(n, guard)
 

@@ -52,7 +52,7 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
     # common vector of affine dynamics
     b = sparsevec([t], [1.], n)
 
-    # mode 1 ("Mode 1")
+    # mode 1 ("approaching")
     A = spzeros(n, n)
     A[x, vx] = 1.
     A[y, vy] = 1.
@@ -73,7 +73,7 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
     end
     m_1 = CACS(A, b, invariant)
 
-    # mode 2 ("Mode 2")
+    # mode 2 ("rendezvous attempt")
     A = spzeros(n, n)
     A[x, vx] = 1.
     A[y, vy] = 1.
@@ -100,7 +100,7 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
     end
     m_2 = CACS(A, b, invariant)
 
-    # mode 3 ("Passive")
+    # mode 3 ("aborting")
     A = spzeros(n, n)
     A[x, vx] = 1.
     A[y, vy] = 1.
@@ -116,14 +116,14 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
     # transition 1 -> 2
     add_transition!(automaton, 1, 2, 1)
     guard = HPolyhedron([
-        HalfSpace(sparsevec([y], [-1.], n), 100.),           # y >= -100
-        HalfSpace(sparsevec([x, y], [-1., -1.], n), 141.1),  # x + y >= -141.1
         HalfSpace(sparsevec([x], [-1.], n), 100.),           # x >= -100
-        HalfSpace(sparsevec([x, y], [-1., 1.], n), 141.1),   # -x + y <= 141.1
-        HalfSpace(sparsevec([y], [1.], n), 100.),            # y <= -100
-        HalfSpace(sparsevec([x, y], [1., 1.], n), 141.1),    # x + y <= 141.1
         HalfSpace(sparsevec([x], [1.], n), 100.),            # x <= 100
+        HalfSpace(sparsevec([y], [-1.], n), 100.),           # y >= -100
+        HalfSpace(sparsevec([y], [1.], n), 100.),            # y <= 100
+        HalfSpace(sparsevec([x, y], [-1., -1.], n), 141.1),  # x + y >= -141.1
+        HalfSpace(sparsevec([x, y], [1., 1.], n), 141.1),    # x + y <= 141.1
         HalfSpace(sparsevec([x, y], [1., -1.], n), 141.1),   # -x + y >= -141.1
+        HalfSpace(sparsevec([x, y], [-1., 1.], n), 141.1)    # -x + y <= 141.1
        ])
     t1 = ConstrainedIdentityMap(n, guard)
 
@@ -159,14 +159,14 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
     cx = velocity * cos(π / 8)  # x-coordinate of the octagon's first (ENE) corner
     cy = velocity * sin(π / 8)  # y-coordinate of the octagon's first (ENE) corner
     octagon = [
-        HalfSpace(sparsevec([vx], [1.], n), cx),                 # vx <= cx
-        HalfSpace(sparsevec([vx, vy], [1., 1.], n), cy + cx),    # vx + vy <= cy + cx
-        HalfSpace(sparsevec([vy], [1.], n), cx),                 # vy <= cx
-        HalfSpace(sparsevec([vx, vy], [-1., 1.], n), cy + cx),   # -vx + vy <= cy + cx
         HalfSpace(sparsevec([vx], [-1.], n), cx),                # vx >= -cx
-        HalfSpace(sparsevec([vx, vy], [-1., -1.], n), cy + cx),  # -vx - vy <= cy + cx
+        HalfSpace(sparsevec([vx], [1.], n), cx),                 # vx <= cx
         HalfSpace(sparsevec([vy], [-1.], n), cx),                # vy >= -cx
+        HalfSpace(sparsevec([vy], [1.], n), cx),                 # vy <= cx
+        HalfSpace(sparsevec([vx, vy], [1., 1.], n), cy + cx),    # vx + vy <= cy + cx
         HalfSpace(sparsevec([vx, vy], [1., -1.], n), cy + cx)    # vx - vy <= cy + cx
+        HalfSpace(sparsevec([vx, vy], [-1., 1.], n), cy + cx),   # -vx + vy <= cy + cx
+        HalfSpace(sparsevec([vx, vy], [-1., -1.], n), cy + cx),  # -vx - vy <= cy + cx
        ]
     tan30 = tan(π/6)
     cone = [
@@ -175,12 +175,12 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
         HalfSpace(sparsevec([x, y], [tan30, 1.], n), 0.),   # -x tan(30°) - y >= 0
        ]
     property_rendezvous = SafeStatesProperty(HPolytope([octagon; cone]))
-    # safety property in "Passive"
+    # safety property in "aborting"
     target = HPolytope([
-        HalfSpace(sparsevec([x], [1.], n), 0.2),   # x <= 0.2
         HalfSpace(sparsevec([x], [-1.], n), 0.2),  # x >= -0.2
-        HalfSpace(sparsevec([y], [1.], n), 0.2),   # y <= 0.2
+        HalfSpace(sparsevec([x], [1.], n), 0.2),   # x <= 0.2
         HalfSpace(sparsevec([y], [-1.], n), 0.2),  # y >= -0.2
+        HalfSpace(sparsevec([y], [1.], n), 0.2),   # y <= 0.2
        ])
     property_aborting = BadStatesProperty(target)
     # safety properties

@@ -20,7 +20,8 @@ using Reachability: solve
 end
 
 function laubloomis(; T=20.0, W=0.01, plot_vars=[0, 4],
-                      property=(t,x)->x[4] < 4.5)
+                      property=(t,x)->x[4] < 4.5,
+                      project_reachset=true)
 
     # equations, x' = f(x(t))
     𝐹 = BlackBoxContinuousSystem(laubloomis!, 7)
@@ -32,7 +33,8 @@ function laubloomis(; T=20.0, W=0.01, plot_vars=[0, 4],
     𝑃 = InitialValueProblem(𝐹, X0)
 
     # general options
-    𝑂 = Options(:T=>T, :plot_vars=>plot_vars, :property=>property)
+    𝑂 = Options(:T=>T, :plot_vars=>plot_vars, :property=>property,
+                :project_reachset=project_reachset)
 
     return (𝑃, 𝑂)
 end

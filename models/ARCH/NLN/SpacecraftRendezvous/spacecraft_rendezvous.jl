@@ -29,6 +29,9 @@ const n = sqrt(μ / r^3)
     # vy' = n²y - 2n*vx - μ/(rc^3)y + uy/mc
     dx[4] = (n^2*x[2] - 2*(n*x[3])) - (μ/(rc^3)*x[2] - uxy[2]/mc)
 
+    # t' = 1
+    dx[5] = 1.0
+
     return dx
 end
 
@@ -48,12 +51,22 @@ end
     # vy' = n²y - 2n*vx - μ/(rc^3)y
     dx[4] = (n^2*x[2] - 2*n*x[3]) - μ/(rc^3)*x[2]
 
+    # t' = 1
+    dx[5] = 1.0
+
     return dx
 end
 
 function spacecraft_rendezvous()
+    # variables
+    x = 1   # x position (negative!)
+    y = 2   # y position (negative!)
+    vx = 3  # x velocity
+    vy = 4  # y velocity
+    t = 5   # time
+
     # number of variables
-    n = 4
+    n = 4 + 1
 
     # time of abort
     t_abort = 120.0
@@ -69,7 +82,7 @@ function spacecraft_rendezvous()
         HalfSpace(sparsevec([x], [1.], n), -100.),    # x <= -100
         HalfSpace(sparsevec([t], [1.], n), t_abort))  # t <= t_abort
        ])
-    m₁ = CBBCS(𝐹, 4, invariant)
+    m₁ = CBBCS(𝐹, 5, invariant)
 
     # mode 2 ("rendezvous attempt")
     K₂ = [-288.0288 0.1312 -9614.9898 0.0;
@@ -86,12 +99,12 @@ function spacecraft_rendezvous()
         HalfSpace(sparsevec([x, y], [-1., 1.], n), 141.1),   # -x + y <= 141.1
         HalfSpace(sparsevec([t], [1.], n), t_abort))         # t <= t_abort
        ])
-    m₂ = CBBCS(𝐹, 4, invariant)
+    m₂ = CBBCS(𝐹, 5, invariant)
 
     # mode 3 ("aborting")
     𝐹 = spacecraft_aborting!
     invariant = Universe(n)
-    m₃ = CBBCS(𝐹, 4, invariant)
+    m₃ = CBBCS(𝐹, 5, invariant)
 
     # modes
     modes = aborting ? [m₁, m₂, m₃]

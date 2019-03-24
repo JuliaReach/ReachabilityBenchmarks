@@ -164,9 +164,9 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
         HalfSpace(sparsevec([vy], [-1.], n), cx),                # vy >= -cx
         HalfSpace(sparsevec([vy], [1.], n), cx),                 # vy <= cx
         HalfSpace(sparsevec([vx, vy], [1., 1.], n), cy + cx),    # vx + vy <= cy + cx
-        HalfSpace(sparsevec([vx, vy], [1., -1.], n), cy + cx)    # vx - vy <= cy + cx
+        HalfSpace(sparsevec([vx, vy], [1., -1.], n), cy + cx),   # vx - vy <= cy + cx
         HalfSpace(sparsevec([vx, vy], [-1., 1.], n), cy + cx),   # -vx + vy <= cy + cx
-        HalfSpace(sparsevec([vx, vy], [-1., -1.], n), cy + cx),  # -vx - vy <= cy + cx
+        HalfSpace(sparsevec([vx, vy], [-1., -1.], n), cy + cx)   # -vx - vy <= cy + cx
        ]
     tan30 = tan(π/6)
     cone = [

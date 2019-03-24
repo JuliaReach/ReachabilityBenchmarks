@@ -14,7 +14,8 @@ time_horizon = 7.0
 𝑂 = Options(:T=>time_horizon, :mode=>"check", :property=>(t, x) -> x[2] < 2.75)
 
 # algorithm-specific options
-𝑂jets = Options(:abs_tol=>1e-1, :orderT=>2, :orderQ=>2, :max_steps=>500)
+#𝑂jets = Options(:abs_tol=>1e-1, :orderT=>2, :orderQ=>2, :max_steps=>500)
+𝑂jets = Options(:abs_tol=>1e-10, :orderT=>10, :orderQ=>2, :max_steps=>500)
 
 # first run
 sol = solve(𝑃, 𝑂, op=TMJets(𝑂jets))
@@ -52,7 +53,7 @@ plot(sol,
      xtick=[-3., -2., -1., 0., 1., 2., 3.], ytick=[-3., -2., -1., 0., 1., 2., 3.],
      xlims=(-3., 3.), ylims=(-3., 3.),
      bottom_margin=6mm, left_margin=2mm, right_margin=4mm, top_margin=3mm,
-     size=(1000, 1000), lw=0.0)
+     size=(1000, 1000), linecolor="lightblue")
 
 plot!(x->x, x->2.75, -3., 3., line=2, color="red", linestyle=:dash, legend=nothing)
 savefig(@relpath "vanderpol.png")

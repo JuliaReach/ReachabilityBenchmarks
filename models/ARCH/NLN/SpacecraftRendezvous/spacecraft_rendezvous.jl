@@ -19,7 +19,7 @@ K₂ = [-288.0288 0.1312 -9614.9898 0.0;
 # dynamics in the 'approaching' mode
 @taylorize function spacecraft_approaching!(t, x, dx)
     local rc = sqrt((r + x[1])^2 + x[2]^2)
-    local uxy = K₁ * x
+    local uxy = K₁ * x[1:4]
 
     # x' = vx
     dx[1] = x[3]
@@ -34,7 +34,7 @@ K₂ = [-288.0288 0.1312 -9614.9898 0.0;
     dx[4] = (n^2*x[2] - 2*(n*x[3])) - (μ/(rc^3)*x[2] - uxy[2]/mc)
 
     # t' = 1
-    dx[5] = 1.0
+    dx[5] = 1.0 + 0.0*x[1]
 
     return dx
 end
@@ -42,7 +42,7 @@ end
 # dynamics in the 'rendezvous attempt' mode
 @taylorize function spacecraft_rendezvous_attempt!(t, x, dx)
     local rc = sqrt((r + x[1])^2 + x[2]^2)
-    local uxy = K₂ * x
+    local uxy = K₂ * x[1:4]
 
     # x' = vx
     dx[1] = x[3]
@@ -57,7 +57,7 @@ end
     dx[4] = (n^2*x[2] - 2*(n*x[3])) - (μ/(rc^3)*x[2] - uxy[2]/mc)
 
     # t' = 1
-    dx[5] = 1.0
+    dx[5] = 1.0 + 0.0*x[1]
 
     return dx
 end
@@ -79,7 +79,7 @@ end
     dx[4] = (n^2*x[2] - 2*n*x[3]) - μ/(rc^3)*x[2]
 
     # t' = 1
-    dx[5] = 1.0
+    dx[5] = 1.0 + 0.0*x[1]
 
     return dx
 end
@@ -164,7 +164,7 @@ function spacecraft_rendezvous()
 
     ℋ = HybridSystem(automaton, modes, resetmaps, switchings)
 
-    X0 = Hyperrectangle([-900., -400., 0., 0.], [25., 25., 0., 0.])
+    X0 = Hyperrectangle([-900., -400., 0., 0., 0.], [25., 25., 0., 0., 0.])
     initial_condition = [(1, X0)]
 
     𝑃 = InitialValueProblem(ℋ, initial_condition)

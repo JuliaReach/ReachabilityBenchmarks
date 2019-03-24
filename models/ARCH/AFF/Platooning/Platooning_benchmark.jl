@@ -29,7 +29,7 @@ options_PLAN01_UNB50[:mode] = "check"
 𝑂_dense_options_PLAD01_BND42 = merge(𝑂_common, Options(:δ => 0.01))
 𝑂_dense_options_PLAD01_BND30 = merge(𝑂_common, Options(:δ => 0.00001))
 𝑂_dense_options_PLAN01_UNB50 = merge(𝑂_common, Options(:δ => 0.03))
-𝑂_discrete = merge(𝑂_common, Options(:discretization => "nobloating", :δ => 0.05))
+𝑂_discrete = merge(𝑂_common, Options(:discretization => "nobloating", :δ => 0.1))
 
 opC_dense_PLAD01_BND42 = BFFPSV18(𝑂_dense_options_PLAD01_BND42)
 opC_dense_PLAD01_BND30 = BFFPSV18(𝑂_dense_options_PLAD01_BND30)

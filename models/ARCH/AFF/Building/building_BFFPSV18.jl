@@ -11,7 +11,7 @@ include("building.jl")
 𝑂_dense_BLDF01 = Options(:vars => [25], :partition => [1:24, [25], 26:48],
                          :δ => 0.003, :block_options_init => LazySets.LinearMap)
 𝑂_discrete_BLDF01 =
-    merge(𝑂_dense_BLDF01, Options(:discretization => "nobloating", :δ => 0.005))
+    merge(𝑂_dense_BLDF01, Options(:discretization => "nobloating", :δ => 0.01))
 
 # single run to verify that specification holds
 sol_BLDF01_dense = solve(build_TV, 𝑂_BLDF01, op=BFFPSV18(𝑂_dense_BLDF01))

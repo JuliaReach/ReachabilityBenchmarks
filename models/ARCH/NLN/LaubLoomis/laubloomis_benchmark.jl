@@ -12,7 +12,7 @@ include("laubloomis.jl")
 # --- Case 1: smaller initial states ---
 𝑃, 𝑂 = laubloomis(W=0.01, property=(t,x)->x[4] < 4.5)
 
-𝑂₁ = Options(:abs_tol=>1e-10, :orderT=>7, :orderQ=>2, :max_steps=>1000)
+𝑂₁ = Options(:abs_tol=>1e-10, :orderT=>7, :orderQ=>1, :max_steps=>1000)
 
 # first run
 sol_case_1 = solve(𝑃, 𝑂, op=TMJets(𝑂₁))
@@ -27,7 +27,7 @@ SUITE["LaubLoomis"]["W=0.01"] = @benchmarkable solve($𝑃, $𝑂, op=TMJets($�
 # --- Case 2: larger initial states ---
 𝑃, 𝑂 = laubloomis(W=0.1, property=(t,x)->x[4] < 5.0)
 
-𝑂₂ = copy(𝑂₁)
+𝑂₂ = Options(:abs_tol=>1e-6, :orderT=>7, :orderQ=>2, :max_steps=>1000)
 
 # first run
 sol_case_2 = solve(𝑃, 𝑂, op=TMJets(𝑂₂))

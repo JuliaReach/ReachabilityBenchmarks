@@ -104,8 +104,8 @@ function spacecraft_rendezvous()
     # mode 1 ("approaching")
     𝐹 = (t, x, dx) -> spacecraft_approaching!(t, x, dx)
     invariant = HPolyhedron([
-        HalfSpace(sparsevec([x], [1.], n), -100.),    # x <= -100
-        HalfSpace(sparsevec([t], [1.], n), t_abort))  # t <= t_abort
+        HalfSpace(sparsevec([x], [1.], n), -100.),   # x <= -100
+        HalfSpace(sparsevec([t], [1.], n), t_abort)  # t <= t_abort
        ])
     m₁ = CBBCS(𝐹, 5, invariant)
 
@@ -120,7 +120,7 @@ function spacecraft_rendezvous()
         HalfSpace(sparsevec([x, y], [1., 1.], n), 141.1),    # x + y <= 141.1
         HalfSpace(sparsevec([x, y], [1., -1.], n), 141.1),   # -x + y >= -141.1
         HalfSpace(sparsevec([x, y], [-1., 1.], n), 141.1),   # -x + y <= 141.1
-        HalfSpace(sparsevec([t], [1.], n), t_abort))         # t <= t_abort
+        HalfSpace(sparsevec([t], [1.], n), t_abort)          # t <= t_abort
        ])
     m₂ = CBBCS(𝐹, 5, invariant)
 
@@ -130,7 +130,7 @@ function spacecraft_rendezvous()
     m₃ = CBBCS(𝐹, 5, invariant)
 
     # modes
-    modes = aborting ? [m₁, m₂, m₃]
+    modes = [m₁, m₂, m₃]
 
     # transition 1 -> 2
     add_transition!(automaton, 1, 2, 1)

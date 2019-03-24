@@ -9,7 +9,7 @@ SUITE["Quadrotor"] = BenchmarkGroup()
 # ==============================================================================
 include("quadrotor.jl")
 
-𝑃, 𝑂 = quad(project_reachset=>false)
+𝑃, 𝑂 = quad(project_reachset=false)
 
 # algorithm-specific options
 𝑂jets = Options(:abs_tol=>1e-7, :orderT=>5, :orderQ=>1, :max_steps=>500)
@@ -40,7 +40,7 @@ println("median time for each benchmark:\n", median(results))
 # Create plots
 # ==============================================================================
 
-𝑃, 𝑂 = quad(project_reachset=>true)
+𝑃, 𝑂 = quad(project_reachset=true)
 sol = solve(𝑃, 𝑂, op=TMJets(𝑂jets))
 
 plot(sol,

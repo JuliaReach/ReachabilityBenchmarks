@@ -16,9 +16,9 @@ include("iss.jl")
 𝑂_dense_ISU = Options(:δ=>5e-3, :vars=>136:270, :assume_sparse=>true)
 𝑂_dense_ISS01 = Options(:δ=>6e-4, :vars=>136:270, :assume_sparse=>true,
                         :lazy_inputs_interval=>-1, :partition=>[1:135, 136:270])
-𝑂_discrete_ISU = Options(:discretization=>"nobloating", :δ=>5e-3,
+𝑂_discrete_ISU = Options(:discretization=>"nobloating", :δ=>0.01,
                          :vars=>136:270, :assume_sparse=>true)
-𝑂_discrete_ISS01 = Options(:discretization=>"nobloating", :δ=>5e-3,
+𝑂_discrete_ISS01 = Options(:discretization=>"nobloating", :δ=>0.01,
                            :vars=>136:270, :assume_sparse=>true,
                            :lazy_inputs_interval=>-1,
                            :partition=>[1:135, 136:270])

@@ -12,12 +12,12 @@ include("laubloomis_TMJets.jl")
 # --- Case 1: smaller initial states ---
 
 𝑂₁ = Options(:t0=>0.0, :T=>20.0, :W=>0.01, :abs_tol=>1e-10,
-              :orderT=>7, :orderQ=>2, :maxsteps=>1000, :property=>(t,x)->x[4] < 4.5)
+              :orderT=>7, :orderQ=>2, :max_steps=>1000, :property=>(t,x)->x[4] < 4.5)
 
 # first run
 tTM, xTM = laubloomis_TMJets(; t0=𝑂₁[:t0], T=𝑂₁[:T], W=𝑂₁[:W],
                 abs_tol=𝑂₁[:abs_tol], orderT=𝑂₁[:orderT], orderQ=𝑂₁[:orderQ],
-                maxsteps=𝑂₁[:maxsteps], property=𝑂₁[:property])
+                maxsteps=𝑂₁[:max_steps], property=𝑂₁[:property])
 
 # verify that specification holds
 @assert all([xTM[ind][4] < 4.5 for ind in eachindex(xTM[:])])
@@ -25,17 +25,17 @@ tTM, xTM = laubloomis_TMJets(; t0=𝑂₁[:t0], T=𝑂₁[:T], W=𝑂₁[:W],
 # benchmark
 SUITE["LaubLoomis"]["W=0.01"] = @benchmarkable laubloomis_TMJets(; t0=$𝑂₁[:t0], T=$𝑂₁[:T], W=$𝑂₁[:W],
                 abs_tol=$𝑂₁[:abs_tol], orderT=$𝑂₁[:orderT], orderQ=$𝑂₁[:orderQ],
-                maxsteps=$𝑂₁[:maxsteps], property=$𝑂₁[:property])
+                maxsteps=$𝑂₁[:max_steps], property=$𝑂₁[:property])
 
 # --- Case 2: larger initial states ---
 
 𝑂₂ = Options(:t0=>0.0, :T=>20.0, :W=>0.1, :abs_tol=>1e-10,
-              :orderT=>7, :orderQ=>2, :maxsteps=>1000, :property=>(t,x)->x[4] < 5.0)
+              :orderT=>7, :orderQ=>2, :max_steps=>1000, :property=>(t,x)->x[4] < 5.0)
 
 # first run
 tTM, xTM = laubloomis_TMJets(; t0=𝑂₂[:t0], T=𝑂₂[:T], W=𝑂₂[:W],
                 abs_tol=𝑂₂[:abs_tol], orderT=𝑂₂[:orderT], orderQ=𝑂₂[:orderQ],
-                maxsteps=𝑂₂[:maxsteps], property=𝑂₂[:property])
+                maxsteps=𝑂₂[:max_steps], property=𝑂₂[:property])
 
 # verify that specification holds
 @assert all([xTM[ind][4] < 5.0 for ind in eachindex(xTM[:])])
@@ -46,7 +46,7 @@ tTM, xTM = laubloomis_TMJets(; t0=𝑂₂[:t0], T=𝑂₂[:T], W=𝑂₂[:W],
 # benchmark
 SUITE["LaubLoomis"]["W=0.1"] = @benchmarkable tTM, xTM = laubloomis_TMJets(; t0=$𝑂₂[:t0], T=$𝑂₂[:T], W=$𝑂₂[:W],
                 abs_tol=$𝑂₂[:abs_tol], orderT=$𝑂₂[:orderT], orderQ=$𝑂₂[:orderQ],
-                maxsteps=$𝑂₂[:maxsteps], property=$𝑂₂[:property])
+                maxsteps=$𝑂₂[:max_steps], property=$𝑂₂[:property])
 
 # ==============================================================================
 # Execute benchmarks and save benchmark results

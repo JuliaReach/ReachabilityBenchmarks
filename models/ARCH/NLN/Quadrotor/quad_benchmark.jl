@@ -12,12 +12,12 @@ include("quad_TMJets.jl")
 
 # benchmark settings
 𝑂 = Options(:t0=>0.0, :T=>5.0, :abs_tol=>1e-7, :orderT=>5, :orderQ=>2,
-            :maxsteps=>500, :property=>quad_property)
+            :max_steps=>500, :property=>quad_property)
 
 # first run
 tTM, xTM = quad_TMJets(; t0=𝑂[:t0], T=𝑂[:T], abs_tol=𝑂[:abs_tol],
                 orderT=𝑂[:orderT], orderQ=𝑂[:orderQ],
-                maxsteps=𝑂[:maxsteps], property=𝑂[:property])
+                maxsteps=𝑂[:max_steps], property=𝑂[:property])
 
 # verify that specification holds
 @assert all([quad_property(tTM[ind], xTM[ind]) for ind in eachindex(xTM[:])])
@@ -25,7 +25,7 @@ tTM, xTM = quad_TMJets(; t0=𝑂[:t0], T=𝑂[:T], abs_tol=𝑂[:abs_tol],
 # benchmark
 SUITE["Quadrotor"]["control property"] = @benchmarkable quad_TMJets(; t0=$𝑂[:t0], T=$𝑂[:T],
                 abs_tol=$𝑂[:abs_tol], orderT=$𝑂[:orderT], orderQ=$𝑂[:orderQ],
-                maxsteps=$𝑂[:maxsteps], property=$𝑂[:property])
+                maxsteps=$𝑂[:max_steps], property=$𝑂[:property])
 
 # ==============================================================================
 # Execute benchmarks and save benchmark results

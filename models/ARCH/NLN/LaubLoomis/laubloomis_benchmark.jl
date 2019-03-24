@@ -27,7 +27,7 @@ SUITE["LaubLoomis"]["W=0.01"] = @benchmarkable solve($𝑃, $𝑂, op=TMJets($�
 # --- Case 2: larger initial states ---
 𝑃, 𝑂 = laubloomis(W=0.1, property=(t,x)->x[4] < 5.0)
 
-𝑂₂ = Options(:abs_tol=>1e-6, :orderT=>7, :orderQ=>2, :max_steps=>1000)
+𝑂₂ = Options(:abs_tol=>1e-10, :orderT=>7, :orderQ=>2, :max_steps=>1000)
 
 # first run
 sol_case_2 = solve(𝑃, 𝑂, op=TMJets(𝑂₂))
@@ -60,7 +60,7 @@ println("median time for each benchmark:\n", median(results))
 
 plot(sol_case_1,
      tickfont=font(30, "Times"), guidefontsize=45,
-     xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",
+     xlab=L"t\raisebox{2.0mm}{\textcolor{white}{.}}",
      ylab=L"x_{4}\raisebox{1.2mm}{\textcolor{white}{.}}",
      xtick=[0., 2., 4., 6., 8., 10., 12., 14., 16., 18., 20.],
      ytick=[2, 2.5, 3, 3.5, 4, 4.5],
@@ -73,7 +73,7 @@ savefig(@relpath "laubloomis_case_1.png")
 
 plot(sol_case_2,
      tickfont=font(30, "Times"), guidefontsize=45,
-     xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",
+     xlab=L"t\raisebox{2.0mm}{\textcolor{white}{.}}",
      ylab=L"x_{4}\raisebox{1.2mm}{\textcolor{white}{.}}",
      xtick=[0., 2., 4., 6., 8., 10., 12., 14., 16., 18., 20.],
      ytick=[2, 2.5, 3, 3.5, 4, 4.5, 5.0],

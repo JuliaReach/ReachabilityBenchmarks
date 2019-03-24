@@ -7,7 +7,7 @@ SUITE["VanDerPol"] = BenchmarkGroup()
 # ==============================================================================
 # Jet-based approach using Taylor Models
 # ==============================================================================
-include("vanderpol_TMJets.jl")
+include("vanderpol.jl")
 
 # benchmark settings
 time_horizon = 7.0

@@ -7,7 +7,7 @@ SUITE["Quadrotor"] = BenchmarkGroup()
 # ==============================================================================
 # Jet-based approach using Taylor Models
 # ==============================================================================
-include("quad_TMJets.jl")
+include("quad.jl")
 
 # benchmark settings
 𝑂 = Options(:t0=>0.0, :T=>5.0, :abs_tol=>1e-7, :orderT=>5, :orderQ=>2,

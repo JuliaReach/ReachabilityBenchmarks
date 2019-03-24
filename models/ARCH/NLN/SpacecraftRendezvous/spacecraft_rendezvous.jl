@@ -4,8 +4,8 @@
 # https://gitlab.com/goranf/ARCH-COMP/blob/master/2018/NLN/C2E2/ARCH18_NLN/rendezvous/c2e2_nonlinear_pass_4d.hyxml
 # for a reference model
 # ===========================================================================
-using SparseArrays, HybridSystems, MathematicalSystems, LazySets, Reachability
-using TaylorIntegration
+using SparseArrays, HybridSystems, MathematicalSystems, LazySets, Reachability, TaylorIntegration
+using Reachability: solve
 
 # dynamics
 @taylorize function spacecraft!(t, x, dx)
@@ -63,7 +63,7 @@ end
 
 function spacecraft_TMJets(property; T=200.0, orderT=10, orderQ=2, abs_tol=1e-10, maxsteps=500)
     X0 = Hyperrectangle([-900., -400., 0., 0.], [25, 25, 0, 0.])
-    𝐹 = BlackBoxContinuousSystem(spacecraft!, 4, X0)
+    𝐹 = BlackBoxContinuousSystem(spacecraft!, 4)
     𝑃 = InitialValueProblem(𝐹, X0)
     𝑂 = Options(:property=>property, :T=>T)
     𝑂jets = Options(:orderT=>orderT, :orderQ=>orderQ, :abs_tol=>abs_tol, :maxsteps=>maxsteps)

@@ -133,16 +133,48 @@ function spacecraft_rendezvous()
 
     𝑃 = InitialValueProblem(ℋ, initial_condition)
 
-    # TODO
-    property = (t, x) -> true
+    # safety property in "Mode 2"
+    velocity = 0.055 * 60.  # meters per minute
+    cx = velocity * cos(π / 8)  # x-coordinate of the octagon's first (ENE) corner
+    cy = velocity * sin(π / 8)  # y-coordinate of the octagon's first (ENE) corner
+    octagon = [
+        HalfSpace(sparsevec([vx], [1.], n), cx),                 # vx <= cx
+        HalfSpace(sparsevec([vx, vy], [1., 1.], n), cy + cx),    # vx + vy <= cy + cx
+        HalfSpace(sparsevec([vy], [1.], n), cx),                 # vy <= cx
+        HalfSpace(sparsevec([vx, vy], [-1., 1.], n), cy + cx),   # -vx + vy <= cy + cx
+        HalfSpace(sparsevec([vx], [-1.], n), cx),                # vx >= -cx
+        HalfSpace(sparsevec([vx, vy], [-1., -1.], n), cy + cx),  # -vx - vy <= cy + cx
+        HalfSpace(sparsevec([vy], [-1.], n), cx),                # vy >= -cx
+        HalfSpace(sparsevec([vx, vy], [1., -1.], n), cy + cx)    # vx - vy <= cy + cx
+       ]
+    tan30 = tan(π/6)
+    cone = [
+        HalfSpace(sparsevec([x], [-1.], n), 100.),          # x >= -100
+        HalfSpace(sparsevec([x, y], [tan30, -1.], n), 0.),  # -x tan(30°) + y >= 0
+        HalfSpace(sparsevec([x, y], [tan30, 1.], n), 0.),   # -x tan(30°) - y >= 0
+       ]
+    property_rendezvous = SafeStatesProperty(HPolytope([octagon; cone]))
+    # safety property in "Passive"
+    target = HPolytope([
+        HalfSpace(sparsevec([x], [1.], n), 0.2),   # x <= 0.2
+        HalfSpace(sparsevec([x], [-1.], n), 0.2),  # x >= -0.2
+        HalfSpace(sparsevec([y], [1.], n), 0.2),   # y <= 0.2
+        HalfSpace(sparsevec([y], [-1.], n), 0.2),  # y >= -0.2
+       ])
+    property_aborting = BadStatesProperty(target)
+    # safety properties
+    property = Dict{Int, Property}(2 => property_rendezvous,
+                                   3 => property_aborting)
 
     𝑂 = Options(:T=>200.0, :property=>property)
 
     return 𝑃, 𝑂
 end
 
-function spacecraft_TMJets(property; T=200.0, orderT=10, orderQ=2, abs_tol=1e-10, max_steps=500)
+function spacecraft_TMJets(T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
+                           max_steps=500)
     𝑃, 𝑂 = spacecraft_rendezvous()
-    𝑂jets = Options(:orderT=>orderT, :orderQ=>orderQ, :abs_tol=>abs_tol, :max_steps=>max_steps)
+    𝑂jets = Options(:orderT=>orderT, :orderQ=>orderQ, :abs_tol=>abs_tol,
+                    :max_steps=>max_steps)
     return 𝑃, 𝑂, 𝑂jets
 end

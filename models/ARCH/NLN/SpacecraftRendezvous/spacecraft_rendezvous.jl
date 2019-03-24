@@ -32,7 +32,7 @@ using Reachability: solve
     dx[3] = ((n^2*x[1] + 2*n*x[4]) + μ/(r^2)) + (μ/(rc^3)*(r + x[1]) + ux/mc)
 
     # vy' = n²y - 2n*vx - μ/(rc^3)y + uy/mc
-    dx[4] = (n^2*x[2] - 2*n*x[3]) - (μ/(rc^3)*x[2] + uy/mc)
+    dx[4] = (n^2*x[2] - 2*n*x[3]) - (μ/(rc^3)*x[2] - uy/mc)
 
     return dx
 end

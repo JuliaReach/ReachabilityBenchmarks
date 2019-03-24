@@ -122,7 +122,7 @@ function quad(; T=5.0, plot_vars=[0, 3],
 
     # general options
     𝑂 = Options(:T=>T, :plot_vars=>plot_vars, :property=>property,
-                :project_reachset=>project_reachset)
+                :project_reachset=>project_reachset, :mode=>"check")
 
     return (𝑃, 𝑂)
 end

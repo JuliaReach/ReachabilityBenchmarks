@@ -9,10 +9,10 @@ SUITE["Quadrotor"] = BenchmarkGroup()
 # ==============================================================================
 include("quadrotor.jl")
 
-𝑃, 𝑂 = quad()
+𝑃, 𝑂 = quad(project_reachset=>false)
 
 # algorithm-specific options
-𝑂jets = Options(:abs_tol=>1e-7, :orderT=>5, :orderQ=>2, :max_steps=>500)
+𝑂jets = Options(:abs_tol=>1e-7, :orderT=>5, :orderQ=>1, :max_steps=>500)
 
 # first run
 sol = solve(𝑃, 𝑂, op=TMJets(𝑂jets))
@@ -40,6 +40,9 @@ println("median time for each benchmark:\n", median(results))
 # Create plots
 # ==============================================================================
 
+𝑃, 𝑂 = quad(project_reachset=>true)
+sol = solve(𝑃, 𝑂, op=TMJets(𝑂jets))
+
 plot(sol,
      tickfont=font(30, "Times"), guidefontsize=45,
      xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",
@@ -52,5 +55,6 @@ plot(sol,
 plot!(x->x, x->1.4, 0., 5., line=2, color="red", linestyle=:dash, legend=nothing)
 plot!(x->x, x->0.98, 0., 5., line=2, color="red", linestyle=:dash, legend=nothing)
 plot!(x->x, x->1.02, 0., 5., line=2, color="red", linestyle=:dash, legend=nothing)
+plot!(x->x, x->0.9, 0., 5., line=2, color="red", linestyle=:dash, legend=nothing)
 
 savefig(@relpath "quadrotor.png")

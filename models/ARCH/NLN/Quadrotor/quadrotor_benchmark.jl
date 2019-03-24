@@ -43,13 +43,14 @@ println("median time for each benchmark:\n", median(results))
 plot(sol,
      tickfont=font(30, "Times"), guidefontsize=45,
      xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",
-     ylab=L"x_{3}\raisebox{2mm}{\textcolor{white}{.}}",
+     ylab=L"x_{3}\raisebox{1mm}{\textcolor{white}{.}}",
      xtick=[0., 1, 2, 3, 4, 5], ytick=[0.5, 0., 0.5, 1.0, 1.5],
      xlims=(0., 5.), ylims=(-0.5, 1.5),
-     bottom_margin=6mm, left_margin=2mm, right_margin=4mm, top_margin=3mm,
+     bottom_margin=6mm, left_margin=6mm, right_margin=4mm, top_margin=3mm,
      size=(1000, 1000), linecolor="blue")
 
 plot!(x->x, x->1.4, 0., 5., line=2, color="red", linestyle=:dash, legend=nothing)
 plot!(x->x, x->0.98, 0., 5., line=2, color="red", linestyle=:dash, legend=nothing)
 plot!(x->x, x->1.02, 0., 5., line=2, color="red", linestyle=:dash, legend=nothing)
+
 savefig(@relpath "quadrotor.png")

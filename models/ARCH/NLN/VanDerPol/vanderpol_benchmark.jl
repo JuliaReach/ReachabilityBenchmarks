@@ -52,7 +52,7 @@ plot(sol,
      xtick=[-3., -2., -1., 0., 1., 2., 3.], ytick=[-3., -2., -1., 0., 1., 2., 3.],
      xlims=(-3., 3.), ylims=(-3., 3.),
      bottom_margin=6mm, left_margin=2mm, right_margin=4mm, top_margin=3mm,
-     size=(1000, 1000), linecolor="lightblue")
+     size=(1000, 1000), linecolor="blue")
 
 plot!(x->x, x->2.75, -3., 3., line=2, color="red", linestyle=:dash, legend=nothing)
 savefig(@relpath "vanderpol.png")

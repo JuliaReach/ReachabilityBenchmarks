@@ -238,5 +238,5 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
     return 𝑃, 𝑂, 𝑂jets
 end
 
-𝑃, 𝑂, 𝑂jets = spacecraft_rendezvous(T=1.0, orderT=7, orderQ=2, abs_tol=1e-20, max_steps=5000);
-solve(𝑃, 𝑂, TMJets(𝑂jets), LazyDiscretePost(:check_invariant_intersection=>true))
+𝑃, 𝑂, 𝑂jets = spacecraft_rendezvous(T=200.0, orderT=7, orderQ=2, abs_tol=1e-20, max_steps=5000);
+sol = solve(𝑃, 𝑂, TMJets(𝑂jets), LazyDiscretePost(:check_invariant_intersection=>true))

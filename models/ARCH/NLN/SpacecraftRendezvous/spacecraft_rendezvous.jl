@@ -28,7 +28,7 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
     automaton = LightAutomaton(3)
 
     # mode 1 ("approaching")
-    𝐹 = (t, x, dx) -> spacecraft_approaching!(t, x, dx)
+    𝐹 = spacecraft_approaching!
     invariant = HPolyhedron([
         HalfSpace(sparsevec([x], [1.], n), -100.),   # x <= -100
         HalfSpace(sparsevec([t], [1.], n), t_abort)  # t <= t_abort
@@ -36,7 +36,7 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
     m₁ = CBBCS(𝐹, 5, invariant)
 
     # mode 2 ("rendezvous attempt")
-    𝐹 = (t, x, dx) -> spacecraft_rendezvous_attempt!(t, x, dx)
+    𝐹 = spacecraft_rendezvous_attempt!
     invariant = HPolyhedron([
         HalfSpace(sparsevec([x], [-1.], n), 100.),           # x >= -100
         HalfSpace(sparsevec([x], [1.], n), 100.),            # x <= 100
@@ -139,8 +139,8 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
     
     # safety properties
     property = Dict{Int, Function}(1 => (t, x) -> true,
-                              2 => property_rendezvous,
-                              3 => property_aborting)
+                                   2 => property_rendezvous,
+                                   3 => property_aborting)
 
     # global options
     𝑂 = Options(:T=>T, :property=>property, :plot_vars=>plot_vars,
@@ -152,7 +152,7 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
     return 𝑃, 𝑂, 𝑂jets
 end
 
-𝑃, 𝑂, 𝑂jets = spacecraft_rendezvous(T=200.0, orderT=10, orderQ=2, abs_tol=1e-28, max_steps=5000);
+𝑃, 𝑂, 𝑂jets = spacecraft_rendezvous(T=200.0, orderT=14, orderQ=6, abs_tol=1e-28, max_steps=5000);
 sol = solve(𝑃, 𝑂, TMJets(𝑂jets), LazyDiscretePost(:check_invariant_intersection=>true))
 
 # compute projection onto the plot variables (project_reachset doesn't currently

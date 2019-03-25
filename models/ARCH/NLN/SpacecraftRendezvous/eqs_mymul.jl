@@ -36,7 +36,7 @@ end
     μ_rc3 = μ / rc3
 
     uxy = Array{typeof(x[1])}(undef, size(K₁mc,1))
-    mymul!(uxy, K₁mc, x)
+    mymul!(uxy, K₁mc, x[1:4])
     
     # x' = vx
     dx[1] = x[3]
@@ -62,7 +62,7 @@ end
     μ_rc3 = μ / rc3
 
     uxy = Array{typeof(x[1])}(undef, size(K₂mc,1))
-    mymul!(uxy, K₂mc, x)
+    mymul!(uxy, K₂mc, x[1:4])
 
     # x' = vx
     dx[1] = x[3]

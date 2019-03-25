@@ -96,7 +96,7 @@ function spacecraft_aborting!(t, x, dx)
 end
 
 function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
-                                max_steps=500, plot_vars=[1, 2], project_reachset=true)
+                                max_steps=500, plot_vars=[1, 2], project_reachset=false)
     # variables
     x = 1   # x position (negative!)
     y = 2   # y position (negative!)
@@ -185,6 +185,9 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
     velocity = 0.055 * 60.  # meters per minute
     cx = velocity * cos(π / 8)  # x-coordinate of the octagon's first (ENE) corner
     cy = velocity * sin(π / 8)  # y-coordinate of the octagon's first (ENE) corner
+    
+    tan30 = tan(π/6)
+    #=
     octagon = [
         HalfSpace(sparsevec([vx], [1.], n), cx),                 # vx <= cx
         HalfSpace(sparsevec([vx, vy], [1., 1.], n), cy + cx),    # vx + vy <= cy + cx
@@ -195,14 +198,20 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
         HalfSpace(sparsevec([vy], [-1.], n), cx),                # vy >= -cx
         HalfSpace(sparsevec([vx, vy], [1., -1.], n), cy + cx)    # vx - vy <= cy + cx
        ]
-    tan30 = tan(π/6)
     cone = [
         HalfSpace(sparsevec([x], [-1.], n), 100.),          # x >= -100
         HalfSpace(sparsevec([x, y], [tan30, -1.], n), 0.),  # -x tan(30°) + y >= 0
         HalfSpace(sparsevec([x, y], [tan30, 1.], n), 0.),   # -x tan(30°) - y >= 0
        ]
     property_rendezvous = SafeStatesProperty(HPolytope([octagon; cone]))
+    =#
+    
+    property_rendezvous = (t, x) -> (x[3] <= cx) && (x[3]+x[4]<=cx+cy) && (x[4]<=cx) && (-x[3]+x[4] <= cx+cy) && (x[3] >= -cx) &&
+                                    (-x[3]-x[4] <= cx+cy) && (x[4] >= -cx) && (x[3]-x[4] <= cx+cy) &&
+                                    (x[1] >= -100) && (-x[1]*tan30+x[2]>=0) && (-x[1]*tan30-x[2]>=0)
+
     # safety property in "Passive"
+    #=
     target = HPolytope([
         HalfSpace(sparsevec([x], [1.], n), 0.2),   # x <= 0.2
         HalfSpace(sparsevec([x], [-1.], n), 0.2),  # x >= -0.2
@@ -210,12 +219,18 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
         HalfSpace(sparsevec([y], [-1.], n), 0.2),  # y >= -0.2
        ])
     property_aborting = BadStatesProperty(target)
+    =#
+    
+    property_aborting = (t, x) -> !( (x[1] <= 0.2) && (x[1] >= -0.2) && (x[2] <= 0.2) && (x[2] >= -0.2))
+    
     # safety properties
-    property = Dict{Int, Property}(2 => property_rendezvous,
-                                   3 => property_aborting)
+    property = Dict{Int, Function}(1 => (t, x) -> true,
+                              2 => property_rendezvous,
+                              3 => property_aborting)
 
     # global options
-    𝑂 = Options(:T=>T, :property=>property, :plot_vars=>plot_vars, :project_reachset=>project_reachset)
+    𝑂 = Options(:T=>T, :property=>property, :plot_vars=>plot_vars,
+                :project_reachset=>project_reachset, :mode=>"reach")
 
     # algorithm-specific options
     𝑂jets = Options(:orderT=>orderT, :orderQ=>orderQ, :abs_tol=>abs_tol, :max_steps=>max_steps)

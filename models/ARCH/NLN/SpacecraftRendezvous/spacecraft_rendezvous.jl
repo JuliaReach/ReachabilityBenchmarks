@@ -23,7 +23,7 @@ const K₂11 = -288.0288; const K₂12 = 0.1312; const K₂13 = -9614.9898; cons
 const K₂21 = -0.1312; const K₂22 = -288.0; const K₂23 = 0.0; const K₂24 = -9614.9883;
 
 # dynamics in the 'approaching' mode
-function spacecraft_approaching!(t, x, dx)
+@taylorize function spacecraft_approaching!(t, x, dx)
 
     rc = sqrt((r + x[1])^2 + x[2]^2)
     uxy1 = (K₁11 * x[1] + K₁12 * x[2]) + (K₁13 * x[3] + K₁14 * x[4])
@@ -48,7 +48,7 @@ function spacecraft_approaching!(t, x, dx)
 end
 
 # dynamics in the 'rendezvous attempt' mode
-function spacecraft_rendezvous_attempt!(t, x, dx)
+@taylorize function spacecraft_rendezvous_attempt!(t, x, dx)
 
     rc = sqrt((r + x[1])^2 + x[2]^2)
     uxy1 = (K₂11 * x[1] + K₂12 * x[2]) + (K₂13 * x[3] + K₂14 * x[4])
@@ -73,7 +73,7 @@ function spacecraft_rendezvous_attempt!(t, x, dx)
 end
 
 # dynamics in the 'aborting' mode
-function spacecraft_aborting!(t, x, dx)
+@taylorize function spacecraft_aborting!(t, x, dx)
 
     rc = sqrt((r + x[1])^2 + x[2]^2)
 
@@ -238,5 +238,10 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
     return 𝑃, 𝑂, 𝑂jets
 end
 
-𝑃, 𝑂, 𝑂jets = spacecraft_rendezvous(T=200.0, orderT=7, orderQ=2, abs_tol=1e-20, max_steps=5000);
+𝑃, 𝑂, 𝑂jets = spacecraft_rendezvous(T=200.0, orderT=7, orderQ=2, abs_tol=1e-20, max_steps=10000);
 sol = solve(𝑃, 𝑂, TMJets(𝑂jets), LazyDiscretePost(:check_invariant_intersection=>true))
+
+# compute projection onto the plot variables (project_reachset doesn't currently
+# work for a limitation in the hybrid solve, which does not preserve the type of opC)
+
+

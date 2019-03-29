@@ -92,7 +92,7 @@ plot(sol_1,
      xtick=[-3., -2., -1., 0., 1., 2., 3.], ytick=[-3., -2., -1., 0., 1., 2., 3.],
      xlims=(-3., 3.), ylims=(-3., 3.),
      bottom_margin=6mm, left_margin=2mm, right_margin=4mm, top_margin=3mm,
-     size=(1000, 1000), linecolor="blue")
+     size=(1000, 1000), linecolor="red")
 
 plot!(x->x, x->2.75, -3., 3., line=2, color="red", linestyle=:dash, legend=nothing)
 savefig(@relpath "vanderpol_case_1.png")
@@ -110,7 +110,7 @@ for i in 1:nsplits_x
                    xtick=[-2., -1., 0., 1., 2., 3.], ytick=[-4., -3., -2., -1., 0., 1., 2., 3., 4.],
                    xlims=(-2.5, 3.), ylims=(-4.5, 4.),
                    bottom_margin=6mm, left_margin=2mm, right_margin=4mm, top_margin=3mm,
-                   size=(1000, 1000), color="red", linewidth=0.0, linecolor="red", alpha=.5)
+                   size=(1000, 1000), color="blue", linewidth=0.0, linecolor="red", alpha=.5)
 end
 
 savefig(plot_2, @relpath "vanderpol_case_2.png")
@@ -126,18 +126,18 @@ for i in 1:nsplits_x
     plot!(plot_all, sol_2[i], tickfont=font(30, "Times"), guidefontsize=45,
                    xlab=L"x_{1}\raisebox{-0.5mm}{\textcolor{white}{.}}",
                    ylab=L"x_{2}\raisebox{2mm}{\textcolor{white}{.}}",
-                   xtick=[-2., -1., 0., 1., 2., 3.], ytick=[-4., -3., -2., -1., 0., 1., 2., 3., 4.],
-                   xlims=(-2.5, 3.), ylims=(-4.5, 4.),
+                   xtick=[-2., -1., 0., 1., 2.], ytick=[-4., -3., -2., -1., 0., 1., 2., 3., 4.],
+                   xlims=(-2.5, 2.5), ylims=(-4.5, 4.),
                    bottom_margin=6mm, left_margin=2mm, right_margin=4mm, top_margin=3mm,
-                   size=(1000, 1000), color="red", linewidth=0.0, linecolor="red", alpha=.5)
+                   size=(1000, 1000), color="blue", linewidth=0.0, linecolor="blue", alpha=.5)
 end
 
 plot!(plot_all, sol_1, tickfont=font(30, "Times"), guidefontsize=45,
                        xlab=L"x_{1}\raisebox{-0.5mm}{\textcolor{white}{.}}",
                        ylab=L"x_{2}\raisebox{2mm}{\textcolor{white}{.}}",
-                       xtick=[-2., -1., 0., 1., 2., 3.], ytick=[-3., -2., -1., 0., 1., 2., 3., 4.],
-                       xlims=(-2.5, 3.), ylims=(-4.5, 4.),
+                       xtick=[-2., -1., 0., 1., 2.], ytick=[-4., -3., -2., -1., 0., 1., 2., 3., 4.],
+                       xlims=(-2.5, 2.5), ylims=(-4.5, 4.),
                        bottom_margin=6mm, left_margin=2mm, right_margin=4mm, top_margin=3mm,
-                       size=(1000, 1000), color="blue", linewidth=1., linecolor="blue", alpha=.8)
+                       size=(1000, 1000), color="red", linewidth=1., linecolor="red", alpha=.8)
 
 savefig(plot_all, @relpath "vanderpol_case_all.png")

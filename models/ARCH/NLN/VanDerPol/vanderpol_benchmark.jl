@@ -10,6 +10,7 @@ SUITE["VanDerPol"] = BenchmarkGroup()
 include("vanderpol.jl")
 
 # benchmark settings
+𝑃 = vanderpol(μ=1.0)
 time_horizon = 7.0
 𝑂 = Options(:T=>time_horizon, :mode=>"check", :property=>(t, x) -> x[2] < 2.75)
 

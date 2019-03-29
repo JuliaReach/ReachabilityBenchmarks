@@ -23,7 +23,10 @@ end
 end
 
 function vanderpol(; μ=1.0,
-                     X0 = Hyperrectangle(low=[1.25, 2.35], high=[1.55, 2.45]))
+                     X0=Hyperrectangle(low=[1.25, 2.35], high=[1.55, 2.45]),
+                     T=7.0,
+                     property=(t, x) -> x[2] < 2.75)
+
     if μ == 1.0
         f = vanderPol_mu_one!
     elseif μ == 2.0
@@ -34,8 +37,11 @@ function vanderpol(; μ=1.0,
     # equations, x' = f(x(t))
     F = BlackBoxContinuousSystem(f, 2)
 
+    # problem options
+    𝑂 = Options(:T=>T, :mode=>"check", :property=>property)
+    
     # instantiate problem
     𝑃 = InitialValueProblem(F, X0)
 
-    return 𝑃
+    return 𝑃, 𝑂
 end

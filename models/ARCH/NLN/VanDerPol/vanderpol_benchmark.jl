@@ -9,10 +9,12 @@ SUITE["VanDerPol"] = BenchmarkGroup()
 # ==============================================================================
 include("vanderpol.jl")
 
+# ----------------------------------------
+# Case 1: μ = 1
+# ----------------------------------------
+
 # benchmark settings
-𝑃 = vanderpol(μ=1.0)
-time_horizon = 7.0
-𝑂 = Options(:T=>time_horizon, :mode=>"check", :property=>(t, x) -> x[2] < 2.75)
+𝑃, 𝑂 = vanderpol(μ)
 
 # algorithm-specific options
 𝑂jets = Options(:abs_tol=>1e-10, :orderT=>10, :orderQ=>2, :max_steps=>500)
@@ -25,6 +27,12 @@ sol = solve(𝑃, 𝑂, op=TMJets(𝑂jets))
 
 # benchmark
 SUITE["VanDerPol"]["x[2] <= 2.75"] = @benchmarkable solve($𝑃, $𝑂, op=TMJets($𝑂jets))
+
+# ----------------------------------------
+# Case 2: μ = 2
+# ----------------------------------------
+
+# TODO
 
 # ==============================================================================
 # Execute benchmarks and save benchmark results

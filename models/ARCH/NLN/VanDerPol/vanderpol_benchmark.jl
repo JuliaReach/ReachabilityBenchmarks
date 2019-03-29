@@ -14,7 +14,7 @@ include("vanderpol.jl")
 # ----------------------------------------
 
 # benchmark settings
-𝑃, 𝑂 = vanderpol(μ)
+𝑃, 𝑂 = vanderpol(μ=1)
 
 # algorithm-specific options
 𝑂jets = Options(:abs_tol=>1e-10, :orderT=>10, :orderQ=>2, :max_steps=>500)

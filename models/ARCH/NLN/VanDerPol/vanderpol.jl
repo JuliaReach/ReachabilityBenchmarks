@@ -46,7 +46,7 @@ function vanderpol(; μ=1.0,
     return 𝑃, 𝑂
 end
 
-function splitX0(H::AbstractHyperrectangle, n::Int=2, m::Int=2)
+function split(H::AbstractHyperrectangle, n::Int=2, m::Int=2)
      @assert dim(H) == 2
      r = copy(radius_hyperrectangle(H))
      r[1] /= n
@@ -61,7 +61,7 @@ function splitX0(H::AbstractHyperrectangle, n::Int=2, m::Int=2)
          c[2] = c0[2]
          for j in 1:m
              c[2] += d[2]
-             push!(result, Hyperrectangle(c, r))
+             push!(result, Hyperrectangle(copy(c), copy(r)))
          end
      end
      return result

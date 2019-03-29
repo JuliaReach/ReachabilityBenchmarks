@@ -132,7 +132,7 @@ for i in 1:nsplits_x
                    size=(1000, 1000), color="red", linewidth=0.0, linecolor="red", alpha=.5)
 end
 
-plot!(sol_1, tickfont=font(30, "Times"), guidefontsize=45,
+plot!(plot_all, sol_1, tickfont=font(30, "Times"), guidefontsize=45,
                        xlab=L"x_{1}\raisebox{-0.5mm}{\textcolor{white}{.}}",
                        ylab=L"x_{2}\raisebox{2mm}{\textcolor{white}{.}}",
                        xtick=[-2., -1., 0., 1., 2., 3.], ytick=[-3., -2., -1., 0., 1., 2., 3., 4.],
@@ -140,4 +140,4 @@ plot!(sol_1, tickfont=font(30, "Times"), guidefontsize=45,
                        bottom_margin=6mm, left_margin=2mm, right_margin=4mm, top_margin=3mm,
                        size=(1000, 1000), color="blue", linewidth=1., linecolor="blue", alpha=.8)
 
-savefig(plot_all, "vanderpol_case_all.png")
+savefig(plot_all, @relpath "vanderpol_case_all.png")

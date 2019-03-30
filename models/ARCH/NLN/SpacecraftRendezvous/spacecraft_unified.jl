@@ -68,7 +68,9 @@ end
 end
 
 𝑂 = Options(:T=>200., :plot_vars=>[0, 3], :project_reachset=>true, :mode=>"reach")
-𝑃 = BlackBoxContinuousSystem(space_rendezvous!, 4)
+X0 = Hyperrectangle([-900., -400., 0., 0.], [25., 25., 0., 0.])
+𝑃 = IVP(BlackBoxContinuousSystem(space_rendezvous!, 4), X0)
 𝑂jets = Options(:orderT=>10, :orderQ=>2, :abs_tol=>1e-28, :max_steps=>11000)
 
-#sol = solve(𝑃, 𝑂, op=TMJets(𝑂jets)
+# solve (long time: 1052.716118 seconds (7.69 G allocations: 475.973 GiB, 19.54% gc time)
+# @time sol = solve(𝑃, 𝑂, op=TMJets(𝑂jets))

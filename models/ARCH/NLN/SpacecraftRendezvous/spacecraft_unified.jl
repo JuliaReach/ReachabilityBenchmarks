@@ -67,7 +67,7 @@ end
     return dx
 end
 
-𝑂 = Options(:T=>200., :plot_vars=>[0, 3], :project_reachset=>true, :mode=>"reach")
+𝑂 = Options(:T=>200., :plot_vars=>[1, 2], :project_reachset=>true, :mode=>"reach")
 X0 = Hyperrectangle([-900., -400., 0., 0.], [25., 25., 0., 0.])
 𝑃 = IVP(BlackBoxContinuousSystem(space_rendezvous!, 4), X0)
 𝑂jets = Options(:orderT=>10, :orderQ=>2, :abs_tol=>1e-28, :max_steps=>11000)

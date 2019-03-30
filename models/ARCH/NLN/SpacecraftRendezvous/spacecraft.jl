@@ -7,84 +7,10 @@
 using SparseArrays, HybridSystems, MathematicalSystems, LazySets, Reachability, TaylorIntegration
 using Reachability: solve
 
-const μ = 3.986e14 * 60^2
-const r = 42164e3
-const mc = 500.0
-const n = sqrt(μ / r^3)
-K₁ = [-28.8287 0.1005 -1449.9754 0.0046;
-      -0.087 -33.2562 0.00462 -1451.5013]
-K₂ = [-288.0288 0.1312 -9614.9898 0.0;
-      -0.1312 -288.0 0.0 -9614.9883]
+include("eqs_mymul.jl")
 
-# dynamics in the 'approaching' mode
-@taylorize function spacecraft_approaching!(t, x, dx)
-    local rc = sqrt((r + x[1])^2 + x[2]^2)
-    local uxy = K₁ * x[1:4]
-
-    # x' = vx
-    dx[1] = x[3]
-
-    # y' = vy
-    dx[2] = x[4]
-
-    # vx' = n²x + 2n*vy + μ/(r^2) - μ/(rc^3)*(r+x) + ux/mc
-    dx[3] = (n^2*x[1] + 2*(n*x[4])) + ((μ/(r^2) - μ/(rc^3)*(r + x[1])) + uxy[1]/mc)
-
-    # vy' = n²y - 2n*vx - μ/(rc^3)y + uy/mc
-    dx[4] = (n^2*x[2] - 2*(n*x[3])) - (μ/(rc^3)*x[2] - uxy[2]/mc)
-
-    # t' = 1
-    dx[5] = 1.0 + 0.0*x[1]
-
-    return dx
-end
-
-# dynamics in the 'rendezvous attempt' mode
-@taylorize function spacecraft_rendezvous_attempt!(t, x, dx)
-    local rc = sqrt((r + x[1])^2 + x[2]^2)
-    local uxy = K₂ * x[1:4]
-
-    # x' = vx
-    dx[1] = x[3]
-
-    # y' = vy
-    dx[2] = x[4]
-
-    # vx' = n²x + 2n*vy + μ/(r^2) - μ/(rc^3)*(r+x) + ux/mc
-    dx[3] = (n^2*x[1] + 2*(n*x[4])) + ((μ/(r^2) - μ/(rc^3)*(r + x[1])) + uxy[1]/mc)
-
-    # vy' = n²y - 2n*vx - μ/(rc^3)y + uy/mc
-    dx[4] = (n^2*x[2] - 2*(n*x[3])) - (μ/(rc^3)*x[2] - uxy[2]/mc)
-
-    # t' = 1
-    dx[5] = 1.0 + 0.0*x[1]
-
-    return dx
-end
-
-# dynamics in the 'aborting' mode
-@taylorize function spacecraft_aborting!(t, x, dx)
-    local rc = sqrt((r + x[1])^2 + x[2]^2)
-
-    # x' = vx
-    dx[1] = x[3]
-
-    # y' = vy
-    dx[2] = x[4]
-
-    # vx' = n²x + 2n*vy + μ/(r^2) + μ/(rc^3)*(r+x)
-    dx[3] = (n^2*x[1] + 2*n*x[4]) + μ/(r^2) + μ/(rc^3)*(r + x[1])
-
-    # vy' = n²y - 2n*vx - μ/(rc^3)y
-    dx[4] = (n^2*x[2] - 2*n*x[3]) - μ/(rc^3)*x[2]
-
-    # t' = 1
-    dx[5] = 1.0 + 0.0*x[1]
-
-    return dx
-end
-
-function spacecraft_rendezvous()
+function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
+                                max_steps=500, plot_vars=[1, 2], project_reachset=false)
     # variables
     x = 1   # x position (negative!)
     y = 2   # y position (negative!)
@@ -102,7 +28,7 @@ function spacecraft_rendezvous()
     automaton = LightAutomaton(3)
 
     # mode 1 ("approaching")
-    𝐹 = (t, x, dx) -> spacecraft_approaching!(t, x, dx)
+    𝐹 = spacecraft_approaching!
     invariant = HPolyhedron([
         HalfSpace(sparsevec([x], [1.], n), -100.),   # x <= -100
         HalfSpace(sparsevec([t], [1.], n), t_abort)  # t <= t_abort
@@ -110,7 +36,7 @@ function spacecraft_rendezvous()
     m₁ = CBBCS(𝐹, 5, invariant)
 
     # mode 2 ("rendezvous attempt")
-    𝐹 = (t, x, dx) -> spacecraft_rendezvous_attempt!(t, x, dx)
+    𝐹 = spacecraft_rendezvous_attempt!
     invariant = HPolyhedron([
         HalfSpace(sparsevec([x], [-1.], n), 100.),           # x >= -100
         HalfSpace(sparsevec([x], [1.], n), 100.),            # x <= 100
@@ -173,6 +99,9 @@ function spacecraft_rendezvous()
     velocity = 0.055 * 60.  # meters per minute
     cx = velocity * cos(π / 8)  # x-coordinate of the octagon's first (ENE) corner
     cy = velocity * sin(π / 8)  # y-coordinate of the octagon's first (ENE) corner
+    
+    tan30 = tan(π/6)
+    #=
     octagon = [
         HalfSpace(sparsevec([vx], [1.], n), cx),                 # vx <= cx
         HalfSpace(sparsevec([vx, vy], [1., 1.], n), cy + cx),    # vx + vy <= cy + cx
@@ -183,14 +112,20 @@ function spacecraft_rendezvous()
         HalfSpace(sparsevec([vy], [-1.], n), cx),                # vy >= -cx
         HalfSpace(sparsevec([vx, vy], [1., -1.], n), cy + cx)    # vx - vy <= cy + cx
        ]
-    tan30 = tan(π/6)
     cone = [
         HalfSpace(sparsevec([x], [-1.], n), 100.),          # x >= -100
         HalfSpace(sparsevec([x, y], [tan30, -1.], n), 0.),  # -x tan(30°) + y >= 0
         HalfSpace(sparsevec([x, y], [tan30, 1.], n), 0.),   # -x tan(30°) - y >= 0
        ]
     property_rendezvous = SafeStatesProperty(HPolytope([octagon; cone]))
+    =#
+    
+    property_rendezvous = (t, x) -> (x[3] <= cx) && (x[3]+x[4]<=cx+cy) && (x[4]<=cx) && (-x[3]+x[4] <= cx+cy) && (x[3] >= -cx) &&
+                                    (-x[3]-x[4] <= cx+cy) && (x[4] >= -cx) && (x[3]-x[4] <= cx+cy) &&
+                                    (x[1] >= -100) && (-x[1]*tan30+x[2]>=0) && (-x[1]*tan30-x[2]>=0)
+
     # safety property in "Passive"
+    #=
     target = HPolytope([
         HalfSpace(sparsevec([x], [1.], n), 0.2),   # x <= 0.2
         HalfSpace(sparsevec([x], [-1.], n), 0.2),  # x >= -0.2
@@ -198,22 +133,21 @@ function spacecraft_rendezvous()
         HalfSpace(sparsevec([y], [-1.], n), 0.2),  # y >= -0.2
        ])
     property_aborting = BadStatesProperty(target)
+    =#
+    
+    property_aborting = (t, x) -> !( (x[1] <= 0.2) && (x[1] >= -0.2) && (x[2] <= 0.2) && (x[2] >= -0.2))
+    
     # safety properties
-    property = Dict{Int, Property}(2 => property_rendezvous,
+    property = Dict{Int, Function}(1 => (t, x) -> true,
+                                   2 => property_rendezvous,
                                    3 => property_aborting)
 
-    𝑂 = Options(:T=>200.0, :property=>property)
+    # global options
+    𝑂 = Options(:T=>T, :property=>property, :plot_vars=>plot_vars,
+                :project_reachset=>project_reachset, :mode=>"reach")
+
+    # algorithm-specific options
+    #𝑂jets = Options(:orderT=>orderT, :orderQ=>orderQ, :abs_tol=>abs_tol, :max_steps=>max_steps)
 
     return 𝑃, 𝑂
 end
-
-function spacecraft_TMJets(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
-                           max_steps=500)
-    𝑃, 𝑂 = spacecraft_rendezvous()
-    𝑂jets = Options(:orderT=>orderT, :orderQ=>orderQ, :abs_tol=>abs_tol,
-                    :max_steps=>max_steps)
-    return 𝑃, 𝑂, 𝑂jets
-end
-
-𝑃, 𝑂, 𝑂jets = spacecraft_TMJets(T=1.0, orderT=10, orderQ=2, abs_tol=1e-8);
-solve(𝑃, 𝑂, TMJets(𝑂jets), LazyDiscretePost(:check_invariant_intersection=>true))

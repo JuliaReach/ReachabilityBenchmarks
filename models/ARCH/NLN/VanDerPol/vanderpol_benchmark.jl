@@ -128,7 +128,7 @@ for i in 1:nsplits_x
                    xtick=[-2., -1., 0., 1., 2.], ytick=[-4., -3., -2., -1., 0., 1., 2., 3., 4.],
                    xlims=(-2.5, 2.5), ylims=(-4.5, 4.),
                    bottom_margin=6mm, left_margin=2mm, right_margin=4mm, top_margin=3mm,
-                   size=(1000, 1000), color="blue", linewidth=0.0, linecolor="blue", alpha=.5)
+                   size=(1000, 1000), color="blue", linewidth=0., linecolor="blue")
 end
 
 plot!(plot_all, sol_1, tickfont=font(30, "Times"), guidefontsize=45,
@@ -137,8 +137,8 @@ plot!(plot_all, sol_1, tickfont=font(30, "Times"), guidefontsize=45,
                        xtick=[-2., -1., 0., 1., 2.], ytick=[-4., -3., -2., -1., 0., 1., 2., 3., 4.],
                        xlims=(-2.5, 2.5), ylims=(-4.5, 4.),
                        bottom_margin=6mm, left_margin=2mm, right_margin=4mm, top_margin=3mm,
-                       size=(1000, 1000), color="red", linewidth=1., linecolor="red", alpha=.8)
+                       size=(1000, 1000), color="red", linewidth=0., linecolor="red")
 
 plot!(plot_all, x->x, x->2.75, -2.5, 2.5, line=2, color="red", linestyle=:dash, legend=nothing)
 
-savefig(plot_all, @relpath "vanderpol_case_all.pdf")
+savefig(plot_all, @relpath "vanderpol_case_all.png")

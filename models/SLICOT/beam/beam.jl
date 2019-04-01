@@ -3,13 +3,15 @@ Model: Beam (348 variables, 1 input)
 =#
 using Reachability, MAT, SparseArrays
 
-beam(o::Pair{Symbol, <:Any}...) = beam(Options(Dict{Symbol, Any}(o)))
 
-function beam(input_options::Options)
+#get_filename() = @relpath "beam.mat"
+
+function beam(input_options=nothing; filename=@relpath "beam.mat")
+
     # =====================
     # Problem specification
     # =====================
-    file = matopen(@relpath "beam.mat")
+    file = matopen(filename)
     A = read(file, "A")
 
     # initial set
@@ -23,27 +25,21 @@ function beam(input_options::Options)
     U = BallInf([0.5], 0.3)
 
     # instantiate continuous LTI system
-    S = InitialValueProblem(
-        ConstrainedLinearControlContinuousSystem(A, B, nothing, U), X0)
+    P = IVP(CLCCS(A, B, nothing, U), X0)
 
     # safety property: x89 < 2100
     property = SafeStatesProperty(HalfSpace(sparsevec([89], [1.0], 348), 2100.))
 
     # =======================
-    # Problem default options
+    # Problem options
     # =======================
+    O = Options(:property => property, :plot_vars => [0, 89], :T=>20.0)
+
+    # algorithm-specific options
     partition = [(2*i-1:2*i) for i in 1:174] # 2D blocks
-
-    if input_options[:mode] == "reach"
-        problem_options = Options(:vars => [89],
-                                  :partition => partition,
-                                  :plot_vars => [0, 89])
-
-    elseif input_options[:mode] == "check"
-        problem_options = Options(:vars => [89],
-                                  :partition => partition,
-                                  :property => property)
+    O_BFFPSV18 = Options(:vars => [89], :partition => partition, :δ=>1e-3)
+    if input_options != nothing
+        O_BFFPSV18 = merge(problem_options, input_options)
     end
-
-    return (S, merge(problem_options, input_options))
+    return P, O, BFFPSV18(O_BFFPSV18)
 end

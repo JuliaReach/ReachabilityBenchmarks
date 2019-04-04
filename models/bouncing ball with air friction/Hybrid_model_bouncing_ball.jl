@@ -59,7 +59,7 @@ function bouncing_ball()
     ℋ = HybridSystem(automaton, modes, resetmaps, switchings)
 
     #initial condition in mode one
-    X0= Hyperrectangle(low=[ 4.9,-0.2], high=[ 5.1,0.0])
+    X0= Hyperrectangle(low=[4.9, -0.2], high=[5.1, 0.0])
 
     initial_condition = [(2,X0)]
 

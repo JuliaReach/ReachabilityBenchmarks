@@ -20,7 +20,7 @@ end
 
 function bouncing_ball()
 
-    automaton = LightAutomaton(2) # two nodes
+    automaton = LightAutomaton(2) # two modes
 
     inv_up = HPolyhedron([HalfSpace([-1.0, 0.0], 0.0),  # x >= 0
                           HalfSpace([0.0, -1.0], 0.0)]) # v >= 0

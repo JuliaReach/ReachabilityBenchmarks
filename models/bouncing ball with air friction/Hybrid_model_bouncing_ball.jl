@@ -61,7 +61,7 @@ function bouncing_ball()
     #initial condition in mode one
     X0= Hyperrectangle(low=[4.9, -0.2], high=[5.1, 0.0])
 
-    initial_condition = [(2,X0)]
+    initial_condition = [(2, X0)]  # initial condition in the "down" mode
 
     system = InitialValueProblem(ℋ, initial_condition)
 

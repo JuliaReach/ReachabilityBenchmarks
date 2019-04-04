@@ -45,7 +45,7 @@ function bouncing_ball()
                                HalfSpace([0.0,-1.0], 0.0)])  #v>=0
 
 
-    A = [1.0 0.0; 0.0 -0.75]
+    A = [1.0 0.0; 0.0 -0.8]
     t1 = ConstrainedLinearMap(A, guard_alpha)
     t2 = ConstrainedLinearMap(A, guard_beta)
 

@@ -30,7 +30,7 @@ function bouncing_ball()
 
     m1 = ConstrainedBlackBoxContinuousSystem(bball_up!, 2, inv_up)
 
-    m2 = ConstrainedBlackBoxContinuousSystem(bball_down!,2, inv_down)
+    m2 = ConstrainedBlackBoxContinuousSystem(bball_down!, 2, inv_down)
 
     modes = [m1,m2]  #modes
 

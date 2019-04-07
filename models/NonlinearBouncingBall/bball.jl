@@ -54,17 +54,17 @@ function bouncing_ball()
     Rα = ConstrainedLinearMap(A, Gα)
     Rβ = ConstrainedIdentityMap(2, Gβ)
 
-    #resetmaps
+    # resetmaps
     resetmaps = [Rα, Rβ]
 
-    # switching
+    # switchings
     switching = AutonomousSwitching()
     switchings = fill(switching, 2)
 
     ℋ = HybridSystem(automaton, modes, resetmaps, switchings)
 
-    #initial condition in mode one
-    X0= Hyperrectangle(low=[4.9, -0.2], high=[5.1, 0.0])
+    # initial condition in mode one
+    X0 = Hyperrectangle(low=[4.9, -0.2], high=[5.1, 0.0])
 
     initial_condition = [(2, X0)]  # initial condition in the "down" mode
 

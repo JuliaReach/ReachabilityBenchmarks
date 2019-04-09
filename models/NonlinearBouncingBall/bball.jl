@@ -82,4 +82,4 @@ options = Options(:mode=>"reach", :T=>3.0, :plot_vars=>[1, 2], :project_reachset
 
 @time sol_TMJets = solve(problem, options, TMJets(:orderT=>5, :orderQ=>2, :abs_tol=>1e-10),LazyDiscretePost(:check_invariant_intersection=>true));
 
-plot(sol_TMJets, use_subindices=false, aspectratio=1, alpha=.5, color=:lightblue)
+plot(sol_TMJets, xlab="x", ylab="v", alpha=.5, color=:lightblue)

@@ -69,6 +69,6 @@ For example, in [models/ARCH2018/SpaceStation](https://nbviewer.jupyter.org/gith
 
 ## Screenshots
 
-![buildingT1](models/ARCH2018/Building/buildingT1.png)
+![buildingT1](models/ARCH/AFF/Building/buildingT1.png)
 
-![buildingT20](models/ARCH2018/Building/buildingT20.png )
+![buildingT20](models/ARCH/AFF/Building/buildingT20.png )

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<sspaceex version="0.2" math="SpaceEx" xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex">
+		<component id="composition">
+			<param dynamics="any" name="cycle_time1" controlled="true" local="true" type="real" d2="1" d1="1"></param>
+			<param dynamics="any" name="P_on_plc" controlled="true" local="true" type="bool" d2="1" d1="1"></param>
+			<param dynamics="any" name="high" controlled="true" local="true" type="bool" d2="1" d1="1"></param>
+			<param dynamics="any" name="P_on" controlled="true" local="true" type="bool" d2="1" d1="1"></param>
+			<param dynamics="any" name="h" controlled="true" local="true" type="real" d2="1" d1="1"></param>
+			<param dynamics="any" name="P_off" controlled="true" local="true" type="bool" d2="1" d1="1"></param>
+			<param dynamics="any" name="P" controlled="true" local="true" type="bool" d2="1" d1="1"></param>
+			<param dynamics="any" name="global_time" controlled="true" local="true" type="real" d2="1" d1="1"></param>
+			<param dynamics="any" name="nextSfcLoc" controlled="true" local="true" type="real" d2="1" d1="1"></param>
+			<param dynamics="any" name="low" controlled="true" local="true" type="bool" d2="1" d1="1"></param>
+			<param dynamics="const" name="globalTimeHorizon" controlled="true" local="true" type="real" d2="1" d1="1"></param>
+			<param dynamics="any" name="P_plc" controlled="true" local="true" type="bool" d2="1" d1="1"></param>
+			<param dynamics="const" name="delta" controlled="true" local="true" type="real" d2="1" d1="1"></param>
+			<param dynamics="any" name="P_off_plc" controlled="true" local="true" type="bool" d2="1" d1="1"></param>
+			<param name="write" local="true" type="label"></param>
+			<param name="read" local="true" type="label"></param>
+			<location height="80" x="280" name="l1" width="130" y="100" id="14">
+				<invariant>cycle_time1 &gt;= 0.0 &amp; cycle_time1 &lt;= delta &amp; global_time &lt;= globalTimeHorizon &amp; h &lt;= 20.0 &amp; global_time &gt;= 0.0 &amp; P_plc == 1.0</invariant>
+				<flow>h' == 2 &amp; global_time' == 1 &amp; cycle_time1' == 1 &amp; P_on_plc' == 0 &amp; high' == 0 &amp; P_on' == 0 &amp; P_off' == 0 &amp; P' == 0 &amp; nextSfcLoc' == 0 &amp; low' == 0 &amp; P_plc' == 0 &amp; P_off_plc' == 0</flow>
+			</location>
+			<location height="80" x="280" name="l2" width="130" y="200" id="13">
+				<invariant>cycle_time1 &gt;= 0.0 &amp; cycle_time1 &lt;= delta &amp; h &gt;= 20.0 &amp; global_time &lt;= globalTimeHorizon &amp; global_time &gt;= 0.0</invariant>
+				<flow>h' == 0 &amp; global_time' == 1 &amp; cycle_time1' == 1 &amp; P_on_plc' == 0 &amp; high' == 0 &amp; P_on' == 0 &amp; P_off' == 0 &amp; P' == 0 &amp; nextSfcLoc' == 0 &amp; low' == 0 &amp; P_plc' == 0 &amp; P_off_plc' == 0</flow>
+			</location>
+			<location height="80" x="280" name="l3" width="130" y="300" id="12">
+				<invariant>cycle_time1 &gt;= 0.0 &amp; cycle_time1 &lt;= delta &amp; global_time &lt;= globalTimeHorizon &amp; P_plc == 0.0 &amp; global_time &gt;= 0.0</invariant>
+				<flow>h' == -1.5 &amp; global_time' == 1 &amp; cycle_time1' == 1 &amp; P_on_plc' == 0 &amp; high' == 0 &amp; P_on' == 0 &amp; P_off' == 0 &amp; P' == 0 &amp; nextSfcLoc' == 0 &amp; low' == 0 &amp; P_plc' == 0 &amp; P_off_plc' == 0</flow>
+			</location>
+			<location height="80" x="280" name="clock__switch_off__cycle" width="130" y="400" id="10">
+				<invariant>cycle_time1 == 0.0 &amp; global_time &lt;= globalTimeHorizon &amp; global_time &gt;= 0.0</invariant>
+				<flow>global_time' == 1 &amp; cycle_time1' == 1 &amp; h' == 0 &amp; P_on_plc' == 0 &amp; high' == 0 &amp; P_on' == 0 &amp; P_off' == 0 &amp; P' == 0 &amp; nextSfcLoc' == 0 &amp; low' == 0 &amp; P_plc' == 0 &amp; P_off_plc' == 0</flow>
+			</location>
+			<location height="80" x="280" name="clock__switch_off_in__comm" width="130" y="500" id="8">
+				<invariant>cycle_time1 == 0.0 &amp; global_time &lt;= globalTimeHorizon &amp; global_time &gt;= 0.0</invariant>
+				<flow>global_time' == 1 &amp; cycle_time1' == 1 &amp; h' == 0 &amp; P_on_plc' == 0 &amp; high' == 0 &amp; P_on' == 0 &amp; P_off' == 0 &amp; P' == 0 &amp; nextSfcLoc' == 0 &amp; low' == 0 &amp; P_plc' == 0 &amp; P_off_plc' == 0</flow>
+			</location>
+			<location height="80" x="280" name="clock__switch_off_in__cycle" width="130" y="600" id="7">
+				<invariant>cycle_time1 == 0.0 &amp; global_time &lt;= globalTimeHorizon &amp; global_time &gt;= 0.0</invariant>
+				<flow>global_time' == 1 &amp; cycle_time1' == 1 &amp; h' == 0 &amp; P_on_plc' == 0 &amp; high' == 0 &amp; P_on' == 0 &amp; P_off' == 0 &amp; P' == 0 &amp; nextSfcLoc' == 0 &amp; low' == 0 &amp; P_plc' == 0 &amp; P_off_plc' == 0</flow>
+			</location>
+			<location height="80" x="280" name="clock__switch_off_in__user" width="130" y="700" id="6">
+				<invariant>cycle_time1 == 0.0 &amp; global_time &lt;= globalTimeHorizon &amp; global_time &gt;= 0.0</invariant>
+				<flow>global_time' == 1 &amp; cycle_time1' == 1 &amp; h' == 0 &amp; P_on_plc' == 0 &amp; high' == 0 &amp; P_on' == 0 &amp; P_off' == 0 &amp; P' == 0 &amp; nextSfcLoc' == 0 &amp; low' == 0 &amp; P_plc' == 0 &amp; P_off_plc' == 0</flow>
+			</location>
+			<location height="80" x="280" name="clock__switch_on__cycle" width="130" y="800" id="4">
+				<invariant>cycle_time1 == 0.0 &amp; global_time &lt;= globalTimeHorizon &amp; global_time &gt;= 0.0</invariant>
+				<flow>global_time' == 1 &amp; cycle_time1' == 1 &amp; h' == 0 &amp; P_on_plc' == 0 &amp; high' == 0 &amp; P_on' == 0 &amp; P_off' == 0 &amp; P' == 0 &amp; nextSfcLoc' == 0 &amp; low' == 0 &amp; P_plc' == 0 &amp; P_off_plc' == 0</flow>
+			</location>
+			<location height="80" x="280" name="clock__switch_on_in__comm" width="130" y="900" id="2">
+				<invariant>cycle_time1 == 0.0 &amp; global_time &lt;= globalTimeHorizon &amp; global_time &gt;= 0.0</invariant>
+				<flow>global_time' == 1 &amp; cycle_time1' == 1 &amp; h' == 0 &amp; P_on_plc' == 0 &amp; high' == 0 &amp; P_on' == 0 &amp; P_off' == 0 &amp; P' == 0 &amp; nextSfcLoc' == 0 &amp; low' == 0 &amp; P_plc' == 0 &amp; P_off_plc' == 0</flow>
+			</location>
+			<location height="80" x="280" name="clock__switch_on_in__cycle" width="130" y="1000" id="1">
+				<invariant>cycle_time1 == 0.0 &amp; global_time &lt;= globalTimeHorizon &amp; global_time &gt;= 0.0</invariant>
+				<flow>global_time' == 1 &amp; cycle_time1' == 1 &amp; h' == 0 &amp; P_on_plc' == 0 &amp; high' == 0 &amp; P_on' == 0 &amp; P_off' == 0 &amp; P' == 0 &amp; nextSfcLoc' == 0 &amp; low' == 0 &amp; P_plc' == 0 &amp; P_off_plc' == 0</flow>
+			</location>
+			<location height="80" x="280" name="clock__switch_on_in__user" width="130" y="1100" id="0">
+				<invariant>cycle_time1 == 0.0 &amp; global_time &lt;= globalTimeHorizon &amp; global_time &gt;= 0.0</invariant>
+				<flow>global_time' == 1 &amp; cycle_time1' == 1 &amp; h' == 0 &amp; P_on_plc' == 0 &amp; high' == 0 &amp; P_on' == 0 &amp; P_off' == 0 &amp; P' == 0 &amp; nextSfcLoc' == 0 &amp; low' == 0 &amp; P_plc' == 0 &amp; P_off_plc' == 0</flow>
+			</location>
+			<transition source="13" target="12">
+				<guard>true</guard>
+				<assignment></assignment>
+			</transition>
+			<transition source="12" target="13">
+				<guard>true</guard>
+				<assignment></assignment>
+			</transition>
+			<transition source="14" target="13">
+				<guard>true</guard>
+				<assignment></assignment>
+			</transition>
+			<transition source="13" target="14">
+				<guard>true</guard>
+				<assignment></assignment>
+			</transition>
+			<transition source="7" target="14">
+				<guard>cycle_time == 0.0</guard>
+				<assignment>nextSfcLoc = 6</assignment>
+			</transition>
+			<transition source="7" target="13">
+				<guard>cycle_time == 0.0</guard>
+				<assignment>nextSfcLoc = 6</assignment>
+			</transition>
+			<transition source="7" target="12">
+				<guard>cycle_time == 0.0</guard>
+				<assignment>nextSfcLoc = 6</assignment>
+			</transition>
+			<transition source="1" target="14">
+				<guard>cycle_time == 0.0</guard>
+				<assignment>nextSfcLoc = 0</assignment>
+			</transition>
+			<transition source="1" target="13">
+				<guard>cycle_time == 0.0</guard>
+				<assignment>nextSfcLoc = 0</assignment>
+			</transition>
+			<transition source="1" target="12">
+				<guard>cycle_time == 0.0</guard>
+				<assignment>nextSfcLoc = 0</assignment>
+			</transition>
+			<transition source="14" target="6">
+				<label>write</label>
+				<guard>nextSfcLoc == 6.0 &amp; cycle_time1 == delta</guard>
+				<assignment>cycle_time1 = 0&amp;P_plc = P&amp;P_on_plc = P_on&amp;P_off_plc = P_off</assignment>
+			</transition>
+			<transition source="13" target="6">
+				<label>write</label>
+				<guard>nextSfcLoc == 6.0 &amp; cycle_time1 == delta</guard>
+				<assignment>cycle_time1 = 0&amp;P_plc = P&amp;P_on_plc = P_on&amp;P_off_plc = P_off</assignment>
+			</transition>
+			<transition source="12" target="6">
+				<label>write</label>
+				<guard>nextSfcLoc == 6.0 &amp; cycle_time1 == delta</guard>
+				<assignment>cycle_time1 = 0&amp;P_plc = P&amp;P_on_plc = P_on&amp;P_off_plc = P_off</assignment>
+			</transition>
+			<transition source="14" target="0">
+				<label>write</label>
+				<guard>cycle_time1 == delta &amp; nextSfcLoc == 0.0</guard>
+				<assignment>cycle_time1 = 0&amp;P_plc = P&amp;P_on_plc = P_on&amp;P_off_plc = P_off</assignment>
+			</transition>
+			<transition source="13" target="0">
+				<label>write</label>
+				<guard>cycle_time1 == delta &amp; nextSfcLoc == 0.0</guard>
+				<assignment>cycle_time1 = 0&amp;P_plc = P&amp;P_on_plc = P_on&amp;P_off_plc = P_off</assignment>
+			</transition>
+			<transition source="12" target="0">
+				<label>write</label>
+				<guard>cycle_time1 == delta &amp; nextSfcLoc == 0.0</guard>
+				<assignment>cycle_time1 = 0&amp;P_plc = P&amp;P_on_plc = P_on&amp;P_off_plc = P_off</assignment>
+			</transition>
+			<transition source="0" target="2">
+				<guard>cycle_time1 == 0.0 &amp; P_plc &lt;= 0.0</guard>
+				<assignment>P_off_plc = 0&amp;P_on_plc = 1</assignment>
+			</transition>
+			<transition source="0" target="2">
+				<guard>cycle_time1 == 0.0 &amp; P_plc &gt;= 1.0</guard>
+				<assignment>P_off_plc = 1&amp;P_on_plc = 0</assignment>
+			</transition>
+			<transition source="2" target="4">
+				<label>read</label>
+				<guard>cycle_time == 0.0 &amp; h &gt;= 12.0</guard>
+				<assignment>low = 1.0&amp;high = 1.0&amp;P_off = P_off_plc&amp;P = P_plc&amp;P_on = P_on_plc</assignment>
+			</transition>
+			<transition source="2" target="4">
+				<label>read</label>
+				<guard>cycle_time == 0.0 &amp; h &lt;= 12.0 &amp; h &gt;= 6.0</guard>
+				<assignment>low = 1.0&amp;high = 0.0&amp;P_off = P_off_plc&amp;P = P_plc&amp;P_on = P_on_plc</assignment>
+			</transition>
+			<transition source="2" target="4">
+				<label>read</label>
+				<guard>cycle_time == 0.0 &amp; h &lt;= 6.0</guard>
+				<assignment>low = 0.0&amp;high = 0.0&amp;P_off = P_off_plc&amp;P = P_plc&amp;P_on = P_on_plc</assignment>
+			</transition>
+			<transition source="4" target="7">
+				<guard>cycle_time == 0.0 &amp; high == 1.0</guard>
+				<assignment>P = 0&amp;P_on = 0&amp;P_off = 0</assignment>
+			</transition>
+			<transition source="4" target="7">
+				<guard>cycle_time == 0.0 &amp; P_off == 1.0</guard>
+				<assignment>P = 0&amp;P_on = 0&amp;P_off = 0</assignment>
+			</transition>
+			<transition source="4" target="1">
+				<guard>high == 0.0 &amp; cycle_time == 0.0 &amp; P_off == 0.0</guard>
+				<assignment></assignment>
+			</transition>
+			<transition source="6" target="8">
+				<guard>cycle_time1 == 0.0 &amp; P_plc &lt;= 0.0</guard>
+				<assignment>P_off_plc = 0&amp;P_on_plc = 1</assignment>
+			</transition>
+			<transition source="6" target="8">
+				<guard>cycle_time1 == 0.0 &amp; P_plc &gt;= 1.0</guard>
+				<assignment>P_off_plc = 1&amp;P_on_plc = 0</assignment>
+			</transition>
+			<transition source="8" target="10">
+				<label>read</label>
+				<guard>cycle_time == 0.0 &amp; h &gt;= 12.0</guard>
+				<assignment>low = 1.0&amp;high = 1.0&amp;P_off = P_off_plc&amp;P = P_plc&amp;P_on = P_on_plc</assignment>
+			</transition>
+			<transition source="8" target="10">
+				<label>read</label>
+				<guard>cycle_time == 0.0 &amp; h &lt;= 12.0 &amp; h &gt;= 6.0</guard>
+				<assignment>low = 1.0&amp;high = 0.0&amp;P_off = P_off_plc&amp;P = P_plc&amp;P_on = P_on_plc</assignment>
+			</transition>
+			<transition source="8" target="10">
+				<label>read</label>
+				<guard>cycle_time == 0.0 &amp; h &lt;= 6.0</guard>
+				<assignment>low = 0.0&amp;high = 0.0&amp;P_off = P_off_plc&amp;P = P_plc&amp;P_on = P_on_plc</assignment>
+			</transition>
+			<transition source="10" target="7">
+				<guard>cycle_time == 0.0 &amp; low == 1.0 &amp; P_on == 0.0</guard>
+				<assignment></assignment>
+			</transition>
+			<transition source="10" target="7">
+				<guard>cycle_time == 0.0 &amp; P_off == 1.0 &amp; low == 1.0</guard>
+				<assignment></assignment>
+			</transition>
+			<transition source="10" target="7">
+				<guard>cycle_time == 0.0 &amp; high == 1.0 &amp; low == 1.0</guard>
+				<assignment></assignment>
+			</transition>
+			<transition source="10" target="1">
+				<guard>high == 0.0 &amp; P_on == 1.0 &amp; cycle_time == 0.0 &amp; P_off == 0.0</guard>
+				<assignment>P = 1&amp;P_on = 0&amp;P_off = 0</assignment>
+			</transition>
+			<transition source="10" target="1">
+				<guard>cycle_time == 0.0 &amp; low == 0.0</guard>
+				<assignment>P = 1&amp;P_on = 0&amp;P_off = 0</assignment>
+			</transition>
+		</component>
+		<component id="leaking_tank">
+			<bind x="350" as="composition" component="composition" y="350">
+			</bind>
+		</component>
+	</sspaceex>

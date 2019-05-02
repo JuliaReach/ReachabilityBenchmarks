@@ -128,8 +128,4 @@
 				<assignment></assignment>
 			</transition>
 		</component>
-		<component id="thermostat">
-			<bind x="350" as="composition" component="composition" y="350">
-			</bind>
-		</component>
 	</sspaceex>

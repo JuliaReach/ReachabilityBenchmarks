@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" version="0.2" math="SpaceEx">
+  <component id="cruise_control">
+    <param name="v" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="t" type="real" local="true" d1="1" d2="1" dynamics="any" />
+    <param name="x" type="real" local="true" d1="1" d2="1" dynamics="any" />
+    <location id="1" name="q1" x="352.0" y="138.0" width="242.0" height="124.0">
+      <invariant>v &gt;= 15 &amp; v &lt;= 40 &amp;
+ t &gt;= 0 &amp; t&lt;= 2.5</invariant>
+      <flow>v' == -t - 2.5 &amp;
+x' == 0 &amp;
+t' == 1</flow>
+    </location>
+    <location id="2" name="q2" x="849.0" y="137.0" width="218.0" height="96.0">
+      <invariant>v &gt;= 15 &amp; v &lt;= 40</invariant>
+      <flow>v' == -5 &amp;
+x' == 0 &amp;
+t' ==0</flow>
+    </location>
+    <location id="3" name="q3" x="838.0" y="336.0" width="202.0" height="104.0">
+      <invariant>v &gt;= 5 &amp; v &lt;= 20</invariant>
+      <flow>v' == -2.5 &amp;
+x' == 0 &amp;
+t' == 0</flow>
+    </location>
+    <location id="4" name="q4" x="357.0" y="342.0" width="244.0" height="126.0">
+      <invariant>v &gt;= 5 &amp; v &lt;= 20 &amp;
+t &gt;= 0 &amp; t &lt;= 1.3</invariant>
+      <flow>v' == -t - 1.2 &amp;
+x' == 0 &amp;
+t' == 0.5</flow>
+    </location>
+    <location id="5" name="q5" x="360.0" y="535.0" width="242.0" height="130.0">
+      <invariant>v &gt;= -15 &amp; v &lt;= 15 &amp;
+x &gt;= -500 &amp; x &lt;= 500</invariant>
+      <flow>v' == -0.001*x - 0.052*v &amp;
+x' == v &amp;
+t' == 0</flow>
+    </location>
+    <location id="6" name="q6" x="361.0" y="726.0" width="164.0" height="116.0">
+      <invariant>v &gt;= -20 &amp; v &lt;= -5</invariant>
+      <flow>v' == 1.5 &amp;
+x' == 0 &amp;
+t' == 0</flow>
+    </location>
+    <transition source="1" target="2">
+      <guard>t == 2.5 &amp; v &gt;= 15 &amp; v &lt;= 40</guard>
+      <labelposition x="-101.0" y="-43.0" width="230.0" height="50.0" />
+    </transition>
+    <transition source="2" target="4">
+      <guard>t == 2.5 &amp; v &gt;= 15 &amp; v &lt;= 16</guard>
+      <assignment>t := 0</assignment>
+      <labelposition x="164.0" y="-88.0" width="198.0" height="50.0" />
+      <middlepoint x="556.0" y="260.0" />
+    </transition>
+    <transition source="3" target="1">
+      <guard>t == 1.3 &amp; v &gt;= 18 &amp; v &lt;= 20</guard>
+      <assignment>t := 0</assignment>
+      <labelposition x="131.0" y="13.0" width="200.0" height="60.0" />
+      <middlepoint x="570.5" y="213.5" />
+    </transition>
+    <transition source="4" target="3">
+      <guard>t == 1.3 &amp; v &gt;= 5 &amp; v &lt;= 20</guard>
+      <labelposition x="-86.0" y="-9.0" width="204.0" height="50.0" />
+    </transition>
+    <transition source="1" target="4">
+      <guard>t &gt;= 0 &amp; t &lt;= 2.5 &amp;
+v &gt;= 15 &amp; v &lt;= 16</guard>
+      <assignment>t := 0</assignment>
+      <labelposition x="8.0" y="-39.0" width="140.0" height="72.0" />
+      <middlepoint x="383.0" y="241.0" />
+    </transition>
+    <transition source="4" target="1">
+      <guard>t &gt;= 0 &amp; t &lt;= 1.3 &amp;
+v &gt;= 18 &amp; v &lt;= 20</guard>
+      <assignment>t := 0</assignment>
+      <labelposition x="-148.0" y="-37.0" width="162.0" height="76.0" />
+      <middlepoint x="328.0" y="241.0" />
+    </transition>
+    <transition source="4" target="5">
+      <guard>t &gt;= 0 &amp; t &lt;= 1.3 &amp; 
+v &gt;= 5 &amp; v &lt;= 11</guard>
+      <assignment>x := 0</assignment>
+      <labelposition x="4.0" y="-40.0" width="144.0" height="72.0" />
+      <middlepoint x="386.5" y="438.5" />
+    </transition>
+    <transition source="5" target="4">
+      <guard>v &gt;= 13 &amp; v &lt;= 15 &amp;
+x &gt;= -500 &amp; x &gt;= 500</guard>
+      <assignment>t := 0</assignment>
+      <labelposition x="-151.0" y="-44.0" width="154.0" height="80.0" />
+      <middlepoint x="330.5" y="437.5" />
+    </transition>
+    <transition source="3" target="5">
+      <guard>t == 1.3 &amp; v &gt;= 5 &amp; v &lt;= 11</guard>
+      <assignment>x := 0</assignment>
+      <labelposition x="22.0" y="-20.0" width="210.0" height="50.0" />
+      <middlepoint x="571.0" y="478.0" />
+    </transition>
+    <transition source="5" target="6">
+      <guard>v &gt;= -15 &amp; v &lt;= -14 &amp;
+x &gt;= -500 &amp; x &lt;= 500</guard>
+      <labelposition x="7.0" y="-40.0" width="154.0" height="74.0" />
+      <middlepoint x="384.5" y="631.5" />
+    </transition>
+    <transition source="6" target="5">
+      <guard>v &gt;= -6 &amp; v &lt;= -5 &amp;
+x &gt;= -500 &amp; x &lt;= 500</guard>
+      <assignment>x := 0</assignment>
+      <labelposition x="-159.0" y="-40.0" width="170.0" height="74.0" />
+      <middlepoint x="327.5" y="629.5" />
+    </transition>
+  </component>
+  <component id="system">
+    <param name="v" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <bind component="cruise_control" as="cruise_control_1">
+      <map key="v">v</map>
+    </bind>
+  </component>
+</sspaceex>
+

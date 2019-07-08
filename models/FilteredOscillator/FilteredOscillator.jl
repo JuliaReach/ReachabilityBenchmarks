@@ -7,12 +7,13 @@
 using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra, Optim
 using LinearAlgebra, SparseArrays
 
-import LazySets.HalfSpace
-import LazySets.Approximations: overapproximate, OctDirections
+using LazySets: HalfSpace
+using LazySets.Approximations: overapproximate, OctDirections
 
-function filtered_oscillator(n0::Int=4,
+function filtered_oscillator(;n0::Int=2,
                              time_horizon::Float64=99.,
-                             one_loop_iteration::Bool=false)
+                             one_loop_iteration::Bool=false,
+                             max_jumps::Int=-1)
 
     n1 = (one_loop_iteration ? n0 + 1 : n0)
     n = n1 + 2
@@ -110,10 +111,11 @@ function filtered_oscillator(n0::Int=4,
 
     problem = InitialValueProblem(HS, [(3, X0)])
 
-    options = Options(:T=>time_horizon, :mode=>"reach", :verbosity=>0)
+    options = Options(:T=>time_horizon, :mode=>"reach",
+                      :project_reachset=>false, :verbosity=>0, :plot_vars=>[1, 2],
+                       :max_jumps=>max_jumps)
 
-    solver_options = Options(:vars=>1:n, :δ=>0.01, :plot_vars=>[1, 2],
-                             :ε_proj=>0.001, :project_reachset=>false)
+    solver_options = Options(:vars=>1:n, :δ=>0.01, :ε_proj=>0.001)
 
     return (problem, options, solver_options)
 end
@@ -145,5 +147,5 @@ function get_projection(sol, projected_dims)
 end
 
 # single run of filtered oscillator
-problem, options, solver_options = filtered_oscillator()
-result = solve(problem, options, BFFPSV18(solver_options), ApproximatingDiscretePost());
+#problem, options, solver_options = filtered_oscillator()
+#result = solve(problem, options, BFFPSV18(solver_options), ApproximatingDiscretePost());

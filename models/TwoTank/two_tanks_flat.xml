@@ -73,15 +73,5 @@ x2' == x1-x2-5 + u </flow>
       <middlepoint x="598.0" y="336.5" />
     </transition>
   </component>
-  <component id="system">
-    <param name="x1" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
-    <param name="x2" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
-    <param name="u" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
-    <bind component="two_tanks" as="two_tanks_1" x="321.0" y="182.0">
-      <map key="x1">x1</map>
-      <map key="x2">x2</map>
-      <map key="u">u</map>
-    </bind>
-  </component>
 </sspaceex>
 

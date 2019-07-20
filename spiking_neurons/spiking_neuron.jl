@@ -53,7 +53,9 @@ problem, options = spiking_neurons();
 
 options = Options(:mode=>"reach", :T=>100.0, :plot_vars=>[1, 2], :project_reachset=>false, :verbosity => "info")
 
-@time sol_TMJets = solve(problem, options, TMJets(:orderT=>5, :orderQ=>2, :abs_tol=>1e-10),LazyDiscretePost(:check_invariant_intersection=>true))
+opC = TMJets(:orderT=>5, :orderQ=>2, :abs_tol=>1e-10)
+opD = LazyDiscretePost(:check_invariant_intersection=>true)
+@time sol_TMJets = solve(problem, options, opC, opD)
 
 plot(sol_TMJets, use_subindices=false, alpha=.5, color=:lightblue)
 

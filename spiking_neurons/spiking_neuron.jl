@@ -16,8 +16,8 @@ function spiking_neurons()
 
     automaton = LightAutomaton(1) # one node
 
-    inv_one = HPolyhedron([HalfSpace([-1.0, 0.0], -0.2),    #x[1] >= -0.2
-                           HalfSpace([0.0, -1.0], -70.0)])  #x[2] >= -70
+    inv_one = HPolyhedron([HalfSpace([-1.0, 0.0], 0.2),    #x[1] >= -0.2
+                           HalfSpace([0.0, -1.0], 70.0)])  #x[2] >= -70
 
     m1 = ConstrainedBlackBoxContinuousSystem(spiking_neuron!, 2, inv_one)
 
@@ -25,8 +25,8 @@ function spiking_neurons()
 
     add_transition!(automaton, 1, 1, 1)
 
-    guard_alpha = HPolyhedron([HalfSpace([-1.0, 0.0], 30.0),   # x[1] >= 30
-                               HalfSpace([1.0, 0.0], 30.0)]) # x[1] <= 30
+    guard_alpha = HPolyhedron([HalfSpace([1.0, 0.0], 30.0),   # x[1] >= 30
+                               HalfSpace([-1.0, 0.0], -30.0)]) # x[1] <= 30
 
     A = [1.0 0.0;0.0 1.0]
     b = [-65.0, 8.0]
@@ -56,3 +56,4 @@ options = Options(:mode=>"reach", :T=>100.0, :plot_vars=>[1, 2], :project_reachs
 @time sol_TMJets = solve(problem, options, TMJets(:orderT=>5, :orderQ=>2, :abs_tol=>1e-10),LazyDiscretePost(:check_invariant_intersection=>true))
 
 plot(sol_TMJets, use_subindices=false, alpha=.5, color=:lightblue)
+

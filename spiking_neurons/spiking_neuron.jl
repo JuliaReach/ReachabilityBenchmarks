@@ -26,7 +26,7 @@ function spiking_neurons()
     add_transition!(automaton, 1, 1, 1)
 
     guard_alpha = HPolyhedron([HalfSpace([-1.0, 0.0], -30.0),   # x[1] >= 30
-                               HalfSpace([-1.0, 0.0], -30.0)]) # x[1] <= 30
+                               HalfSpace([1.0, 0.0], 30.0)]) # x[1] <= 30
 
     A = [1.0 0.0;0.0 1.0]
     b = [-65.0, 8.0]

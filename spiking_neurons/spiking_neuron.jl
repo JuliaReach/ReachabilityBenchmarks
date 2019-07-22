@@ -58,20 +58,20 @@ opD = LazyDiscretePost(:check_invariant_intersection=>true)
 @time sol_TMJets = solve(problem, options, opC, opD)
 
 using IntervalArithmetic
-a = (100/0.55)*IntervalArithmetic.Interval(sol_TMJets.Xk[1].t_start,sol_TMJets.Xk[1].t_end)
+a = (100/0.84)*IntervalArithmetic.Interval(sol_TMJets.Xk[1].t_start,sol_TMJets.Xk[1].t_end)
 b = IntervalArithmetic.Interval(sol_TMJets.Xk[1].X.radius[1],sol_TMJets.Xk[1].X.radius[2])
 fig1 = plot(a×b, colour = "green")
 for i =2:length(sol_TMJets.Xk)
-    a = (100/0.55)*IntervalArithmetic.Interval(sol_TMJets.Xk[i].t_start,sol_TMJets.Xk[i].t_end)
+    a = (100/0.84)*IntervalArithmetic.Interval(sol_TMJets.Xk[i].t_start,sol_TMJets.Xk[i].t_end)
     b = IntervalArithmetic.Interval(sol_TMJets.Xk[i].X.radius[1],sol_TMJets.Xk[i].X.radius[2])
     fig1 =  plot!(a×b, colour = "green")
 end
 
-a = (100/0.55)*IntervalArithmetic.Interval(sol_TMJets.Xk[1].t_start,sol_TMJets.Xk[1].t_end)
+a = (100/0.84)*IntervalArithmetic.Interval(sol_TMJets.Xk[1].t_start,sol_TMJets.Xk[1].t_end)
 b = IntervalArithmetic.Interval(sol_TMJets.Xk[1].X.center[1],sol_TMJets.Xk[1].X.center[2])
 fig2 = plot(a×b, colour = "green")
 for i =2:length(sol_TMJets.Xk)
-    a = (100/0.55)*IntervalArithmetic.Interval(sol_TMJets.Xk[i].t_start,sol_TMJets.Xk[i].t_end)
+    a = (100/0.84)*IntervalArithmetic.Interval(sol_TMJets.Xk[i].t_start,sol_TMJets.Xk[i].t_end)
     b = IntervalArithmetic.Interval(sol_TMJets.Xk[i].X.center[1],sol_TMJets.Xk[i].X.center[2])
     fig2 =  plot!(a×b, colour = "green")
 end

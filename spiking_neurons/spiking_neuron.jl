@@ -16,8 +16,8 @@ function spiking_neurons()
 
     automaton = LightAutomaton(1) # one node
 
-    inv_one = HPolyhedron([HalfSpace([-1.0, 0.0], 0.2),    #x[1] >= -0.2
-                           HalfSpace([0.0, -1.0], 70.0)])  #x[2] >= -70
+    inv_one = HPolyhedron([HalfSpace([1.0, 0.0], 30.0)])
+
 
     m1 = ConstrainedBlackBoxContinuousSystem(spiking_neuron!, 2, inv_one)
 
@@ -25,12 +25,12 @@ function spiking_neurons()
 
     add_transition!(automaton, 1, 1, 1)
 
-    guard_alpha = HPolyhedron([HalfSpace([-1.0, 0.0], -30.0),   # x[1] >= 30
-                               HalfSpace([1.0, 0.0], 30.0)]) # x[1] <= 30
+    guard_alpha = HPolyhedron([HalfSpace([-1.0, 0.0], -30.0)])
 
-    A = [1.0 0.0;0.0 1.0]
+
+    A = [0.0 0.0;0.0 1.0]
     b = [-65.0, 8.0]
-    t1 = ConstrainedAffineMap(A,b,guard_alpha)
+    t1 = ConstrainedAffineMap(A, b, guard_alpha)
     #resetmaps
     resetmaps = [t1]
     # switching
@@ -57,5 +57,21 @@ opC = TMJets(:orderT=>5, :orderQ=>2, :abs_tol=>1e-10)
 opD = LazyDiscretePost(:check_invariant_intersection=>true)
 @time sol_TMJets = solve(problem, options, opC, opD)
 
-plot(sol_TMJets, use_subindices=false, alpha=.5, color=:lightblue)
+using IntervalArithmetic
+a = (100/0.55)*IntervalArithmetic.Interval(sol_TMJets.Xk[1].t_start,sol_TMJets.Xk[1].t_end)
+b = IntervalArithmetic.Interval(sol_TMJets.Xk[1].X.radius[1],sol_TMJets.Xk[1].X.radius[2])
+fig1 = plot(a×b, colour = "green")
+for i =2:length(sol_TMJets.Xk)
+    a = (100/0.55)*IntervalArithmetic.Interval(sol_TMJets.Xk[i].t_start,sol_TMJets.Xk[i].t_end)
+    b = IntervalArithmetic.Interval(sol_TMJets.Xk[i].X.radius[1],sol_TMJets.Xk[i].X.radius[2])
+    fig1 =  plot!(a×b, colour = "green")
+end
 
+a = (100/0.55)*IntervalArithmetic.Interval(sol_TMJets.Xk[1].t_start,sol_TMJets.Xk[1].t_end)
+b = IntervalArithmetic.Interval(sol_TMJets.Xk[1].X.center[1],sol_TMJets.Xk[1].X.center[2])
+fig2 = plot(a×b, colour = "green")
+for i =2:length(sol_TMJets.Xk)
+    a = (100/0.55)*IntervalArithmetic.Interval(sol_TMJets.Xk[i].t_start,sol_TMJets.Xk[i].t_end)
+    b = IntervalArithmetic.Interval(sol_TMJets.Xk[i].X.center[1],sol_TMJets.Xk[i].X.center[2])
+    fig2 =  plot!(a×b, colour = "green")
+end

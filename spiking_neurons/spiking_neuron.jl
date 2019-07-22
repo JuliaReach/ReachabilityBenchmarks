@@ -38,7 +38,7 @@ function spiking_neurons()
 
     ℋ = HybridSystem(automaton, modes, resetmaps, switching)
     #initial condition in mode one
-    X0 = Hyperrectangle(low = [-0.2, -65.0], high = [0.2, -60.0])
+    X0 = Hyperrectangle(low = [-65.0, -0.2], high = [-60.0, 0.2])
 
     initial_condition = [(1, X0)]
 

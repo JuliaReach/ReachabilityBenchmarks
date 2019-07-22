@@ -9,7 +9,7 @@ using TaylorIntegration
     local b = 0.2
     local I = 40
     dx[1] = 0.04*x[1]^2 + 5*x[1] + 140 - x[2] + I
-    dx[2] = a*(b*x[1] - x[2])
+    dx[2] = a*b*x[1] - a*x[2]
 end
 
 function spiking_neurons()

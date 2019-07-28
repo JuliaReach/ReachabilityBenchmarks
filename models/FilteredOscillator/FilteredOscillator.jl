@@ -10,6 +10,27 @@ using LinearAlgebra, SparseArrays
 import LazySets.HalfSpace
 import LazySets.Approximations: overapproximate, OctDirections
 
+"""
+    function filtered_oscillator(n0::Int=4, time_horizon::Float64=99.,
+                                 one_loop_iteration::Bool=false)
+
+Construct the filtered-oscillator model.
+
+### Input
+
+- `n0`                 -- (optional; default: `4`) number of filters
+- `time_horizon`       -- (optional; default: `99.`) time horizon
+- `one_loop_iteration` -- (optional; default: `false`) option to enforce a
+                          single loop (see Notes section below)
+
+### Notes
+
+The option `one_loop_iteration` can be used to add an additional variable `k`.
+This variable starts at value `1` and is multiplied by `2` when taking the
+transition from location `ℓ₃` to location `ℓ₄`.
+In location `ℓ₄` we add the invariant constraint `k ≤ 2.1`.
+Thus location `ℓ₄` can only be entered once.
+"""
 function filtered_oscillator(n0::Int=4,
                              time_horizon::Float64=99.,
                              one_loop_iteration::Bool=false)
@@ -74,8 +95,12 @@ function filtered_oscillator(n0::Int=4,
     X_l3l4 = HPolyhedron([HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                           HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
                           HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
-    A_trans_34 = Matrix(1.0I, n, n)
-    A_trans_34[n, n] = 2.
+    if one_loop_iteration
+        A_trans_34 = copy(A_trans)
+        A_trans_34[n, n] = 2.  # k' = k * 2
+    else
+        A_trans_34 = A_trans
+    end
     r1 = ConstrainedLinearMap(A_trans_34, X_l3l4)
 
     # transition l4 -> l2
@@ -104,8 +129,12 @@ function filtered_oscillator(n0::Int=4,
     HS = HybridSystem(a, m, r, s)
 
     # initial condition in mode 1
-    low = one_loop_iteration ? [0.2; -0.1; zeros(n0); 1.0] : [0.2; -0.1; zeros(n0)]
-    high = one_loop_iteration ? [0.3; 0.1; zeros(n0); 1.0] : [0.3; 0.1; zeros(n0)]
+    low = [0.2; -0.1; zeros(n1)]
+    high = [0.3; 0.1; zeros(n1)]
+    if one_loop_iteration
+        low[end] = 1.0
+        high[end] = 1.0
+    end
     X0 = Hyperrectangle(low=low, high=high)
 
     problem = InitialValueProblem(HS, [(3, X0)])

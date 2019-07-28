@@ -125,7 +125,7 @@ function filtered_oscillator(n0::Int=4,
 
     HS = HybridSystem(a, m, r, s)
 
-    # initial condition in mode 1
+    # initial condition in mode 3
     low = [0.2; -0.1; zeros(n1)]
     high = [0.3; 0.1; zeros(n1)]
     if one_loop_iteration

@@ -88,38 +88,35 @@ function filtered_oscillator(n0::Int=4,
 
     # transitions
 
-    # common resets
-    A_trans = Matrix(1.0I, n, n)
-
     # transition l3 -> l4
     X_l3l4 = HPolyhedron([HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                           HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
                           HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
     if one_loop_iteration
-        A_trans_34 = copy(A_trans)
+        A_trans_34 = Matrix(1.0I, n, n)
         A_trans_34[n, n] = 2.  # k' = k * 2
+        r1 = ConstrainedLinearMap(A_trans_34, X_l3l4)
     else
-        A_trans_34 = A_trans
+        r1 = ConstrainedIdentityMap(n, X_l3l4)
     end
-    r1 = ConstrainedLinearMap(A_trans_34, X_l3l4)
 
     # transition l4 -> l2
     X_l4l2 = HPolyhedron([HalfSpace([0.714286; 1.0; z], 0.0),  # 0.714286*x + y <= 0
                           HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                           HalfSpace([1.0; 0.0; z], 0.0)])  # x <= 0
-    r2 = ConstrainedLinearMap(A_trans, X_l4l2)
+    r2 = ConstrainedIdentityMap(n, X_l4l2)
 
     # transition l2 -> l1
     X_l2l1 = HPolyhedron([HalfSpace([1.0; 0.0; z], 0.0),  # x <= 0
                           HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
                           HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
-    r3 = ConstrainedLinearMap(A_trans, X_l2l1)
+    r3 = ConstrainedIdentityMap(n, X_l2l1)
 
     # transition l1 -> l3
     X_l1l3 = HPolyhedron([HalfSpace([-0.714286; -1.0; z], 0.0),  # 0.714286*x + y >= 0
                           HalfSpace([-1.0; 0.0; z], 0.0),  # x >= 0
                           HalfSpace([1.0; 0.0; z], 0.0)])  # x <= 0
-    r4 = ConstrainedLinearMap(A_trans, X_l1l3)
+    r4 = ConstrainedIdentityMap(n, X_l1l3)
 
     r = [r1, r2, r3, r4]
 

@@ -4,8 +4,8 @@
 # See: https://flowstar.org/benchmarks/filtered-oscillator/
 # ==============================================================================
 
-using HybridSystems, MathematicalSystems, LazySets, Reachability, Polyhedra, Optim
-using LinearAlgebra, SparseArrays
+using HybridSystems, MathematicalSystems, LazySets, LinearAlgebra, Reachability
+using Polyhedra, Optim
 
 import LazySets.HalfSpace
 import LazySets.Approximations: overapproximate, OctDirections

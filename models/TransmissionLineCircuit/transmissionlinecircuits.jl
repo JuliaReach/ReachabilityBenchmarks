@@ -7,43 +7,44 @@ using Plots
 
 @taylorize function transmission_line_circuits_one!(t, x, dx)
    local α = 5
-   dx[1] = -2*x[1] + x[2] + 2 - exp(α*x[1]) - exp(α*(x[1] - x[2])) + 2
-   dx[2] = -2*x[2] + x[1] + x[3] + exp(α*(x[1] - x[2])) - exp(α*(x[2] - x[3])) 
-   dx[3] = -2*x[3] + x[2] + x[4] + exp(α*(x[2] - x[3])) - exp(α*(x[3] - x[4]))
-   dx[4] = -2*x[4] + x[3] + x[5] + exp(α*(x[3] - x[4])) - exp(α*(x[4] - x[5]))
-   dx[5] = -2*x[5] + x[4] + x[6] + exp(α*(x[4] - x[5])) - exp(α*(x[5] - x[6]))
-   dx[6] = -x[6] + x[5] -1 + exp(α*(x[5] - x[6]))
+   dx[1] = (-2*x[1] + x[2]) + ((2 - exp(α*x[1])) + (2 - exp(α*(x[1] - x[2]))))
+   dx[2] = (-2*x[2] + x[1]) + ((x[3] + exp(α*(x[1] - x[2]))) - exp(α*(x[2] - x[3])))
+   dx[3] = (-2*x[3] + x[2]) + ((x[4] + exp(α*(x[2] - x[3]))) - exp(α*(x[3] - x[4])))
+   dx[4] = (-2*x[4] + x[3]) + ((x[5] + exp(α*(x[3] - x[4]))) - exp(α*(x[4] - x[5])))
+   dx[5] = (-2*x[5] + x[4]) + ((x[6] + exp(α*(x[4] - x[5]))) - exp(α*(x[5] - x[6])))
+   dx[6] = (-x[6] + x[5]) + (exp(α*(x[5] - x[6])) - 1)
    dx[7] = one(x[7])
    return dx
 end
 
 @taylorize function transmission_line_circuits_two!(t, x, dx)
    local α = 5
-   dx[1] = -2*x[1] + x[2] + 2 - exp(α*x[1]) - exp(α*(x[1] - x[2])) + 3 - x[7]
-   dx[2] = -2*x[2] + x[1] + x[3] + exp(α*(x[1] - x[2])) - exp(α*(x[2] - x[3])) 
-   dx[3] = -2*x[3] + x[2] + x[4] + exp(α*(x[2] - x[3])) - exp(α*(x[3] - x[4]))
-   dx[4] = -2*x[4] + x[3] + x[5] + exp(α*(x[3] - x[4])) - exp(α*(x[4] - x[5]))
-   dx[5] = -2*x[5] + x[4] + x[6] + exp(α*(x[4] - x[5])) - exp(α*(x[5] - x[6]))
-   dx[6] = -x[6] + x[5] -1 + exp(α*(x[5] - x[6]))
+   dx[1] = (-2*x[1] + x[2]) + ((2 - exp(α*x[1])) + ((3 - exp(α*(x[1] - x[2]))) - x[7]))
+   dx[2] = (-2*x[2] + x[1]) + ((x[3] + exp(α*(x[1] - x[2]))) - exp(α*(x[2] - x[3])))
+   dx[3] = (-2*x[3] + x[2]) + ((x[4] + exp(α*(x[2] - x[3]))) - exp(α*(x[3] - x[4])))
+   dx[4] = (-2*x[4] + x[3]) + ((x[5] + exp(α*(x[3] - x[4]))) - exp(α*(x[4] - x[5])))
+   dx[5] = (-2*x[5] + x[4]) + ((x[6] + exp(α*(x[4] - x[5]))) - exp(α*(x[5] - x[6])))
+   dx[6] = (-x[6] + x[5]) + (exp(α*(x[5] - x[6])) - 1)
    dx[7] = one(x[7])
    return dx
 end
 
 @taylorize function transmission_line_circuits_three!(t, x, dx)
    local α = 5
-   dx[1] = -2*x[1] + x[2] + 2 - exp(α*x[1]) - exp(α*(x[1] - x[2])) + 1
-   dx[2] = -2*x[2] + x[1] + x[3] + exp(α*(x[1] - x[2])) - exp(α*(x[2] - x[3])) 
-   dx[3] = -2*x[3] + x[2] + x[4] + exp(α*(x[2] - x[3])) - exp(α*(x[3] - x[4]))
-   dx[4] = -2*x[4] + x[3] + x[5] + exp(α*(x[3] - x[4])) - exp(α*(x[4] - x[5]))
-   dx[5] = -2*x[5] + x[4] + x[6] + exp(α*(x[4] - x[5])) - exp(α*(x[5] - x[6]))
-   dx[6] = -x[6] + x[5] -1 + exp(α*(x[5] - x[6]))
+   dx[1] = (-2*x[1] + x[2]) + ((2 - exp(α*x[1])) + (1 - exp(α*(x[1] - x[2]))))
+   dx[2] = (-2*x[2] + x[1]) + ((x[3] + exp(α*(x[1] - x[2]))) - exp(α*(x[2] - x[3])))
+   dx[3] = (-2*x[3] + x[2]) + ((x[4] + exp(α*(x[2] - x[3]))) - exp(α*(x[3] - x[4])))
+   dx[4] = (-2*x[4] + x[3]) + ((x[5] + exp(α*(x[3] - x[4]))) - exp(α*(x[4] - x[5])))
+   dx[5] = (-2*x[5] + x[4]) + ((x[6] + exp(α*(x[4] - x[5]))) - exp(α*(x[5] - x[6])))
+   dx[6] = (-x[6] + x[5]) + (exp(α*(x[5] - x[6])) - 1)
    dx[7] = one(x[7])
    return dx
 end
 
+
 function circuits()
 
-   automaton = LightAutomaton(2) # two modes
+   automaton = LightAutomaton(3) #three modes
 
    inv_one = HPolyhedron([HalfSpace([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0], 1.0)]) 
 
@@ -64,31 +65,20 @@ function circuits()
 
    add_transition!(automaton, 1, 2, 1)    # first transion
    add_transition!(automaton, 2, 3, 2)    # second transion
-#   add_transition!(automaton, 2, 1, 3)    # third transion
-#   add_transition!(automaton, 3, 2, 4)    # fourth transion 
      
    G_first = HPolyhedron([HalfSpace([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0], -1.0)]) 
-   G_second = HPolyhedron([HalfSpace([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0], -2.0)]) 
-#   G_third = HPolyhedron([HalfSpace([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0], 1.0)]) 
-#   G_fourth = HPolyhedron([HalfSpace([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0], 2.0)]) 
+   G_second = HPolyhedron([HalfSpace([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0], -2.0)])
 
-   A = [0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0;
-        0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 1.0]
-   
-   b = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-
-   R_first = ConstrainedAffineMap(A, b, G_first)
-   R_second = ConstrainedAffineMap(A, b, G_second)
-#   R_third = ConstrainedAffineMap(A2, b1, G_third)
-#   R_fourth = ConstrainedAffineMap(A1, b2, G_fourth)
+   R_first = ConstrainedIdentityMap(7, G_first)
+   R_second = ConstrainedIdentityMap(7, G_second)
    # resetmaps
-   resetmaps = [R_first, R_second]# R_third, R_fourth]
+   resetmaps = [R_first, R_second]
    # switchings
    switching = AutonomousSwitching()
    switchings = fill(switching, 2)
 
    ℋ = HybridSystem(automaton, modes, resetmaps, switchings)
-   # initial condition in mode three
+
    X0 = Hyperrectangle(low = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], high = [0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.01])
    # initial condition 
    initial_condition = [(1, X0)]  

@@ -1,6 +1,15 @@
-# ==============================================================================
+#=
+This is Non-linear transmission line circuits model,
+Originally considered by Chen et al [1]
+and then adapted to be hybrid case studies [2, 3]
 
-# ==============================================================================
+[1] https://www.researchgate.net/publication/2538345_A_Quadratic_Method_for_Nonlinear_Model_Order_Reduction
+
+[2] https://ieeexplore.ieee.org/document/1174092
+
+[3] C. Gu. Model Order Reduction of Nonlinear Dynamical Systems. 
+    PhD thesis, University of California, Berkeley, 2011   
+=#
 
 using MathematicalSystems, Reachability, HybridSystems
 using Reachability: solve
@@ -67,8 +76,8 @@ function circuits()
    add_transition!(automaton, 1, 2, 1)    # first transion
    add_transition!(automaton, 2, 3, 2)    # second transion
      
-   G_first = HPolyhedron([HalfSpace([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0], -1.0)]) 
-   G_second = HPolyhedron([HalfSpace([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0], -2.0)])
+   G_first = Hyperplane([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0], 1.0)
+   G_second = Hyperplane([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0], 2.0)
 
    R_first = ConstrainedIdentityMap(7, G_first)
    R_second = ConstrainedIdentityMap(7, G_second)

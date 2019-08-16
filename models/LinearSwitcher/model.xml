@@ -63,6 +63,8 @@ x5' == -3.3585*x1 + 14.3426*x2 - 10.5703*x3 - 3.8785*x4 - 10.3111*x5 - 0.7342*u<
       <guard>x1 == 0</guard>
       <labelposition x="-8.0" y="-4.0" />
     </transition>
-
+    <transition source="5" target="1">
+          <guard>x1 == 1</guard>
+    </transition>
   </component>
 </sspaceex>

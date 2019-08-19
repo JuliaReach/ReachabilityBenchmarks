@@ -16,27 +16,27 @@ function linear_switching(; X0 = Singleton([3.1, 4.0, 0.0, 0.0, 0.0]),
 
     id_location = 1
     A, B, c = get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars)
-    X = HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -3.0 + ε) # x >= 3
+    X = HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -3.0 + ε) # x1 >= 3
     q1 = ConstrainedLinearControlContinuousSystem(A, B, X, U)
 
     id_location = 2
     A, B, c = get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars)
-    X = HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -2.0 + ε) # x >= 2
+    X = HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -2.0 + ε) # x1 >= 2
     q2 = ConstrainedLinearControlContinuousSystem(A, B, X, U)
 
     id_location = 3
     A, B, c = get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars)
-    X = HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -1.0 + ε) # x >= 1
+    X = HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -1.0 + ε) # x1 >= 1
     q3 = ConstrainedLinearControlContinuousSystem(A, B, X, U)
 
     id_location = 4
-    A, B, c = get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars) # new function in SX
-    X = HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], 0.0 + ε) # x >= 0
+    A, B, c = get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars)
+    X = HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], 0.0 + ε) # x1 >= 0
     q4 = ConstrainedLinearControlContinuousSystem(A, B, X, U)
 
     id_location = 5
-    A, B, c = get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars) # new function in SX
-    X = HalfSpace([1.0, 0.0, 0.0, 0.0, 0.0], 1.0 + ε) # x <= 1
+    A, B, c = get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars)
+    X = HalfSpace([1.0, 0.0, 0.0, 0.0, 0.0], 1.0 + ε) # x1 <= 1
     q5 = ConstrainedLinearControlContinuousSystem(A, B, X, U)
 
     # automaton structure
@@ -52,20 +52,15 @@ function linear_switching(; X0 = Singleton([3.1, 4.0, 0.0, 0.0, 0.0]),
     add_transition!(automaton, 5, 1, 5)
 
     # guards
-    G12 = HPolyhedron([HalfSpace([1.0, 0.0, 0.0, 0.0, 0.0], 3.0 + ε),
-                       HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -3.0 + ε)]) # x1 = 3
+    G12 = Hyperplane([1.0, 0.0, 0.0, 0.0, 0.0], 3.0)# x1 = 3
 
-    G23 = HPolyhedron([HalfSpace([1.0, 0.0, 0.0, 0.0, 0.0], 2.0 + ε),
-                       HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -2.0 + ε)]) # x1 = 2
+    G23 = Hyperplane([1.0, 0.0, 0.0, 0.0, 0.0], 2.0) # x1 = 2
 
-    G34 = HPolyhedron([HalfSpace([1.0, 0.0, 0.0, 0.0, 0.0], 1.0 + ε),
-                       HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -1.0 + ε)]) # x1 = 1
+    G34 = Hyperplane([1.0, 0.0, 0.0, 0.0, 0.0], 1.0) # x1 = 1
 
-    G45 = HPolyhedron([HalfSpace([1.0, 0.0, 0.0, 0.0, 0.0], 0.0 + ε),
-                       HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -0.0 + ε)]) # x1 = 0
+    G45 = Hyperplane([1.0, 0.0, 0.0, 0.0, 0.0], 0.0) # x1 = 0
 
-    G51 = HPolyhedron([HalfSpace([1.0, 0.0, 0.0, 0.0, 0.0], 1.0 + ε),
-                       HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -1.0 + ε)]) # x1 = 1
+    G51 = Hyperplane([1.0, 0.0, 0.0, 0.0, 0.0], 1.0) # x1 = 1
 
     resetmaps = [ConstrainedIdentityMap(2, G12),
                  ConstrainedIdentityMap(2, G23),
@@ -92,8 +87,6 @@ function linear_switching(; X0 = Singleton([3.1, 4.0, 0.0, 0.0, 0.0]),
     return problem, options
 end
 
-X0 = Singleton([3.1, 4.0, 0.0, 0.0, 0.0])
-U = Interval(-1.0, 1.0)
 problem, options = linear_switching()
 
 @time begin

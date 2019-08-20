@@ -52,15 +52,20 @@ function linear_switching(; X0 = Singleton([3.1, 4.0, 0.0, 0.0, 0.0]),
     add_transition!(automaton, 5, 1, 5)
 
     # guards
-    G12 = Hyperplane([1.0, 0.0, 0.0, 0.0, 0.0], 3.0)# x1 = 3
+    G12 = HPolyhedron([HalfSpace([1.0, 0.0, 0.0, 0.0, 0.0], 3.0 + ε),
+                       HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -3.0 + ε)]) # x1 = 3
 
-    G23 = Hyperplane([1.0, 0.0, 0.0, 0.0, 0.0], 2.0) # x1 = 2
+    G23 = HPolyhedron([HalfSpace([1.0, 0.0, 0.0, 0.0, 0.0], 2.0 + ε),
+                       HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -2.0 + ε)]) # x1 = 2
 
-    G34 = Hyperplane([1.0, 0.0, 0.0, 0.0, 0.0], 1.0) # x1 = 1
+    G34 = HPolyhedron([HalfSpace([1.0, 0.0, 0.0, 0.0, 0.0], 1.0 + ε),
+                       HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -1.0 + ε)]) # x1 = 1
 
-    G45 = Hyperplane([1.0, 0.0, 0.0, 0.0, 0.0], 0.0) # x1 = 0
+    G45 = HPolyhedron([HalfSpace([1.0, 0.0, 0.0, 0.0, 0.0], 0.0 + ε),
+                       HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -0.0 + ε)]) # x1 = 0
 
-    G51 = Hyperplane([1.0, 0.0, 0.0, 0.0, 0.0], 1.0) # x1 = 1
+    G51 = HPolyhedron([HalfSpace([1.0, 0.0, 0.0, 0.0, 0.0], 1.0 + ε),
+                       HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -1.0 + ε)]) # x1 = 1
 
     resetmaps = [ConstrainedIdentityMap(2, G12),
                  ConstrainedIdentityMap(2, G23),

@@ -87,15 +87,15 @@ function linear_switching(; X0 = Singleton([3.1, 4.0, 0.0, 0.0, 0.0]),
 
     property = BadStatesProperty(border)
 
-    options = Options(:mode=>"reach", :T=>T, :property=>property)
+    options = Options(:mode=>"check", :T=>T, :property=>property)
 
     return problem, options
 end
 
-problem, options = linear_switching()
-
-@time begin
-    opC = BFFPS19(:δ=>0.001, :partition=>[1:2, 3:3, 4:4, 5:5], :ε_proj=>0.001)
-    opD = DecomposedDiscretePost(:out_vars=>[1,2], :clustering=>:none)
-    sol = solve(problem, options, opC, opD)
-end
+# problem, options = linear_switching()
+#
+# @time begin
+#     opC = BFFPS19(:δ=>0.0001, :partition=>[1:2, 3:3, 4:4, 5:5], :ε_proj=>0.001)
+#     opD = DecomposedDiscretePost(:out_vars=>[1,2], :clustering=>:none)
+#     sol1 = solve(problem, options, opC, opD)
+# end

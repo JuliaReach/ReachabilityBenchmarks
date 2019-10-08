@@ -127,3 +127,10 @@ function run_platooning(system, options)
 
     solve(system, options, opC, opD)
 end
+
+
+function run_platooning(system, options, opD, opC)
+    options[:mode] = "check"
+    println("upd")
+    return solve(system, options, opC, opD)
+end

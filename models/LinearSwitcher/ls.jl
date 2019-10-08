@@ -6,7 +6,7 @@ model = readsxmodel(file, raw_dict=true)
 function linear_switching(; X0 = Singleton([3.1, 4.0, 0.0, 0.0, 0.0]),
                             U = Interval(-1.0, 1.0),
                             T = 1.0,
-                            ε = 1e-6)
+                            ε = 0)
 
     n = 5 # number of state variables
     m = 1 # number of input variables
@@ -98,4 +98,10 @@ end
 #     opC = BFFPS19(:δ=>0.0001, :partition=>[1:2, 3:3, 4:4, 5:5], :ε_proj=>0.001)
 #     opD = DecomposedDiscretePost(:out_vars=>[1,2], :clustering=>:none)
 #     sol1 = solve(problem, options, opC, opD)
+# end
+#
+# @time begin
+#     opC = BFFPSV18(:δ=>0.0001, :partition=>[1:2, 3:3, 4:4, 5:5], :ε_proj=>0.001)
+#     opD = ApproximatingDiscretePost()
+#     sol2 = solve(problem, options, opC, opD)
 # end

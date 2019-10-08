@@ -20,7 +20,7 @@ Construct the spacecraft-rendezvous model.
                   the upper (`u`) bound; a negative number is interpreted as a
                   *no-abort* scenario
 """
-function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
+function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=120.)
     # variables
     x = 1  # x position (negative!)
     y = 2  # y position (negative!)
@@ -30,7 +30,7 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
 
     # number of variables
     n = 4 + 1
-
+    ε = 1e-6
     # flag for activating the "rendezvous abort" scenario
     aborting = true
     if abort_time isa Number
@@ -86,17 +86,17 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
     A[vy, vx] = -0.00876276068239993
     A[vy, vy] = -19.2299765959399
     invariant = HPolyhedron([
-        HalfSpace(sparsevec([x], [-1.], n), 100.),           # x >= -100
-        HalfSpace(sparsevec([x], [1.], n), 100.),            # x <= 100
-        HalfSpace(sparsevec([y], [-1.], n), 100.),           # y >= -100
-        HalfSpace(sparsevec([y], [1.], n), 100.),            # y <= 100
-        HalfSpace(sparsevec([x, y], [-1., -1.], n), 141.1),  # x + y >= -141.1
-        HalfSpace(sparsevec([x, y], [1., 1.], n), 141.1),    # x + y <= 141.1
-        HalfSpace(sparsevec([x, y], [1., -1.], n), 141.1),   # -x + y >= -141.1
-        HalfSpace(sparsevec([x, y], [-1., 1.], n), 141.1)    # -x + y <= 141.1
+        HalfSpace(sparsevec([x], [-1.], n), 100. + ε),           # x >= -100
+        HalfSpace(sparsevec([x], [1.], n), 100. + ε),            # x <= 100
+        HalfSpace(sparsevec([y], [-1.], n), 100. + ε),           # y >= -100
+        HalfSpace(sparsevec([y], [1.], n), 100. + ε),            # y <= 100
+        HalfSpace(sparsevec([x, y], [-1., -1.], n), 141.1+ ε),  # x + y >= -141.1
+        HalfSpace(sparsevec([x, y], [1., 1.], n), 141.1+ ε),    # x + y <= 141.1
+        HalfSpace(sparsevec([x, y], [1., -1.], n), 141.1+ ε),   # -x + y >= -141.1
+        HalfSpace(sparsevec([x, y], [-1., 1.], n), 141.1+ ε)    # -x + y <= 141.1
        ])
     if aborting
-        addconstraint!(invariant, HalfSpace(sparsevec([t], [1.], n), t_abort_upper))  # t <= t_abort_upper
+        addconstraint!(invariant, HalfSpace(sparsevec([t], [1.], n), t_abort_upper+ ε))  # t <= t_abort_upper
     end
     m_2 = CACS(A, b, invariant)
 
@@ -116,14 +116,14 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
     # transition 1 -> 2
     add_transition!(automaton, 1, 2, 1)
     guard = HPolyhedron([
-        HalfSpace(sparsevec([x], [-1.], n), 100.),           # x >= -100
-        HalfSpace(sparsevec([x], [1.], n), 100.),            # x <= 100
-        HalfSpace(sparsevec([y], [-1.], n), 100.),           # y >= -100
-        HalfSpace(sparsevec([y], [1.], n), 100.),            # y <= 100
-        HalfSpace(sparsevec([x, y], [-1., -1.], n), 141.1),  # x + y >= -141.1
-        HalfSpace(sparsevec([x, y], [1., 1.], n), 141.1),    # x + y <= 141.1
-        HalfSpace(sparsevec([x, y], [1., -1.], n), 141.1),   # -x + y >= -141.1
-        HalfSpace(sparsevec([x, y], [-1., 1.], n), 141.1)    # -x + y <= 141.1
+        HalfSpace(sparsevec([x], [-1.], n), 100. + ε),           # x >= -100
+        HalfSpace(sparsevec([x], [1.], n), 100. + ε),            # x <= 100
+        HalfSpace(sparsevec([y], [-1.], n), 100. + ε),           # y >= -100
+        HalfSpace(sparsevec([y], [1.], n), 100. + ε),            # y <= 100
+        HalfSpace(sparsevec([x, y], [-1., -1.], n), 141.1+ ε),  # x + y >= -141.1
+        HalfSpace(sparsevec([x, y], [1., 1.], n), 141.1+ ε),    # x + y <= 141.1
+        HalfSpace(sparsevec([x, y], [1., -1.], n), 141.1+ ε),   # -x + y >= -141.1
+        HalfSpace(sparsevec([x, y], [-1., 1.], n), 141.1+ ε)    # -x + y <= 141.1
        ])
     t1 = ConstrainedIdentityMap(n, guard)
 
@@ -131,11 +131,11 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
 
     if aborting
         add_transition!(automaton, 1, 3, 2)
-        guard = HalfSpace(sparsevec([t], [-1.], n), -t_abort_lower)  # t >= t_abort_lower
+        guard = HPolyhedron([HalfSpace(sparsevec([t], [-1.], n), -t_abort_lower+ ε)])  # t >= t_abort_lower
         t2 = ConstrainedIdentityMap(n, guard)
 
         add_transition!(automaton, 2, 3, 3)
-        guard = HalfSpace(sparsevec([t], [-1.], n), -t_abort_lower)  # t >= t_abort_lower
+        guard = HPolyhedron([HalfSpace(sparsevec([t], [-1.], n), -t_abort_lower+ ε)])  # t >= t_abort_lower
         t3 = ConstrainedIdentityMap(n, guard)
     end
 
@@ -174,9 +174,9 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
         HalfSpace(sparsevec([x, y], [tan30, -1.], n), 0.),  # -x tan(30°) + y >= 0
         HalfSpace(sparsevec([x, y], [tan30, 1.], n), 0.),   # -x tan(30°) - y >= 0
        ]
-    property_rendezvous = SafeStatesProperty(HPolytope([octagon; cone]))
+    property_rendezvous = SafeStatesProperty(HPolyhedron([octagon; cone]))
     # safety property in "aborting"
-    target = HPolytope([
+    target = HPolyhedron([
         HalfSpace(sparsevec([x], [-1.], n), 0.2),  # x >= -0.2
         HalfSpace(sparsevec([x], [1.], n), 0.2),   # x <= 0.2
         HalfSpace(sparsevec([y], [-1.], n), 0.2),  # y >= -0.2
@@ -188,17 +188,13 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
                                    3 => property_aborting)
 
     # default options
-    options = Options(:T=>300., :property=>property)
+    options = Options(:T=>240., :property=>property)
 
     return (system, options)
 end
 
-function run_spacecraft(system, options)
-    opC = BFFPSV18(:partition => [1:5], :δ => 0.04)
-    opD = LazyDiscretePost(:lazy_R⋂I => true, :lazy_R⋂G => true)
+function run_spacecraft(system, options, opC, opD)
     options[:mode] = "check"
-    options[:plot_vars] = [1, 2]
-    options[:project_reachset] = true
 
     solve(system, options, opC, opD)
 end

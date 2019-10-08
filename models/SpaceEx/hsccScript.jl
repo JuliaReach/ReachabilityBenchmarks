@@ -1,8 +1,9 @@
 import Reachability
+
 include("../ARCH/AFF/Platooning/Platooning.jl")
 include("../LinearSwitcher/ls.jl")
 include("../ARCH/AFF/Rendezvous/SpacecraftRendezvous.jl")
-# include("../FilteredOscillator/FilteredOscillator.jl")
+include("../FilteredOscillator/FilteredOscillator.jl")
 
 function run_platoons()
     println("Platoons")
@@ -25,17 +26,17 @@ function run_platoons()
     𝑂_dense_options_PLAN01_UNB50 = merge(options_PLAN01_UNB50, Options(:δ => 0.03))
 
 
-    println("decomposed")
+    # println("decomposed")
     println("PLAD01_BND42")
     @time sol1_d = run_platooning(PLAD01_BND42, options_PLAD01_BND42, opd_decomposed, BFFPS19())
     println("PLAD01_BND30")
     println("Are safety properties satisfied:", sol1_d.satisfied)
     @time sol2_d = run_platooning(PLAD01_BND30, options_PLAD01_BND30, opd_decomposed, BFFPS19())
     println("Are safety properties satisfied:", sol2_d.satisfied)
-
     println("PLAN01_UNB50")
     @time sol3_d = run_platooning(PLAN01_UNB50, options_PLAN01_UNB50, opd_decomposed, BFFPS19())
     println("Are safety properties satisfied:", sol3_d.satisfied)
+
     println("high")
     println("PLAD01_BND42")
     @time sol1_h = run_platooning(PLAD01_BND42, options_PLAD01_BND42, opd_high, BFFPSV18())
@@ -101,19 +102,25 @@ function run_spacecraft()
 end
 
 
-function run_fo()
+function run_fo(dimensions, time_steps)
     println("filtered_oscillator")
-    for i in [4,8,16,32,64]
-        problem, options, solver_options = filtered_oscillator(i, 99., true)
-        @time result_d = solve(problem, options, BFFPS19(solver_options), DecomposedDiscretePost(:out_vars=>[1,2]));
-        println("decomposed i: ", i, " and is satisfied:", result_d.satisfied)
+    for i in dimensions
+        for time_step in time_steps
+            println("Time step is: ", time_step)
+            problem, options, solver_options = filtered_oscillator(i, 99., true, time_step)
+            @time result_d = solve(problem, options, BFFPS19(solver_options), DecomposedDiscretePost(:out_vars=>[1,2]));
+            println("decomposed i: ", i, " and is satisfied:", result_d.satisfied)
 
-        # @time result_h = solve(problem, options, BFFPSV18(solver_options), LazyDiscretePost());
-        # println("high i: ", i, " and is satisfied:", length(result_h.Xk))
+            @time result_h = solve(problem, options, BFFPSV18(solver_options), LazyDiscretePost());
+            println("high i: ", i, " and is satisfied:", result_h.satisfied)
+            @time result_h = solve(problem, options, BFFPSV18(solver_options), ConcreteDiscretePost());
+            println("concrete high i: ", i, " and is satisfied:", result_h.satisfied)
+        end
     end
 end
 
-# run_platoons()
-# run_lm()
-# run_spacecraft()
-run_fo()
+run_platoons()
+run_lm()
+run_spacecraft()
+run_fo([16], [0.01])
+run_fo([64],[0.01, 0.005])

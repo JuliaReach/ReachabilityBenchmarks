@@ -12,7 +12,7 @@ import LazySets.Approximations: overapproximate, OctDirections
 
 function filtered_oscillator(n0::Int=4,
                              time_horizon::Float64=99.,
-                             one_loop_iteration::Bool=false)
+                             one_loop_iteration::Bool=false, time_step::Float64=0.01)
 
     n1 = (one_loop_iteration ? n0 + 1 : n0)
     n = n1 + 2
@@ -116,7 +116,7 @@ function filtered_oscillator(n0::Int=4,
 
     options = Options(:T=>time_horizon, :mode=>"check", :verbosity=>0, :property=>property)
 
-    solver_options = Options(:vars=>1:n, :δ=>0.01, :partition=>[(i:i) for i in 1:div(n, 1)])
+    solver_options = Options(:vars=>1:n, :δ=>time_step, :partition=>[(i:i) for i in 1:div(n, 1)])
 
     return (problem, options, solver_options)
 end
@@ -148,5 +148,5 @@ function get_projection(sol, projected_dims)
 end
 
 # single run of filtered oscillator
-problem, options, solver_options = filtered_oscillator()
-result = solve(problem, options, BFFPSV18(solver_options), ApproximatingDiscretePost());
+# problem, options, solver_options = filtered_oscillator()
+# result = solve(problem, options, BFFPSV18(solver_options), ApproximatingDiscretePost());

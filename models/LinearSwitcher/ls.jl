@@ -1,4 +1,5 @@
 using Reachability, HybridSystems, MathematicalSystems, LazySets, LinearAlgebra, SX, SymEngine
+using LazySets:Interval
 
 file = "models/LinearSwitcher/model.xml"
 model = readsxmodel(file, raw_dict=true)

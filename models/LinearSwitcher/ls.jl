@@ -2,6 +2,7 @@ using Reachability, HybridSystems, MathematicalSystems, LazySets, LinearAlgebra,
 
 file = "models/LinearSwitcher/model.xml"
 model = readsxmodel(file, raw_dict=true)
+include("ls_helper.jl")
 
 function linear_switching(; X0 = Singleton([3.1, 4.0, 0.0, 0.0, 0.0]),
                             U = Interval(-1.0, 1.0),

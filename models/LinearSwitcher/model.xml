@@ -6,14 +6,14 @@
     <param name="x3" type="real" local="false" d1="1" d2="1" dynamics="any" />
     <param name="x4" type="real" local="false" d1="1" d2="1" dynamics="any" />
     <param name="x5" type="real" local="false" d1="1" d2="1" dynamics="any" />
-    <param name="u" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="u" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="false" />
     <location id="1" name="q1" x="280.0" y="329.0" width="544.0" height="134.0">
       <invariant>x1 &gt;= 3 &amp; -1 &lt;= u &lt;= 1</invariant>
       <flow>x1' == -0.8047*x1 + 8.7420*x2 - 2.4591*x3 - 8.2714*x4 - 1.8640*x5 -0.0845*u &amp;
     x2' == -8.6329*x1 - 0.5860*x2 - 2.1006*x3 + 3.6035*x4 - 1.8423*x5 &amp;
     x3' == 2.4511*x1 + 2.2394*x2 - 0.7538*x3 - 3.6934*x4 + 2.4585*x5 &amp;
     x4' == 8.3858*x1 - 3.1739*x2 + 3.7822*x3 - 0.6249*x4 + 1.8829*x5 &amp;
-    x5' == 1.8302*x1 + 1.9869*x2 - 2.4539*x3 - 1.7726*x4 - 0.7911*x5 -0.0845*u</flow>
+    x5' == 1.8302*x1 + 1.9869*x2 - 2.4539*x3 - 1.7726*x4 - 0.7911*x5 -0.7342*u</flow>
     </location>
     <location id="2" name="q2" x="519.0" y="110.0" width="452.0" height="120.0">
       <invariant>x1 &gt;= 2 &amp; -1 &lt;= u &lt;= 1</invariant>

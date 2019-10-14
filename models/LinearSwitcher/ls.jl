@@ -95,7 +95,7 @@ end
 problem, options = linear_switching()
 
 @time begin
-    opC = BFFPS19(:δ=>0.001, :partition=>[1:2, 3:3, 4:4, 5:5], :ε_proj=>0.001)
+    opC = BFFPS19(:δ=>0.0001, :partition=>[1:2, 3:3, 4:4, 5:5], :ε_proj=>0.001)
     opD = DecomposedDiscretePost(:out_vars=>[1,2], :clustering=>:none)
     sol = solve(problem, options, opC, opD)
 end

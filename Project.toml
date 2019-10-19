@@ -1,0 +1,12 @@
+name = "ReachabilityBenchmarks"
+uuid = "a4785ef3-4c78-58ec-bbba-68644ee365c0"
+version = "0.0.1"
+
+[compat]
+julia = "1.2"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

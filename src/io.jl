@@ -28,7 +28,7 @@ Then,
 # julia -e "include("../projects/models/my_model.jl")"
 
 # in the model file /home/projects/models/my_model.jl we write:
-d = open(@relpath "data.dat")
+d = open(@relpath "my_data.dat")
 # do stuff with d
 ```
 In this example, the macro `@relpath "data.dat"` evaluates to the string

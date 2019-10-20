@@ -24,7 +24,7 @@ directory is required to be loaded by `my_model.jl`.
 Then,
 
 ```julia
-# suppose my path working directory is /home/julia/  so we run the script as
+# suppose the working directory is /home/julia/ and so we ran the script as
 # julia -e "include("../projects/models/my_model.jl")"
 
 # in the model file /home/projects/models/my_model.jl we write:

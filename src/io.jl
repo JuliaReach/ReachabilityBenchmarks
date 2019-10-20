@@ -1,7 +1,7 @@
 """
    @relpath(name)
 
-Returns the absolute path to `name` relative to the executing script.
+Return the absolute path to file `name` relative to the executing script.
 
 ### Input
 

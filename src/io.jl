@@ -16,7 +16,7 @@ A string.
 This macro is equivalent to `joinpath(@__DIR__, name)`.
 
 The `@relpath` macro is used in model scripts to load data files relative to the
-location of the model, wihout having to change directory of your Julia session.
+location of the model, without having to change the directory of the Julia session.
 
 For instance, suppose that the folder `/home/projects/model` contains the script
 `my_model.jl`, and suppose that the data file `my_data.dat` located in the same

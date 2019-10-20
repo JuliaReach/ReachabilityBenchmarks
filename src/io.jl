@@ -33,7 +33,7 @@ d = open(@relpath "my_data.dat")
 ```
 In this example, the macro `@relpath "data.dat"` evaluates to the string
 `/home/projects/models/data.dat`. If the script `my_model.jl` only had
-`d = open("dat.dat")`, without `@relpath`, this command would fail as Julia would
+`d = open("my_data.dat")`, without `@relpath`, this command would fail as Julia would
 have looked for `data.dat` in the *running* directory, giving an error that the file
 `/home/julia/my_data.dat` is not found.
 

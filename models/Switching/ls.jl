@@ -1,13 +1,17 @@
-using Reachability, HybridSystems, MathematicalSystems, LazySets, LinearAlgebra, SX, SymEngine
+#=
+https://ths.rwth-aachen.de/research/projects/hypro/5-dimensional-switching-linear-system/
+Five dimensional switching linear system
+=#
+using Reachability, HybridSystems, MathematicalSystems, LinearAlgebra, SymEngine
+using SX: readsxmodel, _get_coeffs
 
-file = "models/LinearSwitcher/model.xml"
+file = @relpath "model.xml"
 model = readsxmodel(file, raw_dict=true)
-include("ls_helper.jl")
 
-function linear_switching(; X0 = Singleton([3.1, 4.0, 0.0, 0.0, 0.0]),
-                            U = Interval(-1.0, 1.0),
-                            T = 1.0,
-                            ε = 1e-6)
+function switching(; X0 = Singleton([3.1, 4.0, 0.0, 0.0, 0.0]),
+                     U = Interval(-1.0, 1.0),
+                     T = 1.0,
+                     ε = 1e-6)
 
     n = 5 # number of state variables
     m = 1 # number of input variables
@@ -16,7 +20,7 @@ function linear_switching(; X0 = Singleton([3.1, 4.0, 0.0, 0.0, 0.0]),
     input_vars = [convert(Basic, :u)]
 
     id_location = 1
-    A, B, c = get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars)
+    A, B, _ = _get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars)
     X = HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -3.0 + ε) # x1 >= 3
     q1 = ConstrainedLinearControlContinuousSystem(A, B, X, U)
 
@@ -26,17 +30,17 @@ function linear_switching(; X0 = Singleton([3.1, 4.0, 0.0, 0.0, 0.0]),
     q2 = ConstrainedLinearControlContinuousSystem(A, B, X, U)
 
     id_location = 3
-    A, B, c = get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars)
+    A, B, _ = _get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars)
     X = HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], -1.0 + ε) # x1 >= 1
     q3 = ConstrainedLinearControlContinuousSystem(A, B, X, U)
 
     id_location = 4
-    A, B, c = get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars)
+    A, B, _ = _get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars)
     X = HalfSpace([-1.0, 0.0, 0.0, 0.0, 0.0], 0.0 + ε) # x1 >= 0
     q4 = ConstrainedLinearControlContinuousSystem(A, B, X, U)
 
     id_location = 5
-    A, B, c = get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars)
+    A, B, _ = _get_coeffs(model["flows"][id_location], n, m, state_vars, input_vars)
     X = HalfSpace([1.0, 0.0, 0.0, 0.0, 0.0], 1.0 + ε) # x1 <= 1
     q5 = ConstrainedLinearControlContinuousSystem(A, B, X, U)
 
@@ -93,7 +97,7 @@ function linear_switching(; X0 = Singleton([3.1, 4.0, 0.0, 0.0, 0.0]),
     return problem, options
 end
 
-problem, options = linear_switching()
+problem, options = switching()
 
 @time begin
     opC = BFFPS19(:δ=>0.0001, :partition=>[1:2, 3:3, 4:4, 5:5], :ε_proj=>0.001)

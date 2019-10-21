@@ -136,7 +136,12 @@ function filtered_oscillator(n0::Int=4,
 
     problem = InitialValueProblem(HS, [(3, X0)])
 
-    options = Options(:T=>time_horizon, :mode=>"reach", :verbosity=>0)
+    # safety property
+    border = HPolyhedron([HalfSpace([0.0; -1.0; z], -0.5)])  # y >= 0.5
+    property = BadStatesProperty(border)
+
+    options = Options(:T=>time_horizon, :mode=>"reach", :property=>property,
+                      :verbosity=>0)
 
     solver_options = Options(:vars=>1:n, :δ=>0.01, :plot_vars=>[1, 2],
                              :ε_proj=>0.001, :project_reachset=>false)

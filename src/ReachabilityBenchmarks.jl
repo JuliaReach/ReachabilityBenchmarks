@@ -1,13 +1,13 @@
 module ReachabilityBenchmarks
 
-# ================================
-# Input/Output functionality
-# ================================
-include("io.jl")
-
 # ========
 # Exports
 # ========
 export @relpath
+
+# ================================
+# Input/Output functionality
+# ================================
+include("io.jl")
 
 end

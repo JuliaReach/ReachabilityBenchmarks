@@ -2,11 +2,8 @@
 Lorenz model from
 https://en.wikipedia.org/wiki/Lorenz_system
 =#
-using TaylorIntegration
-using TaylorModels: @taylorize
-using Reachability
-using MathematicalSystems
-using LazySets
+using Reachability, MathematicalSystems, TaylorIntegration
+using Reachability: solve
 
 @taylorize function lorenz!(dx, x, params, t)
     local σ = 10.0

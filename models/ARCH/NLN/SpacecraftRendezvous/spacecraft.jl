@@ -4,8 +4,7 @@
 # https://gitlab.com/goranf/ARCH-COMP/blob/master/2018/NLN/C2E2/ARCH18_NLN/rendezvous/c2e2_nonlinear_pass_4d.hyxml
 # for a reference model
 # ===========================================================================
-using SparseArrays, HybridSystems, MathematicalSystems, LazySets, Reachability, TaylorIntegration
-using Reachability: solve
+using SparseArrays, HybridSystems, Reachability, MathematicalSystems, TaylorIntegration
 
 include("eqs_mymul.jl")
 
@@ -99,7 +98,7 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
     velocity = 0.055 * 60.  # meters per minute
     cx = velocity * cos(π / 8)  # x-coordinate of the octagon's first (ENE) corner
     cy = velocity * sin(π / 8)  # y-coordinate of the octagon's first (ENE) corner
-    
+
     tan30 = tan(π/6)
     #=
     octagon = [
@@ -119,7 +118,7 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
        ]
     property_rendezvous = SafeStatesProperty(HPolytope([octagon; cone]))
     =#
-    
+
     property_rendezvous = (t, x) -> (x[3] <= cx) && (x[3]+x[4]<=cx+cy) && (x[4]<=cx) && (-x[3]+x[4] <= cx+cy) && (x[3] >= -cx) &&
                                     (-x[3]-x[4] <= cx+cy) && (x[4] >= -cx) && (x[3]-x[4] <= cx+cy) &&
                                     (x[1] >= -100) && (-x[1]*tan30+x[2]>=0) && (-x[1]*tan30-x[2]>=0)
@@ -134,9 +133,9 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
        ])
     property_aborting = BadStatesProperty(target)
     =#
-    
+
     property_aborting = (t, x) -> !( (x[1] <= 0.2) && (x[1] >= -0.2) && (x[2] <= 0.2) && (x[2] >= -0.2))
-    
+
     # safety properties
     property = Dict{Int, Function}(1 => (t, x) -> true,
                                    2 => property_rendezvous,

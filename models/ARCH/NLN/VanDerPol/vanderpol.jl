@@ -3,8 +3,7 @@
 # See https://easychair.org/publications/paper/gjfh
 # =================================================================
 
-using Reachability, MathematicalSystems, LazySets, TaylorIntegration
-using Reachability: solve
+using Reachability, MathematicalSystems, TaylorIntegration
 
 # Equations of motion: we write the function such that the operations are either
 # unary or binary
@@ -39,7 +38,7 @@ function vanderpol(; μ=1.0,
 
     # problem options
     𝑂 = Options(:T=>T, :mode=>"check", :property=>property)
-    
+
     # instantiate problem
     𝑃 = InitialValueProblem(F, X0)
 

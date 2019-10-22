@@ -3,8 +3,7 @@
 # See https://easychair.org/publications/paper/gjfh
 # =================================================================
 
-using Reachability, MathematicalSystems, LazySets, TaylorIntegration
-using Reachability: solve
+using Reachability, MathematicalSystems, TaylorIntegration
 
 # Equations of motion
 # We write the function such that the operations are either unary or binary:

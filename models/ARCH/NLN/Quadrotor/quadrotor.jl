@@ -34,7 +34,7 @@ const u₃ = 0.0
     return b1 && b2 && b3
 end
 
-@taylorize function quadrotor!(t, x, dx)
+@taylorize function quadrotor!(dx, x, params, t)
     # unwrap the variables and the controllers; the last three are the controllers
     # x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, u₁, u₂, u₃ = x
     x₁  = x[1]

@@ -26,24 +26,24 @@ function switch_controller!(t, x)
     bool_time = constant_term(t) < 120.0
     x_coord = constant_term(constant_term(x[1]))
     bool_approach = -100.0 ≥ x_coord ≥ -1000.0
-    
+
     if bool_time
-        
+
         # Approaching mode
         if bool_approach
             return K₁mc * x
         end
-        
+
         # Rendezvous attempt
         return K₂mc * x
     end
-    
+
     # Aborting
     return zK * x
 end
 
 # dynamics in the 'approaching' mode
-@taylorize function space_rendezvous!(t, x, dx)
+@taylorize function space_rendezvous!(dx, x, params, t)
     x_1 = r + x[1]
     x_12 = x_1^2
     x_22 = x[2]^2
@@ -52,7 +52,7 @@ end
     μ_rc3 = μ / rc3
 
     uxy = switch_controller!(t, x)
-    
+
     # x' = vx
     dx[1] = x[3]
     # y' = vy

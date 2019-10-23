@@ -30,7 +30,7 @@ const u₃ = 0.0
     return b1 && b2 && b3
 end
 
-@taylorize function quadrotor!(t, x, dx)
+@taylorize function quadrotor!(dx, x, params, t)
     # unwrap the variables and the controllers; the last three are the controllers
     # x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, u₁, u₂, u₃ = x
     x₁  = x[1]
@@ -72,7 +72,7 @@ end
     sx7cx8 = sx7*cx8
     cx7cx8 = cx7*cx8
     sx7_cx8 = sx7/cx8
-    cx7_cx8 = cx7/cx8    
+    cx7_cx8 = cx7/cx8
     #
     x4cx8 = cx8*x₄
     #
@@ -81,7 +81,7 @@ end
     xdot9 = p11 + p12
 
     # differential equations for the quadrotor
-    #    
+    #
     dx[1] = (cx9*x4cx8 + (sx7cx9*sx8 - cx7sx9)*x₅) + (cx7cx9*sx8 + sx7sx9)*x₆
     dx[2] = (sx9*x4cx8 + (sx7sx9*sx8 + cx7cx9)*x₅) + (cx7sx9*sx8 - sx7cx9)*x₆
     dx[3] = (sx8*x₄ - sx7cx8*x₅) - cx7cx8*x₆
@@ -134,7 +134,7 @@ function quad_TMJets(; t0=0.0, T=5.0, abs_tol=1e-7,
     Wvel = 0.4
 
     q0 = zeros(12)
-    δq0 = IntervalBox(-Wpos..Wpos, -Wpos..Wpos, -Wpos..Wpos, -Wvel..Wvel, -Wvel..Wvel, -Wvel..Wvel, 
+    δq0 = IntervalBox(-Wpos..Wpos, -Wpos..Wpos, -Wpos..Wpos, -Wvel..Wvel, -Wvel..Wvel, -Wvel..Wvel,
                       0..0, 0..0, 0..0, 0..0, 0..0, 0..0 )
 
     # set variables

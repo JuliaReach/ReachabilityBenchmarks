@@ -5,7 +5,7 @@ using TaylorModels: validated_integ
 
 # Equations of motion
 # We write the function such that the operations are either unary or binary:
-@taylorize function laubloomis!(t, x, dx)
+@taylorize function laubloomis!(dx, x, params, t)
     dx[1] = 1.4*x[3] - 0.9*x[1]
     dx[2] = 2.5*x[5] - 1.5*x[2]
     dx[3] = 0.6*x[7] - 0.8*(x[2]*x[3])
@@ -57,7 +57,7 @@ end
 
 #=
 # return `true` if the specification is specification is satisfied and `false`
-# otherwise 
+# otherwise
 function check_property(xTM)
     satisfied = true
     for ind in eachindex(xTM[:])

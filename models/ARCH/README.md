@@ -1,4 +1,13 @@
-### Note for ARCH-COMP 2019
+## Notes for ARCH-COMP 2019
+
+### Linear systems
+
+Published results can be found here:
+
+- [ARCH-COMP19 Category Report: Continuous and Hybrid Systems with Linear Continuous Dynamics.](https://easychair.org/publications/paper/1gbP)
+
+
+### Nonlinear systems
 
 The models `VanDerPol`, `LaubLoomis` and `Quadrotor` in this folder were taken from:
 
@@ -11,5 +20,4 @@ Link to the respective snapshot [here](https://gitlab.com/goranf/ARCH-COMP/tree/
 
 Published results can be found here:
 
-- [ARCH-COMP19 Category Report: Continuous and Hybrid Systems with Linear Continuous Dynamics.](https://easychair.org/publications/paper/1gbP)
 - [ARCH-COMP19 Category Report: Continuous and Hybrid Systems with Nonlinear Dynamics.](https://easychair.org/publications/paper/4FSh)

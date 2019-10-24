@@ -108,7 +108,7 @@ options_PLAN01_UNB50[:mode] = "reach"
 options_PLAN01_UNB50[:plot_vars] = [0, 1]
 options_PLAN01_UNB50[:project_reachset] = true
 res = solve(PLAN01_UNB50, options_PLAN01_UNB50, opC_dense_PLAN01_UNB50, opD)
-time_horizon = res.Xk[end].t_start
+time_horizon = t_start(res.Xk[end])
 plot(res,
      tickfont=font(30, "Times"), guidefontsize=45,
      xlab=L"t\raisebox{-0.5mm}{\textcolor{white}{.}}",

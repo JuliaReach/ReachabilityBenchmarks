@@ -20,4 +20,4 @@ X0 = Hyperrectangle(low=[0.9, 0.0, 0.0], high=[1.1, 0.0, 0.0])
 
 # reach mode
 𝑂 = Options(:T=>10.0, :mode=>"reach")
-sol = solve(𝑃, 𝑂, op=TMJets(:abs_tol=>1e-27, :orderT=>10, :orderQ=>2));
+sol = solve(𝑃, 𝑂, op=TMJets(:abs_tol=>1e-27, :orderT=>10, :orderQ=>2, :max_steps=>50_000));

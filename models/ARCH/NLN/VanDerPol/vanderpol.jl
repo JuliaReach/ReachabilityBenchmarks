@@ -3,19 +3,18 @@
 # See https://easychair.org/publications/paper/gjfh
 # =================================================================
 
-using Reachability, MathematicalSystems, LazySets, TaylorIntegration
-using Reachability: solve
+using Reachability, MathematicalSystems, TaylorIntegration
 
 # Equations of motion: we write the function such that the operations are either
 # unary or binary
-@taylorize function vanderPol_mu_one!(t, x, dx)
+@taylorize function vanderPol_mu_one!(dx, x, params, t)
     local μ = 1.0
     dx[1] = x[2]
     dx[2] = (μ * x[2]) * (1 - x[1]^2) - x[1]
     return dx
 end
 
-@taylorize function vanderPol_mu_two!(t, x, dx)
+@taylorize function vanderPol_mu_two!(dx, x, params, t)
     local μ = 2.0
     dx[1] = x[2]
     dx[2] = (μ * x[2]) * (1 - x[1]^2) - x[1]
@@ -39,7 +38,7 @@ function vanderpol(; μ=1.0,
 
     # problem options
     𝑂 = Options(:T=>T, :mode=>"check", :property=>property)
-    
+
     # instantiate problem
     𝑃 = InitialValueProblem(F, X0)
 

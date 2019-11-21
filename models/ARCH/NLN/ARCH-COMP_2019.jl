@@ -1,4 +1,4 @@
-using Dates
+using Dates, ReachabilityBenchmarks
 
 # print current time
 now()

@@ -1,3 +1,8 @@
+using Dates, ReachabilityBenchmarks
+
+# print current time
+now()
+
 # ISS benchmark
 include("SpaceStation/iss_benchmark.jl")
 

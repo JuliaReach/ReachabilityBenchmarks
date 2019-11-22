@@ -9,18 +9,6 @@ include("iss_BFFPSV18.jl")
 import IntervalArithmetic
 const IT = Interval{Float64, IntervalArithmetic.Interval{Float64}}
 
-# helper function to take the cartesian product with the time variable
-function add_time(flowpipe::Vector{SparseReachSet{ST}}) where {ST}
-    flowpipe_with_time = Vector{ReachSet{CartesianProduct{Float64, IT, ST}}}()
-    @inbounds for rs in flowpipe
-        ti = time_start(rs)
-        tf = time_end(rs)
-        Δt = Interval(ti, tf)
-        push!(flowpipe_with_time, ReachSet(Δt × set(rs), ti, tf))
-    end
-    return flowpipe_with_time
-end
-
 # ==============================================================================
 # Execute benchmarks and save benchmark results
 # ==============================================================================
@@ -55,8 +43,10 @@ projection_matrix = C[:, 136:270]
 opC = BFFPSV18(merge(𝑂_dense_ISS01, Options(:block_options_iter => nothing)))
 res = solve(iss_TV, 𝑂_ISS01, op=opC)
 
-# FIXME: use Reachability's project function
-res = ReachSolution(add_time(res.Xk), Options(:plot_vars => [0, 1]))
+res = ReachSolution(
+    [ReachSet(Interval(rs.t_start, rs.t_end) × rs.X, rs.t_start, rs.t_end)
+        for rs in res.Xk],
+    Options(:plot_vars => [0, 1]))
 
 plot(res,
      tickfont=font(30, "Times"), guidefontsize=45,
@@ -78,8 +68,10 @@ savefig(@relpath "ISSF01.png")
 opC = BFFPSV18(merge(𝑂_dense_ISS02, Options(:block_options_iter => nothing)))
 res = solve(iss_CONST, 𝑂_ISS02, op=opC)
 
-# FIXME: use Reachability's project function
-res = ReachSolution(add_time(res.Xk), Options(:plot_vars => [0, 1]))
+res = ReachSolution(
+    [ReachSet(Interval(rs.t_start, rs.t_end) × rs.X, rs.t_start, rs.t_end)
+        for rs in res.Xk],
+    Options(:plot_vars => [0, 1]))
 
 plot(res,
      tickfont=font(30, "Times"), guidefontsize=45,

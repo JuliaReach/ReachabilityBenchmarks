@@ -2,8 +2,7 @@
 # Gearbox model
 # See https://easychair.org/publications/paper/cwl
 # ================================================
-using LinearAlgebra, SparseArrays, HybridSystems, MathematicalSystems, LazySets,
-      Reachability
+using Reachability, HybridSystems, MathematicalSystems, SparseArrays
 using LazySets: HalfSpace  # resolve name-space conflicts with Polyhedra
 
 """

@@ -6,9 +6,6 @@ using BenchmarkTools: minimum, median
 # ==============================================================================
 include("iss_BFFPSV18.jl")
 
-import IntervalArithmetic
-const IT = Interval{Float64, IntervalArithmetic.Interval{Float64}}
-
 # ==============================================================================
 # Execute benchmarks and save benchmark results
 # ==============================================================================

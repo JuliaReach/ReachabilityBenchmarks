@@ -1,5 +1,4 @@
-using Reachability, MathematicalSystems, HybridSystems, LinearAlgebra,
-      SparseArrays
+using Reachability, MathematicalSystems, HybridSystems, SparseArrays
 
 
 function print_dynamics(A, b, location_name)

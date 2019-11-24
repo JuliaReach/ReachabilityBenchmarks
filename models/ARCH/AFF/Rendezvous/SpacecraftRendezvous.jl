@@ -4,7 +4,7 @@
 # https://gitlab.com/goranf/ARCH-COMP/tree/master/2018/AFF/SpaceEx/Rendezvous
 # for a reference model
 # ===========================================================================
-using SparseArrays, HybridSystems, MathematicalSystems, LazySets, Reachability
+using SparseArrays, HybridSystems, MathematicalSystems, Reachability
 using LazySets: HalfSpace  # resolve name-space conflicts with Polyhedra
 
 """

@@ -3,8 +3,8 @@
 # See https://easychair.org/publications/open/4cGr
 # ==============================================================================
 
-using MAT, Reachability, MathematicalSystems, SX
-using SparseArrays, LinearAlgebra
+using ReachabilityBenchmarks, Reachability, MathematicalSystems, SX,
+      SparseArrays
 
 # ==============================
 # Load model

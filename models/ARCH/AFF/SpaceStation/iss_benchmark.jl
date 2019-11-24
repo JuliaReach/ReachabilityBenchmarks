@@ -44,8 +44,8 @@ opC = BFFPSV18(merge(𝑂_dense_ISS01, Options(:block_options_iter => nothing)))
 res = solve(iss_TV, 𝑂_ISS01, op=opC)
 
 res = ReachSolution(
-    [ReachSet(Interval(rs.t_start, rs.t_end) × rs.X, rs.t_start, rs.t_end)
-        for rs in res.Xk],
+    [ReachSet(Interval(time_start(rs), time_end(rs)) × set(rs), time_start(rs),
+              time_end(rs)) for rs in res.Xk],
     Options(:plot_vars => [0, 1]))
 
 plot(res,
@@ -69,8 +69,8 @@ opC = BFFPSV18(merge(𝑂_dense_ISS02, Options(:block_options_iter => nothing)))
 res = solve(iss_CONST, 𝑂_ISS02, op=opC)
 
 res = ReachSolution(
-    [ReachSet(Interval(rs.t_start, rs.t_end) × rs.X, rs.t_start, rs.t_end)
-        for rs in res.Xk],
+    [ReachSet(Interval(time_start(rs), time_end(rs)) × set(rs), time_start(rs),
+              time_end(rs)) for rs in res.Xk],
     Options(:plot_vars => [0, 1]))
 
 plot(res,

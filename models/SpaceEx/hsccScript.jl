@@ -1,4 +1,5 @@
 import Reachability
+using Plots, Plots.PlotMeasures, LaTeXStrings
 
 include("../ARCH/AFF/Platooning/Platooning.jl")
 include("../LinearSwitcher/ls.jl")
@@ -102,16 +103,50 @@ function print_results(results)
     end
 end
 
+function plot_raw()
+    plot(tickfont=font(20, "Times"), guidefontsize=30, aspectratio=1, leg=false)
+end
 
-println("Table 1:")
-table1 = Vector{Tuple{String, Vector{Tuple{Float64, Bool}}}}()
-append!(table1, run_platoons())
-append!(table1, run_lm())
-append!(table1, run_spacecraft())
-append!(table1, results = run_fo([16, 32, 64, 128, 256, 512, 1024], [0.01]))
-println("Table 1:")
-print_results(table1)
+function produce_figure()
+	c1 = "orange"
+	c2 = "lightblue"
+	lower = -0.5
+	upper = 0.5
+	left = -0.7
+	right = 0.7
 
-table2 = run_fo([64],[0.01, 0.005, 0.001, 0.0005])
-println("Table 2:")
-print_results(table2)
+	problem, options, solver_options = filtered_oscillator(4, 99., false, 0.01)
+
+	plotly()
+
+    plot_raw()
+    plot!(xlims=(left, right), ylims=(lower, upper),
+		xticks=[-0.6, -0.4, -0.2, 0., 0.2, 0.4, 0.6], yticks=[-0.4, -0.2, 0., 0.2, 0.4],
+        xlab=L"\raisebox{-1mm}{\textcolor{white}{.}}x",
+        ylab=L"\raisebox{1.5mm}{\textcolor{white}{.}}y",
+        left_margin=0mm, right_margin=0mm, top_margin=5mm, bottom_margin=10mm,
+        size=(1000, 750))
+
+	result_box = solve(problem, options, BFFPS19(solver_options), DecomposedDiscretePost(:out_vars=>[1,2]));
+	Xkproj1 = [Approximations.project(set(result_box.Xk[i]), [1, 2], Approximations.BoxDirections) for i in eachindex(result_box.Xk)];
+
+    fig = plot(Xkproj1[1], color=c1)
+    for i in 1:length(Xkproj1)
+        plot!(fig, Xkproj1[i], color=c1)
+    end
+
+	solver_options[:block_options] = Approximations.OctDirections
+	solver_options[:ε_proj] = 1e-3
+	solver_options[:set_type_proj] = HPolygon
+	solver_options[:partition] = [(2*i-1:2*i) for i in 1:div(6, 2)]
+
+	result_oct = solve(problem, options, BFFPS19(solver_options), DecomposedDiscretePost(:overapproximation=>Approximations.OctDirections,:out_vars=>[1,2]));
+    Xkproj2 = [Approximations.project(set(result_oct.Xk[i]), [1, 2], Approximations.OctDirections) for i in eachindex(result_oct.Xk)];
+
+    for i in 1:length(Xkproj2)
+        plot!(fig, Xkproj2[i], color=c2)
+    end
+
+    savefig(fig, "hscc20")
+end
+produce_figure()

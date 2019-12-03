@@ -149,4 +149,17 @@ function produce_figure()
 
     savefig(fig, "hscc20")
 end
+println("Table 1:")
+table1 = Vector{Tuple{String, Vector{Tuple{Float64, Bool}}}}()
+append!(table1, run_platoons())
+append!(table1, run_lm())
+append!(table1, run_spacecraft())
+append!(table1, results = run_fo([16, 32, 64, 128, 256, 512, 1024], [0.01]))
+println("Table 1:")
+print_results(table1)
+
+table2 = run_fo([64],[0.01])
+plot(table2)
+println("Table 2:")
+print_results(table2)
 produce_figure()

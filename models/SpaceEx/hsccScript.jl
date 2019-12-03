@@ -116,7 +116,7 @@ function produce_figure()
 	right = 0.7
 
 	problem, options, solver_options = filtered_oscillator(4, 99., false, 0.01)
-
+	options[:mode] = "reach"
 	plotly()
 
     plot_raw()
@@ -154,11 +154,11 @@ table1 = Vector{Tuple{String, Vector{Tuple{Float64, Bool}}}}()
 append!(table1, run_platoons())
 append!(table1, run_lm())
 append!(table1, run_spacecraft())
-append!(table1, results = run_fo([16, 32, 64, 128, 256, 512, 1024], [0.01]))
+append!(table1, run_fo([16, 32, 64, 128, 256, 512, 1024], [0.01]))
 println("Table 1:")
 print_results(table1)
 
-table2 = run_fo([64],[0.01])
+table2 = run_fo([64],[0.01, 0.005, 0.001, 0.0005])
 plot(table2)
 println("Table 2:")
 print_results(table2)

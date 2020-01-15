@@ -21,13 +21,14 @@ vars = [1, η, η + 1, 2 * η]
 # reachability algorithm
 algorithm_reach = ASB07_decomposed(:δ => 0.002, :max_order => 400,
     :order_discretization => 9, :partition => partition, :vars => vars)
+# TODO ":order_discretization => 6" was used in the paper but that did not work
 
 # compute flowpipe
 options[:mode] = "reach"
 solution = solve(problem, options; op=algorithm_reach)
 
 for (vars, suffix) in [([0, η], "t-U_n"),
-                       ([1, η + 1], "U_1-I_n"),
+                       ([1, 2 * η], "U_1-I_1"),
                        ([η, η + 1], "U_n-I_n")]
     # project flowpipe to time and x_η
     solution.options[:plot_vars] = vars

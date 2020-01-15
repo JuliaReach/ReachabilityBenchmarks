@@ -15,7 +15,7 @@ problem = InitialValueProblem(S, X0)
 # partition with 1D blocks
 partition = [i:i for i in 1:(2 * η)]
 
-# variables of interest: U₁ ~ 1, I₁ ~ η+1, U_η ~ η, I_η ~ 2*η
+# variables of interest: U₁ ~ 1, U_η ~ η, I₁ ~ η+1, I_η ~ 2*η
 vars = [1, η, η + 1, 2 * η]
 
 # reachability algorithm

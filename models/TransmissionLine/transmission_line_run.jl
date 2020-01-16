@@ -4,7 +4,7 @@ include(@relpath "transmission_line_model.jl")
 include(@relpath "transmission_line_specifications.jl")
 
 # number of circuit nodes
-η = 20
+η = 2
 
 S = transmission_line_model(η)
 X0, options = transmission_line_specification(S)
@@ -27,9 +27,16 @@ algorithm_reach = ASB07_decomposed(:δ => 0.002, :max_order => 400,
 options[:mode] = "reach"
 solution = solve(problem, options; op=algorithm_reach)
 
-for (vars, suffix) in [([0, η], "t-U_n"),
-                       ([1, 2 * η], "U_1-I_1"),
-                       ([η, η + 1], "U_n-I_n")]
+# TODO temporary filtering of flowpipe to the first k sets
+k = 1
+flowpipes = [Flowpipe(solution.flowpipes[1].reachsets[1:k])]
+solution = ReachSolution(flowpipes, solution.options)
+
+for (vars, suffix) in [
+                       ([0, η], "t-U_n"),
+                       ([1, η + 1], "U_1-I_1"),
+                       ([η, 2 * η], "U_n-I_n")
+                      ]
     # project flowpipe to time and x_η
     solution.options[:plot_vars] = vars
     solution_proj = project(solution)

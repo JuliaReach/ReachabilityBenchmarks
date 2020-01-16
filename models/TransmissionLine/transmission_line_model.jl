@@ -48,11 +48,17 @@ function interval_matrices(η, n)
     end
 
     # interval matrix p₁Q₁ + p₂Q₂ + p₃Q₃ + p₄Q₄ (see Eq. (15) in [1])
+    # the whole matrix A consists of four blocks A = [A₁₁ A₁₂; A₂₁ A₂₂] where
+    # A₁₁ is the zero matrix,
+    # A₁₂ has -p₂ on the diagonal and p₂ on the upper diagonal,
+    # A₂₁ has p₁ on the diagonal and -p₁ on the upper diagonal, and
+    # A₂₂ has -p₄ on the diagonal except for the top left entry, which is -p₃.
     A = p₁ * Q₁ + p₂ * Q₂ + p₃ * Q₃ + p₄ * Q₄
 
-    # interval matrix p₁r
+    # interval matrix p₁r, which is a zero column matrix except for the (η + 1)
+    # entry, which is p₁ (paper) resp. -p₁ (CORA implementation; see TODO below)
     r = IntervalMatrix(fill(IA.Interval(0.0), (n, 1)))
-    r[η + 1, 1] = -1.0
+    r[η + 1, 1] = -1.0  # TODO CORA implementation say -1 but paper says +1
     B = p₁ * r
 
     # correction due to time scaling

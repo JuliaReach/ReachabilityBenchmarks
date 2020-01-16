@@ -58,7 +58,7 @@ function interval_matrices(η, n)
     # interval matrix p₁r, which is a zero column matrix except for the (η + 1)
     # entry, which is p₁ (paper) resp. -p₁ (CORA implementation; see TODO below)
     r = IntervalMatrix(fill(IA.Interval(0.0), (n, 1)))
-    r[η + 1, 1] = -1.0  # TODO CORA implementation say -1 but paper says +1
+    r[η + 1, 1] = -1.0  # TODO CORA implementation says -1 but paper says +1
     B = p₁ * r
 
     # correction due to time scaling

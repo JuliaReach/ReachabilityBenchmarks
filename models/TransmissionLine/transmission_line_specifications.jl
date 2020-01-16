@@ -11,6 +11,7 @@ function transmission_line_specification(S::ConstrainedLinearControlContinuousSy
     n = size(b, 1)
     u = LazySets.Interval(-0.2, 0.2)
     □(r) = BallInf(zeros(n), r)
+    # TODO paper says -A⁻¹ but implementation uses A⁻¹
     X0 = minkowski_sum(linear_map(-A⁻¹ * b, u), □(1e-3))
 
     # time horizon: 0.7 time units

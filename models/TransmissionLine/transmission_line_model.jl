@@ -12,8 +12,11 @@
 # ===========================================================================
 using MathematicalSystems, LazySets, IntervalMatrices
 
-function interval_matrices(η, n)
+function interval_matrices(η)
     IA = IntervalArithmetic
+
+    # problem dimension
+    n = 2 * η
 
     # parameters (see Table 3 in [1])
     R = IA.Interval(0.99, 1.01)
@@ -69,11 +72,8 @@ function interval_matrices(η, n)
 end
 
 function transmission_line_model(η::Int=20)
-    # problem dimension
-    n = 2 * η
-
     # system and input matrices
-    A, B = interval_matrices(η, n)
+    A, B = interval_matrices(η)
 
     # input domain
     U = ConstantInput(LazySets.Interval(0.99, 1.01))

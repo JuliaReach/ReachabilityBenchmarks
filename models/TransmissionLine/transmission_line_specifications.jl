@@ -7,6 +7,7 @@ function transmission_line_specification(S::ConstrainedLinearControlContinuousSy
     # TODO CORA first creates an interval matrix and then converts to zonotope.
     # is this equivalent?
     A⁻¹ = inv(mid(S.A))
+    A⁻¹[1, 1] = 0.0  # TODO temporary fix to make matrix inverse the same as in CORA
     b = mid(S.B)  # TODO paper says midpoint but CORA implementation uses range
     n = size(b, 1)
     u = LazySets.Interval(-0.2, 0.2)

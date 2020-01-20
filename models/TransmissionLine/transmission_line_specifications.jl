@@ -7,7 +7,6 @@ function transmission_line_specification(S::ConstrainedLinearControlContinuousSy
     # where A and b are the midpoints of S.A and S.B, respectively
 
     A⁻¹ = inv(mid(S.A))
-    A⁻¹[1, 1] = 0.0  # TODO temporary fix to make matrix inverse the same as in CORA
     b = S.B  # TODO paper says midpoint but CORA implementation uses range
              #      we currently cannot do matrix * mid(S.B)
     n = size(b, 1)

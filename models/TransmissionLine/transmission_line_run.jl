@@ -44,4 +44,16 @@ for (vars, suffix) in [
     # plot projection
     plot(solution_proj)
     savefig("transmission_line_" * suffix)
+
+    # TODO temporarily also plot X0
+    using SparseArrays
+    if vars[1] == 0
+        M = sparse([1], [vars[2]], [1.], 1, 2 * η)
+        Y = LazySets.Interval(0., k * algorithm_reach.options[:δ]) × (M * X0)
+    else
+        M = sparse([1, 2], vars, [1., 1.], 2, 2 * η)
+        Y = M * X0
+    end
+    plot(Y, color=:red)
+    savefig("transmission_line_X0_" * suffix)
 end

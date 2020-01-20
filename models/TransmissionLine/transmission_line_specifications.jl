@@ -12,7 +12,8 @@ function transmission_line_specification(S::ConstrainedLinearControlContinuousSy
     n = size(b, 1)
     u = IA.Interval(-0.2, 0.2)
     □(r) = IntervalMatrix(fill(IA.Interval(-r, r), (n, 1)))
-    X0_itvmat = IntervalMatrix(-A⁻¹ * b) * u + □(1e-3)
+    X0_itvmat = IntervalMatrix(-A⁻¹ * b) * u + □(1e-3)  # TODO paper says - but
+                                                    # CORA implementation uses +
     # convert interval matrix to zonotope
     X0 = Zonotope(zeros(n), Diagonal(vec([abs(x.hi) for x in X0_itvmat])))
 

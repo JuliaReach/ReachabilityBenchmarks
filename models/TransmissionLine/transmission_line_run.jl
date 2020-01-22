@@ -60,6 +60,6 @@ for (vars, suffix) in [
         M = sparse([1, 2], vars, [1., 1.], 2, 2 * η)
         Y = M * X0
     end
-    plot(Y, color=:red)
+    plot!(Y, color=:red)
     savefig("transmission_line_X0_" * suffix)
 end

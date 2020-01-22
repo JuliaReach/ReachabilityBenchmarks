@@ -22,6 +22,8 @@ vars = [1, η, η + 1, 2 * η]
 algorithm_reach = ASB07_decomposed(:δ => 0.002, :max_order => 400,
     :order_discretization => 9, :partition => partition, :vars => vars)
 # TODO ":order_discretization => 6" was used in the paper but that did not work
+algorithm_reach = ASB07(:δ => 0.002, :max_order => 400,
+    :order_discretization => 9)  # TODO temporarily use ASB07
 
 # compute flowpipe
 options[:mode] = "reach"

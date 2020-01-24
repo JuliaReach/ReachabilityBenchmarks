@@ -27,15 +27,15 @@ algorithm_reach = ASB07_decomposed(:δ => 0.002, :max_order => 400,
 algorithm_reach2 = ASB07(:δ => 0.002, :max_order => 400,
     :order_discretization => 9)
 # TODO temporary alternative with BFFPSV18 without intervals
-problem2 = InitialValueProblem(ConstrainedLinearControlContinuousSystem(
+problem3 = InitialValueProblem(ConstrainedLinearControlContinuousSystem(
     mid(S.A), mid(S.B), nothing, S.U), X0)
-algorithm_reach2 = BFFPSV18(:δ => 0.002, :partition => partition, :vars => vars)
+algorithm_reach3 = BFFPSV18(:δ => 0.002, :partition => partition, :vars => vars)
 
 # compute flowpipe
 options[:mode] = "reach"
 solution = solve(problem, options; op=algorithm_reach)
-solution2 = solve(problem2, options; op=algorithm_reach2)
-solution3 = solve(problem, options; op=algorithm_reach3)
+solution2 = solve(problem, options; op=algorithm_reach2)
+solution3 = solve(problem3, options; op=algorithm_reach3)
 
 # TODO temporary filtering of flowpipe to the first k sets
 k = 10

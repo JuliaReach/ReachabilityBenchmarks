@@ -33,12 +33,12 @@ algorithm_reach3 = BFFPSV18(:δ => 0.002, :partition => partition, :vars => vars
 
 # compute flowpipe
 options[:mode] = "reach"
-solution = solve(problem, options; op=algorithm_reach)
-solution2 = solve(problem, options; op=algorithm_reach2)
-solution3 = solve(problem3, options; op=algorithm_reach3)
+solution = solve(problem, copy(options); op=algorithm_reach)
+solution2 = solve(problem, copy(options); op=algorithm_reach2)
+solution3 = solve(problem3, copy(options); op=algorithm_reach3)
 
 # TODO temporary filtering of flowpipe to the first k sets
-k = 10
+k = 20
 flowpipes = [Flowpipe(solution.flowpipes[1].reachsets[1:k])]
 solution = ReachSolution(flowpipes, solution.options)
 flowpipes = [Flowpipe(solution2.flowpipes[1].reachsets[1:k])]
@@ -54,7 +54,9 @@ for (vars, suffix) in [
     # project flowpipe to time and x_η
     solution.options[:plot_vars] = vars
     solution_proj = project(solution)
+    solution2.options[:plot_vars] = vars
     solution2_proj = project(solution2)
+    solution3.options[:plot_vars] = vars
     solution3_proj = project(solution3)
 
     # plot projection

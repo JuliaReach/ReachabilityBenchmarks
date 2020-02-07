@@ -34,12 +34,13 @@ algorithm_reach3 = BFFPSV18(:δ => δ, :partition => partition, :vars => vars)
 
 # compute flowpipe
 options[:mode] = "reach"
+k = 20
+options[:T] = δ * k
 solution = solve(problem, copy(options); op=algorithm_reach)
 solution2 = solve(problem, copy(options); op=algorithm_reach2)
 solution3 = solve(problem3, copy(options); op=algorithm_reach3)
 
 # TODO temporary filtering of flowpipe to the first k sets
-k = 20
 flowpipes = [Flowpipe(solution.flowpipes[1].reachsets[1:k])]
 solution = ReachSolution(flowpipes, solution.options)
 flowpipes = [Flowpipe(solution2.flowpipes[1].reachsets[1:k])]

@@ -34,7 +34,7 @@ algorithm_reach3 = BFFPSV18(:δ => δ, :partition => partition, :vars => vars)
 
 # compute flowpipe
 options[:mode] = "reach"
-k = 20
+k = 50 # Int(div(options[:T], δ))
 options[:T] = δ * k
 solution = solve(problem, copy(options); op=algorithm_reach)
 solution2 = solve(problem, copy(options); op=algorithm_reach2)

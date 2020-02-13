@@ -40,14 +40,6 @@ solution = solve(problem, copy(options); op=algorithm_reach)
 solution2 = solve(problem, copy(options); op=algorithm_reach2)
 solution3 = solve(problem3, copy(options); op=algorithm_reach3)
 
-# TODO temporary filtering of flowpipe to the first k sets
-flowpipes = [Flowpipe(solution.flowpipes[1].reachsets[1:k])]
-solution = ReachSolution(flowpipes, solution.options)
-flowpipes = [Flowpipe(solution2.flowpipes[1].reachsets[1:k])]
-solution2 = ReachSolution(flowpipes, solution2.options)
-flowpipes = [Flowpipe(solution3.flowpipes[1].reachsets[1:k])]
-solution3 = ReachSolution(flowpipes, solution3.options)
-
 for (vars, suffix) in [
                        ([0, η], "t-U_n"),
                        ([1, η + 1], "U_1-I_1"),

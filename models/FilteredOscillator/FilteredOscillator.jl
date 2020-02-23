@@ -4,8 +4,8 @@
 # See: https://flowstar.org/benchmarks/filtered-oscillator/
 # ==============================================================================
 
-using HybridSystems, MathematicalSystems, LazySets, LinearAlgebra, Reachability
-using Polyhedra, Optim
+using HybridSystems, MathematicalSystems, MathematicalPredicates, LazySets,
+      LinearAlgebra, Reachability, Polyhedra, Optim
 
 import LazySets.HalfSpace
 import LazySets.Approximations: overapproximate, OctDirections
@@ -138,7 +138,7 @@ function filtered_oscillator(n0::Int=4,
 
     # safety property
     border = HPolyhedron([HalfSpace([0.0; -1.0; z], -0.5)])  # y >= 0.5
-    property = BadStatesProperty(border)
+    property = is_disjoint_from(border)
 
     options = Options(:T=>time_horizon, :mode=>"reach", :property=>property,
                       :verbosity=>0)

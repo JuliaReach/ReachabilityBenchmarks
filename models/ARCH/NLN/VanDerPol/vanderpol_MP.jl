@@ -1,6 +1,6 @@
-using Reachability: Options, SafeStatesProperty
-using MathematicalSystems, LazySets
-using DynamicPolynomials, SemialgebraicSets
+using MathematicalSystems, LazySets, MathematicalPredicates,
+      DynamicPolynomials, SemialgebraicSets
+using Reachability: Options
 
 """
     vanderpol_MP(; [T], [X0], [variables])
@@ -40,7 +40,7 @@ function vanderpol_MP(; T=7.0,
     𝑂[:plot_vars] = [1, 2]
 
     # safety property
-    𝑂[:property] = SafeStatesProperty(HalfSpace([0., 1.], 2.75))
+    𝑂[:property] = is_contained_in(HalfSpace([0., 1.], 2.75))
 
     return (𝑃, 𝑂)
 end

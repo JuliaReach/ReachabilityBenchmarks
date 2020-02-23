@@ -2,7 +2,8 @@
 # Platooning model
 # See https://easychair.org/publications/paper/3QLs
 # =================================================
-using Reachability, HybridSystems, MathematicalSystems, SparseArrays
+using Reachability, HybridSystems, MathematicalSystems, MathematicalPredicates,
+      SparseArrays
 using LazySets: HalfSpace  # resolve name-space conflicts with Polyhedra
 
 """
@@ -110,7 +111,7 @@ function platooning(;
     d4 = zeros(n); d4[4] = -1.  # x4 >= -dmin
     d7 = zeros(n); d7[7] = -1.  # x7 >= -dmin
     property = Conjunction(
-        [SafeStatesProperty(HalfSpace(d, allowed_distance)) for d in [d1, d4, d7]])
+        [is_contained_in(HalfSpace(d, allowed_distance)) for d in [d1, d4, d7]])
 
     # default options
     options = Options(:T=>time_horizon, :property=>property)

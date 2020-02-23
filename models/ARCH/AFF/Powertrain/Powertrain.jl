@@ -1,4 +1,5 @@
-using Reachability, MathematicalSystems, HybridSystems, SparseArrays
+using Reachability, MathematicalSystems, MathematicalPredicates, HybridSystems,
+      SparseArrays
 
 
 function print_dynamics(A, b, location_name)
@@ -259,8 +260,8 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
     system = InitialValueProblem(ℋ, initial_condition)
 
     # safety property
-    property_2 = BadStatesProperty(HalfSpace(sparsevec([1], [1.], n), -α))  # x1 <= -α
-    property_3 = BadStatesProperty(HalfSpace(sparsevec([1], [1.], n), α))   # x1 <= α
+    property_2 = is_disjoint_from(HalfSpace(sparsevec([1], [1.], n), -α))  # x1 <= -α
+    property_3 = is_disjoint_from(HalfSpace(sparsevec([1], [1.], n), α))   # x1 <= α
     property = Dict(2 => property_2, 3 => property_3)
 
     # default options

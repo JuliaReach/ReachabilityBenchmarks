@@ -1,4 +1,4 @@
-using LazySets, Reachability, SparseArrays
+using LazySets, MathematicalPredicates, Reachability, SparseArrays
 
 function mna5_specification()
     # initial set: xᵢ ∈ [0.0002, 0.00025] if i ≤ 10 and xᵢ = 0 otherwise
@@ -6,7 +6,7 @@ function mna5_specification()
                         high=[fill(0.00025, 10); zeros(10903)])
 
     # property: x1 ≤ 0.2 && x2 ≤ 0.15
-    property = SafeStatesProperty(HPolyhedron([
+    property = is_contained_in(HPolyhedron([
         HalfSpace(sparsevec([1], [1.0], 10913), 0.2),
         HalfSpace(sparsevec([2], [1.0], 10913), 0.15)]))
 

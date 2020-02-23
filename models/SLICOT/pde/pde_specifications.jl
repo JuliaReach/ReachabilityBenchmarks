@@ -1,4 +1,4 @@
-using ReachabilityBenchmarks, LazySets, Reachability, MAT
+using ReachabilityBenchmarks, LazySets, MathematicalPredicates, Reachability, MAT
 
 function pde_specification()
     # initial set:
@@ -10,7 +10,7 @@ function pde_specification()
 
     # safety property: y ≤ 12 for linear combination y (defined in out.mat)
     y = read(matopen(@relpath "out.mat"), "M")[1, :]
-    property = SafeStatesProperty(HalfSpace(y, 12.0))
+    property = is_contained_in(HalfSpace(y, 12.0))
 
     # time horizon: 20 time units
     time_horizon = 20.0

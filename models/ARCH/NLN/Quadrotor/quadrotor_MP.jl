@@ -3,9 +3,9 @@
 # See https://easychair.org/publications/paper/gjfh
 # =================================================================
 
-using Reachability: Options, SafeStatesProperty
 using MathematicalSystems, LazySets
-using DynamicPolynomials, SemialgebraicSets
+      DynamicPolynomials, SemialgebraicSets
+using Reachability: Options
 
 # ==============================
 # Load model

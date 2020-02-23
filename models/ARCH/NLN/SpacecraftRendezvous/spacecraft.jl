@@ -4,12 +4,14 @@
 # https://gitlab.com/goranf/ARCH-COMP/blob/master/2018/NLN/C2E2/ARCH18_NLN/rendezvous/c2e2_nonlinear_pass_4d.hyxml
 # for a reference model
 # ===========================================================================
-using SparseArrays, HybridSystems, Reachability, MathematicalSystems, TaylorIntegration
+using SparseArrays, HybridSystems, Reachability, MathematicalSystems,
+      MathematicalPredicates, TaylorIntegration
 
 include("eqs_mymul.jl")
 
 function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
-                                max_steps=500, plot_vars=[1, 2], project_reachset=false)
+                                max_steps=500, plot_vars=[1, 2],
+                                project_reachset=false)
     # variables
     x = 1   # x position (negative!)
     y = 2   # y position (negative!)
@@ -116,12 +118,14 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
         HalfSpace(sparsevec([x, y], [tan30, -1.], n), 0.),  # -x tan(30°) + y >= 0
         HalfSpace(sparsevec([x, y], [tan30, 1.], n), 0.),   # -x tan(30°) - y >= 0
        ]
-    property_rendezvous = SafeStatesProperty(HPolytope([octagon; cone]))
+    property_rendezvous = is_contained_in(HPolytope([octagon; cone]))
     =#
 
-    property_rendezvous = (t, x) -> (x[3] <= cx) && (x[3]+x[4]<=cx+cy) && (x[4]<=cx) && (-x[3]+x[4] <= cx+cy) && (x[3] >= -cx) &&
-                                    (-x[3]-x[4] <= cx+cy) && (x[4] >= -cx) && (x[3]-x[4] <= cx+cy) &&
-                                    (x[1] >= -100) && (-x[1]*tan30+x[2]>=0) && (-x[1]*tan30-x[2]>=0)
+    property_rendezvous = (t, x) ->
+        (x[3] <= cx) && (x[3]+x[4]<=cx+cy) && (x[4]<=cx) &&
+        (-x[3]+x[4] <= cx+cy) && (x[3] >= -cx) && (-x[3]-x[4] <= cx+cy) &&
+        (x[4] >= -cx) && (x[3]-x[4] <= cx+cy) && (x[1] >= -100) &&
+        (-x[1]*tan30+x[2]>=0) && (-x[1]*tan30-x[2]>=0)
 
     # safety property in "Passive"
     #=
@@ -131,10 +135,11 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
         HalfSpace(sparsevec([y], [1.], n), 0.2),   # y <= 0.2
         HalfSpace(sparsevec([y], [-1.], n), 0.2),  # y >= -0.2
        ])
-    property_aborting = BadStatesProperty(target)
+    property_aborting = is_disjoint_from(target)
     =#
 
-    property_aborting = (t, x) -> !( (x[1] <= 0.2) && (x[1] >= -0.2) && (x[2] <= 0.2) && (x[2] >= -0.2))
+    property_aborting = (t, x) ->
+        !( (x[1] <= 0.2) && (x[1] >= -0.2) && (x[2] <= 0.2) && (x[2] >= -0.2) )
 
     # safety properties
     property = Dict{Int, Function}(1 => (t, x) -> true,

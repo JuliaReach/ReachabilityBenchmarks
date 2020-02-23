@@ -1,4 +1,4 @@
-using ReachabilityBenchmarks, LazySets, Reachability, MAT
+using ReachabilityBenchmarks, LazySets, MathematicalPredicates, Reachability, MAT
 
 function fom_specification()
     # initial set: xᵢ ∈ ±0.0001 if i ≤ 400 and xᵢ = 0 otherwise
@@ -6,7 +6,7 @@ function fom_specification()
 
     # safety property: y ≤ 185 for linear combination y (defined in out.mat)
     y = read(matopen(@relpath "out.mat"), "M")[1, :]
-    property = SafeStatesProperty(HalfSpace(y, 185.0))
+    property = is_contained_in(HalfSpace(y, 185.0))
 
     # time horizon: 20 time units
     time_horizon = 20.0

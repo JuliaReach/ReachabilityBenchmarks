@@ -4,7 +4,7 @@
 # ==============================================================================
 
 using ReachabilityBenchmarks, MAT, Reachability, MathematicalSystems,
-      SparseArrays
+      MathematicalPredicates, SparseArrays
 
 # ==============================
 # Load model
@@ -26,10 +26,10 @@ S = ConstrainedLinearControlContinuousSystem(A, B, nothing, U)
 iss_TV = InitialValueProblem(S, X0)
 
 # specifications for time-varying input
-ISU01 = SafeStatesProperty(HPolyhedron([LinearConstraint(Cvec, 0.0005),
-                                        LinearConstraint(-Cvec, 0.0005)]))
-ISS01 = SafeStatesProperty(HPolyhedron([LinearConstraint(Cvec, 0.0007),
-                                        LinearConstraint(-Cvec, 0.0007)]))
+ISU01 = is_contained_in(HPolyhedron([HalfSpace(Cvec, 0.0005),
+                                   HalfSpace(-Cvec, 0.0005)]))
+ISS01 = is_contained_in(HPolyhedron([HalfSpace(Cvec, 0.0007),
+                                   HalfSpace(-Cvec, 0.0007)]))
 
 # ==============================
 # Constant input
@@ -45,7 +45,7 @@ C = hcat(C, [0.0 0.0 0.0])
 Cvec = C[1, :]
 
 # specifications for constant input
-ISU02 = SafeStatesProperty(HPolyhedron([LinearConstraint(Cvec, 0.00017),
-                                        LinearConstraint(-Cvec, 0.00017)]))
-ISS02 = SafeStatesProperty(HPolyhedron([LinearConstraint(Cvec, 0.0005),
-                                        LinearConstraint(-Cvec, 0.0005)]))
+ISU02 = is_contained_in(HPolyhedron([HalfSpace(Cvec, 0.00017),
+                                   HalfSpace(-Cvec, 0.00017)]))
+ISS02 = is_contained_in(HPolyhedron([HalfSpace(Cvec, 0.0005),
+                                   HalfSpace(-Cvec, 0.0005)]))

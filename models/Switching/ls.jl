@@ -2,7 +2,8 @@
 https://ths.rwth-aachen.de/research/projects/hypro/5-dimensional-switching-linear-system/
 Five dimensional switching linear system
 =#
-using Reachability, HybridSystems, MathematicalSystems, LinearAlgebra, SymEngine
+using Reachability, HybridSystems, MathematicalSystems, MathematicalPredicates,
+      LinearAlgebra, SymEngine
 using SX: readsxmodel, _get_coeffs
 
 file = @relpath "model.xml"
@@ -90,7 +91,7 @@ function switching(; X0 = Singleton([3.1, 4.0, 0.0, 0.0, 0.0]),
 
     border = HalfSpace([1.0, 0.0, 0.0, 0.0, 0.0], -1.2) # x1 <= -1.2
 
-    property = BadStatesProperty(border)
+    property = is_disjoint_from(border)
 
     options = Options(:mode=>"reach", :T=>T, :property=>property)
 

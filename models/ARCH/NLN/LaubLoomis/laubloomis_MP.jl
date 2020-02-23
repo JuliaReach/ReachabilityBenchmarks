@@ -3,9 +3,9 @@
 # See https://easychair.org/publications/paper/gjfh
 # =================================================================
 
-using Reachability: Options, SafeStatesProperty
-using MathematicalSystems, LazySets
-using DynamicPolynomials, SemialgebraicSets
+using MathematicalSystems, LazySets, MathematicalPredicates,
+      DynamicPolynomials, SemialgebraicSets
+using Reachability: Options
 
 # ==============================
 # Load model
@@ -66,7 +66,7 @@ function laubloomis(; T=20.0,
     𝑂[:plot_vars] = [0, 4]
 
     # safety property
-    𝑂[:property] = SafeStatesProperty(HalfSpace([0, 0, 0, -1., 0, 0, 0], -unsafe_bound))
+    𝑂[:property] = is_contained_in(HalfSpace([0, 0, 0, -1., 0, 0, 0], -unsafe_bound))
     # @set x₄ ≥ 0.01, vars=(x₁, x₂, x₃, x₄, x₅, x₆, x₇)
     return (𝑃, 𝑂)
 end

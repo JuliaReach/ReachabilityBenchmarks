@@ -1,4 +1,4 @@
-using LazySets, Reachability
+using LazySets, MathematicalPredicates, Reachability
 
 function motor_specification()
     # initial set:
@@ -12,8 +12,8 @@ function motor_specification()
 
     # safety property: x1 ≤ 0.35 ∨ x5 ≤ 0.45
     property = Disjunction([
-        SafeStatesProperty(HalfSpace([1.; zeros(7)], 0.35)),
-        SafeStatesProperty(HalfSpace([zeros(4); 1.; zeros(3)], 0.45))])
+        is_contained_in(HalfSpace([1.; zeros(7)], 0.35)),
+        is_contained_in(HalfSpace([zeros(4); 1.; zeros(3)], 0.45))])
 
     # time horizon: 20 time units
     time_horizon = 20.0

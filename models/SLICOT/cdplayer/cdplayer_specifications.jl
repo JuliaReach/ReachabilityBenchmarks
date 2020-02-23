@@ -1,4 +1,4 @@
-using LazySets, Reachability, SparseArrays
+using LazySets, MathematicalPredicates, Reachability, SparseArrays
 
 function cdplayer_specification()
     # initial set: xᵢ ∈ [-1, 1] for all i
@@ -6,7 +6,7 @@ function cdplayer_specification()
 
     # safety property: 2·x₁ - 3·x₂ ≤ 450.8
     property =
-        SafeStatesProperty(HalfSpace(sparsevec([1, 2], [2.0, -3.0], 120), 450.8))
+        is_contained_in(HalfSpace(sparsevec([1, 2], [2.0, -3.0], 120), 450.8))
 
     # time horizon: 20 time units
     time_horizon = 20.0

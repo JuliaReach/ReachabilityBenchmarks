@@ -59,7 +59,7 @@ function A_matrix_diagonals(η, p₁, p₂, p₃, p₄)
 end
 
 function A_matrix_dense(η, n, p₁, p₂, p₃, p₄)
-    A = Sym(zeros(n, n))
+    A = zeros(n, n)
     A[η + 1, 1] = p₁
     A[η, n] = -p₂
     A[η + 1, η + 1] = -p₃

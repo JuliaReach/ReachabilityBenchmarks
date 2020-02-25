@@ -55,11 +55,12 @@ function A_matrix_diagonals(η, p₁, p₂, p₃, p₄)
     A₁₂ = Bidiagonal(fill(-p₂, η), fill(p₂, η-1), :U)
     A₂₁ = Bidiagonal(fill(p₁, η), fill(-p₁, η-1), :L)
     A₂₂ = Diagonal(vcat(-p₃, fill(-p₄, η-1)))
-    A  = [A₁₁ A₁₂; A₂₁ A₂₂]
+    A = IntervalMatrix([A₁₁ A₁₂; A₂₁ A₂₂])
+    return A
 end
 
 function A_matrix_dense(η, n, p₁, p₂, p₃, p₄)
-    A = zeros(n, n)
+    A = IntervalMatrix(zeros(n, n))
     A[η + 1, 1] = p₁
     A[η, n] = -p₂
     A[η + 1, η + 1] = -p₃
@@ -72,6 +73,7 @@ function A_matrix_dense(η, n, p₁, p₂, p₃, p₄)
         A[i, η + i] = -p₂
         A[i, η + i + 1] = p₂
     end
+    return A
 end
 
 function A_matrix_paper(η, n, p₁, p₂, p₃, p₄)
@@ -97,6 +99,7 @@ function A_matrix_paper(η, n, p₁, p₂, p₃, p₄)
 
     # interval matrix p₁Q₁ + p₂Q₂ + p₃Q₃ + p₄Q₄ (see Eq. (15) in [1])
     A = p₁ * Q₁ + p₂ * Q₂ + p₃ * Q₃ + p₄ * Q₄
+    return A
 end
 
 function transmission_line_model(η::Int=20)

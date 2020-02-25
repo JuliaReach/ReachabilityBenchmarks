@@ -35,11 +35,7 @@ function interval_matrices(η)
     # A₁₂ has -p₂ on the diagonal and p₂ on the upper diagonal,
     # A₂₁ has p₁ on the diagonal and -p₁ on the lower diagonal, and
     # A₂₂ has -p₄ on the diagonal except for the top left entry, which is -p₃.
-    A₁₁ = zeros(η, η)
-    A₁₂ = Bidiagonal(fill(-p₂, η), fill(p₂, η-1), :U)
-    A₂₁ = Bidiagonal(fill(p₁, η), fill(-p₁, η-1), :L)
-    A₂₂ = Diagonal(vcat(-p₃, fill(-p₄, η-1)))
-    A  = [A₁₁ A₁₂; A₂₁ A₂₂]
+    A = A_matrix_diagonals(η, p₁, p₂, p₃, p₄)
 
     # interval matrix p₁r, which is a zero column matrix except for the (η + 1)
     # entry, which is p₁ (paper) resp. -p₁ (CORA implementation; see TODO below)
@@ -54,17 +50,28 @@ function interval_matrices(η)
     return A, B
 end
 
-function transmission_line_model(η::Int=20)
-    # system and input matrices
-    A, B = interval_matrices(η)
+function A_matrix_diagonals(η, p₁, p₂, p₃, p₄)
+    A₁₁ = zeros(η, η)
+    A₁₂ = Bidiagonal(fill(-p₂, η), fill(p₂, η-1), :U)
+    A₂₁ = Bidiagonal(fill(p₁, η), fill(-p₁, η-1), :L)
+    A₂₂ = Diagonal(vcat(-p₃, fill(-p₄, η-1)))
+    A  = [A₁₁ A₁₂; A₂₁ A₂₂]
+end
 
-    # input domain
-    U = ConstantInput(LazySets.Interval(0.99, 1.01))
-
-    # continuous LTI system
-    S = ConstrainedLinearControlContinuousSystem(A, B, nothing, U)
-
-    return S
+function A_matrix_dense(η, n, p₁, p₂, p₃, p₄)
+    A = Sym(zeros(n, n))
+    A[η + 1, 1] = p₁
+    A[η, n] = -p₂
+    A[η + 1, η + 1] = -p₃
+    for i in 2:η
+        A[η + i, i-1] = -p₁
+        A[η + i, i] = p₁
+        A[η + i, η + i] = -p₄
+    end
+    for i in 1:(η - 1)
+        A[i, η + i] = -p₂
+        A[i, η + i + 1] = p₂
+    end
 end
 
 function A_matrix_paper(η, n, p₁, p₂, p₃, p₄)
@@ -90,4 +97,17 @@ function A_matrix_paper(η, n, p₁, p₂, p₃, p₄)
 
     # interval matrix p₁Q₁ + p₂Q₂ + p₃Q₃ + p₄Q₄ (see Eq. (15) in [1])
     A = p₁ * Q₁ + p₂ * Q₂ + p₃ * Q₃ + p₄ * Q₄
+end
+
+function transmission_line_model(η::Int=20)
+    # system and input matrices
+    A, B = interval_matrices(η)
+
+    # input domain
+    U = ConstantInput(LazySets.Interval(0.99, 1.01))
+
+    # continuous LTI system
+    S = ConstrainedLinearControlContinuousSystem(A, B, nothing, U)
+
+    return S
 end

@@ -10,7 +10,7 @@
 #     Linear Dynamic Systems with Parametric Uncertainties. Modeling, Design,
 #     and Simulation of Systems with Uncertainties. 2011.
 # ===========================================================================
-using MathematicalSystems, LazySets, IntervalMatrices
+using MathematicalSystems, LazySets, IntervalMatrices, LinearAlgebra
 
 function interval_matrices(η)
     IA = IntervalArithmetic
@@ -30,33 +30,16 @@ function interval_matrices(η)
     p₃ = Rdriver / L
     p₄ = R / L
 
-    # interval matrices Q₁-Q₄
-    # state dimensions: [U₁, …, U_η, I₁, …, I_η]
-    Z = IntervalMatrix(fill(IA.Interval(0.0), (n, n)))
-    Q₁ = copy(Z)
-    Q₂ = copy(Z)
-    Q₃ = copy(Z)
-    Q₄ = copy(Z)
-    Q₁[η + 1, 1] = 1.0
-    Q₂[η, n] = -1.0
-    Q₃[η + 1, η + 1] = -1.0
-    for i in 2:η
-        Q₁[η + i, i-1] = -1.0
-        Q₁[η + i, i] = 1.0
-        Q₄[η + i, η + i] = -1.0
-    end
-    for i in 1:(η - 1)
-        Q₂[i, η + i] = -1.0
-        Q₂[i, η + i + 1] = 1.0
-    end
-
-    # interval matrix p₁Q₁ + p₂Q₂ + p₃Q₃ + p₄Q₄ (see Eq. (15) in [1])
-    # the whole matrix A consists of four blocks A = [A₁₁ A₁₂; A₂₁ A₂₂] where
+    # interval matrix that consists of four blocks A = [A₁₁ A₁₂; A₂₁ A₂₂] where
     # A₁₁ is the zero matrix,
     # A₁₂ has -p₂ on the diagonal and p₂ on the upper diagonal,
-    # A₂₁ has p₁ on the diagonal and -p₁ on the upper diagonal, and
+    # A₂₁ has p₁ on the diagonal and -p₁ on the lower diagonal, and
     # A₂₂ has -p₄ on the diagonal except for the top left entry, which is -p₃.
-    A = p₁ * Q₁ + p₂ * Q₂ + p₃ * Q₃ + p₄ * Q₄
+    A₁₁ = zeros(η, η)
+    A₁₂ = Bidiagonal(fill(-p₂, η), fill(p₂, η-1), :U)
+    A₂₁ = Bidiagonal(fill(p₁, η), fill(-p₁, η-1), :L)
+    A₂₂ = Diagonal(vcat(-p₃, fill(-p₄, η-1)))
+    A  = [A₁₁ A₁₂; A₂₁ A₂₂]
 
     # interval matrix p₁r, which is a zero column matrix except for the (η + 1)
     # entry, which is p₁ (paper) resp. -p₁ (CORA implementation; see TODO below)
@@ -82,4 +65,29 @@ function transmission_line_model(η::Int=20)
     S = ConstrainedLinearControlContinuousSystem(A, B, nothing, U)
 
     return S
+end
+
+function A_matrix_paper(η, n, p₁, p₂, p₃, p₄)
+    # interval matrices Q₁-Q₄
+    # state dimensions: [U₁, …, U_η, I₁, …, I_η]
+    Z = IntervalMatrix(fill(IntervalArithmetic.Interval(0.0), (n, n)))
+    Q₁ = copy(Z)
+    Q₂ = copy(Z)
+    Q₃ = copy(Z)
+    Q₄ = copy(Z)
+    Q₁[η + 1, 1] = 1.0
+    Q₂[η, n] = -1.0
+    Q₃[η + 1, η + 1] = -1.0
+    for i in 2:η
+        Q₁[η + i, i-1] = -1.0
+        Q₁[η + i, i] = 1.0
+        Q₄[η + i, η + i] = -1.0
+    end
+    for i in 1:(η - 1)
+        Q₂[i, η + i] = -1.0
+        Q₂[i, η + i + 1] = 1.0
+    end
+
+    # interval matrix p₁Q₁ + p₂Q₂ + p₃Q₃ + p₄Q₄ (see Eq. (15) in [1])
+    A = p₁ * Q₁ + p₂ * Q₂ + p₃ * Q₃ + p₄ * Q₄
 end

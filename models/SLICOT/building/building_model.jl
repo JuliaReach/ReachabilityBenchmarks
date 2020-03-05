@@ -1,10 +1,10 @@
-# ===========================================================
+# ==================================
 # Building
 #
-# system type: LTI system
+# system type: continuous LTI system
 # state dimension: 48
 # input dimension: 1
-# ===========================================================
+# ==================================
 using ReachabilityBenchmarks, MathematicalSystems, LazySets, MAT
 
 function building_model()
@@ -16,11 +16,14 @@ function building_model()
     # input matrix
     B = read(file, "B")
 
+    # state domain
+    X = Universe(48)
+
     # input domain
     U = BallInf([0.9], 0.1)
 
     # continuous LTI system
-    S = ConstrainedLinearControlContinuousSystem(A, B, nothing, U)
+    S = @system(x' = Ax + Bu, x ∈ X, u ∈ U)
 
     return S
 end

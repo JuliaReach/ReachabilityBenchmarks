@@ -1,10 +1,10 @@
-# ===========================================================
+# ==================================
 # Beam
 #
-# system type: LTI system
+# system type: continuous LTI system
 # state dimension: 348
 # input dimension: 1
-# ===========================================================
+# ==================================
 using ReachabilityBenchmarks, MathematicalSystems, LazySets, MAT
 
 function beam_model()
@@ -16,11 +16,14 @@ function beam_model()
     # input matrix
     B = read(file, "B")
 
+    # state domain
+    X = Universe(348)
+
     # input domain
     U = BallInf([0.5], 0.3)
 
     # continuous LTI system
-    S = ConstrainedLinearControlContinuousSystem(A, B, nothing, U)
+    S = @system(x' = Ax + Bu, x ∈ X, u ∈ U)
 
     return S
 end

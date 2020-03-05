@@ -1,10 +1,10 @@
-# ===========================================================
+# ==================================
 # Heat
 #
-# system type: LTI system
+# system type: continuous LTI system
 # state dimension: 200
 # input dimension: 1
-# ===========================================================
+# ==================================
 using ReachabilityBenchmarks, MathematicalSystems, LazySets, MAT, SparseArrays
 
 function heat_model()
@@ -16,11 +16,14 @@ function heat_model()
     # input matrix
     B = sparse([67], [1], [1.0], size(A, 1), 1)
 
+    # state domain
+    X = Universe(200)
+
     # input domain
     U = BallInf([0.0], 0.5)
 
     # continuous LTI system
-    S = ConstrainedLinearControlContinuousSystem(A, B, nothing, U)
+    S = @system(x' = Ax + Bu, x ∈ X, u ∈ U)
 
     return S
 end

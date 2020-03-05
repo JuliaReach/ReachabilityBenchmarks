@@ -1,10 +1,10 @@
-# ===========================================================
+# ==================================
 # PDE
 #
-# system type: LTI system
+# system type: continuous LTI system
 # state dimension: 84
 # input dimension: 1
-# ===========================================================
+# ==================================
 using ReachabilityBenchmarks, MathematicalSystems, LazySets, MAT
 
 function pde_model()
@@ -16,11 +16,14 @@ function pde_model()
     # input matrix
     B = read(file, "B")
 
+    # state domain
+    X = Universe(84)
+
     # input domain
     U = BallInf([0.75], .25)
 
     # continuous LTI system
-    S = ConstrainedLinearControlContinuousSystem(A, B, nothing, U)
+    S = @system(x' = Ax + Bu, x ∈ X, u ∈ U)
 
     return S
 end

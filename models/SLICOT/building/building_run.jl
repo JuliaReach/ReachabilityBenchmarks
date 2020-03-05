@@ -5,6 +5,7 @@ include(@relpath "building_specifications.jl")
 
 S = building_model()
 X0, options = building_specification()
+options = Dict(options)
 
 # initial value problem
 problem = InitialValueProblem(S, X0)

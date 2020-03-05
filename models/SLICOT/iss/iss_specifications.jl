@@ -1,4 +1,4 @@
-using ReachabilityBenchmarks, LazySets, MathematicalPredicates, Reachability, MAT
+using ReachabilityBenchmarks, LazySets, MathematicalPredicates, MAT
 
 function iss_specification()
     # initial set: xᵢ ∈ [-1e-4, 1e-4] for all i
@@ -12,7 +12,7 @@ function iss_specification()
     time_horizon = 20.0
 
     # specification
-    O = Options(:T => time_horizon, :property => property)
+    O = Dict(:T => time_horizon, :property => property)
 
     return X0, O
 end

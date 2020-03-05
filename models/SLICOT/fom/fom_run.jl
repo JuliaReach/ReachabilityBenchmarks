@@ -5,6 +5,7 @@ include(@relpath "fom_specifications.jl")
 
 S = fom_model()
 X0, options = fom_specification()
+options = Dict(options)
 
 # initial value problem
 problem = InitialValueProblem(S, X0)

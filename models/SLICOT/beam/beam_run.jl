@@ -5,6 +5,7 @@ include(@relpath "beam_specifications.jl")
 
 S = beam_model()
 X0, options = beam_specification()
+options = Dict(options)
 
 # initial value problem
 problem = InitialValueProblem(S, X0)

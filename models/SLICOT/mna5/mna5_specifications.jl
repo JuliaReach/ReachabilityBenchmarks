@@ -1,4 +1,4 @@
-using LazySets, MathematicalPredicates, Reachability, SparseArrays
+using LazySets, MathematicalPredicates, SparseArrays
 
 function mna5_specification()
     # initial set: xᵢ ∈ [0.0002, 0.00025] if i ≤ 10 and xᵢ = 0 otherwise
@@ -14,7 +14,7 @@ function mna5_specification()
     time_horizon = 20.0
 
     # specification
-    O = Options(:T => time_horizon, :property => property)
+    O = Dict(:T => time_horizon, :property => property)
 
     return X0, O
 end

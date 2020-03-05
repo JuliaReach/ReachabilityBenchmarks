@@ -1,4 +1,4 @@
-using ReachabilityBenchmarks, LazySets, MathematicalPredicates, Reachability, MAT
+using ReachabilityBenchmarks, LazySets, MathematicalPredicates, MAT
 
 function fom_specification()
     # initial set: xᵢ ∈ ±0.0001 if i ≤ 400 and xᵢ = 0 otherwise
@@ -12,7 +12,7 @@ function fom_specification()
     time_horizon = 20.0
 
     # specification
-    O = Options(:T => time_horizon, :property => property)
+    O = Dict(:T => time_horizon, :property => property)
 
     return X0, O
 end

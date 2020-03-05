@@ -5,6 +5,7 @@ include(@relpath "iss_specifications.jl")
 
 S = iss_model()
 X0, options = iss_specification()
+options = Dict(options)
 
 # initial value problem
 problem = InitialValueProblem(S, X0)

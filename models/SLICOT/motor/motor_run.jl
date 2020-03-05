@@ -5,6 +5,7 @@ include(@relpath "motor_specifications.jl")
 
 S = motor_model()
 X0, options = motor_specification()
+options = Dict(options)
 
 # initial value problem
 problem = InitialValueProblem(S, X0)

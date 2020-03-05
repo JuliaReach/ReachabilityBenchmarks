@@ -1,4 +1,4 @@
-using ReachabilityBenchmarks, LazySets, Reachability, SparseArrays, MAT
+using ReachabilityBenchmarks, LazySets, MathematicalPredicates, Reachability, MAT
 
 function iss_specification()
     # initial set: xᵢ ∈ [-1e-4, 1e-4] for all i
@@ -6,7 +6,7 @@ function iss_specification()
 
     # safety property: y ≤ 7e-4 for linear combination y (defined in out.mat)
     y = read(matopen(@relpath "out.mat"), "M")[1, :]
-    property = SafeStatesProperty(HalfSpace(y, 7e-4))
+    property = is_contained_in(HalfSpace(y, 7e-4))
 
     # time horizon: 20 time units
     time_horizon = 20.0

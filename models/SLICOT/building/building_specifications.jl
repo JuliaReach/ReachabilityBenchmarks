@@ -1,4 +1,4 @@
-using LazySets, Reachability, SparseArrays
+using LazySets, MathematicalPredicates, Reachability, SparseArrays
 
 function building_specification()
     # initial set:
@@ -9,7 +9,7 @@ function building_specification()
                         high=[fill(0.00025, 10); zeros(14); 0.0001; zeros(23)])
 
     # safety property: x25 ≤ 6e-3
-    property = SafeStatesProperty(HalfSpace(sparsevec([25], [1.0], 48), 6e-3))
+    property = is_contained_in(HalfSpace(sparsevec([25], [1.0], 48), 6e-3))
 
     # time horizon: 20 time units
     time_horizon = 20.0

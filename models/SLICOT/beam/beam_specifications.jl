@@ -1,4 +1,4 @@
-using LazySets, Reachability, SparseArrays
+using LazySets, MathematicalPredicates, Reachability, SparseArrays
 
 function beam_specification()
     # initial set: xᵢ = 0 if i ≤ 300 and xᵢ ∈ [0.0015, 0.002] otherwise
@@ -6,7 +6,7 @@ function beam_specification()
                         high=[zeros(300); fill(0.002, 48)])
 
     # safety property: x89 ≤ 2100
-    property = SafeStatesProperty(HalfSpace(sparsevec([89], [1.0], 348), 2100.0))
+    property = is_contained_in(HalfSpace(sparsevec([89], [1.0], 348), 2100.0))
 
     # time horizon: 20 time units
     time_horizon = 20.0

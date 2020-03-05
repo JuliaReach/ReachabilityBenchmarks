@@ -2,7 +2,8 @@
 # Gearbox model
 # See https://easychair.org/publications/paper/cwl
 # ================================================
-using Reachability, HybridSystems, MathematicalSystems, SparseArrays
+using Reachability, HybridSystems, MathematicalSystems, MathematicalPredicates,
+      SparseArrays
 using LazySets: HalfSpace  # resolve name-space conflicts with Polyhedra
 
 """
@@ -139,8 +140,8 @@ function gearbox()
     system = InitialValueProblem(ℋ, initial_condition)
 
     # safety property
-    cond_free = SafeStatesProperty(HalfSpace([0., 0., 0., 0., 0., 1.], 0.2))    # t <= 0.2
-    cond_global = SafeStatesProperty(HalfSpace([0., 0., 0., 0., 1., 0.], 20.))  # I <= 20
+    cond_free = is_contained_in(HalfSpace([0., 0., 0., 0., 0., 1.], 0.2))    # t <= 0.2
+    cond_global = is_contained_in(HalfSpace([0., 0., 0., 0., 1., 0.], 20.))  # I <= 20
     property_free = Conjunction([cond_free, cond_global])
     property_meshed = cond_global
     property = Dict(1 => property_free, 2 => property_meshed)

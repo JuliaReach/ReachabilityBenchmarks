@@ -3,7 +3,7 @@ Model: toy.jl
 
 Toy model to test the implementation on certain cases.
 =#
-using Reachability
+using Reachability, MathematicalPredicates
 
 function compute(input_options::Pair{Symbol,<:Any}...)
     # =====================
@@ -24,7 +24,7 @@ function compute(input_options::Pair{Symbol,<:Any}...)
     # define solver-specific options
     options = merge(Options(
         :mode => "reach",
-        :property => SafeStatesProperty(HalfSpace([1., 0.], 20.)), # x1 <= 20
+        :property => is_contained_in(HalfSpace([1., 0.], 20.)), # x1 <= 20
         :blocks => [1],
         :plot_vars => [0, 1]
         ), Options(input_options...))

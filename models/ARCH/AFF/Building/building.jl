@@ -4,7 +4,7 @@
 # ==============================================================================
 
 using ReachabilityBenchmarks, Reachability, MathematicalSystems, SX,
-      SparseArrays
+      MathematicalPredicates, SparseArrays
 
 # ==============================
 # Load model
@@ -31,9 +31,7 @@ X0 = Hyperrectangle(center_X0, radius_X0)
 build_TV = InitialValueProblem(S, X0)
 
 # specifications
-pBDS01 = SafeStatesProperty(
-    LinearConstraint(sparsevec([25], [1.0], n), 0.0051)  # x25 <= 0.0051
-    )
+pBDS01 = is_contained_in(HalfSpace(sparsevec([25], [1.0], n), 0.0051))  # x25 <= 0.0051
 
 time_horizon = 20.0
 
@@ -47,6 +45,4 @@ X0 = X0 × U
 build_CONST = InitialValueProblem(S, X0)
 
 # specifications
-pBLDC01 = SafeStatesProperty(
-    LinearConstraint(sparsevec([25], [1.0], n+1), 0.0051)  # x25 <= 0.0051
-    )
+pBLDC01 = is_contained_in(HalfSpace(sparsevec([25], [1.0], n+1), 0.0051))  # x25 <= 0.0051

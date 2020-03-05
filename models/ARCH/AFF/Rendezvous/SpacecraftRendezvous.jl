@@ -4,7 +4,8 @@
 # https://gitlab.com/goranf/ARCH-COMP/tree/master/2018/AFF/SpaceEx/Rendezvous
 # for a reference model
 # ===========================================================================
-using SparseArrays, HybridSystems, MathematicalSystems, Reachability
+using SparseArrays, HybridSystems, MathematicalSystems, MathematicalPredicates,
+      Reachability
 using LazySets: HalfSpace  # resolve name-space conflicts with Polyhedra
 
 """
@@ -174,7 +175,7 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
         HalfSpace(sparsevec([x, y], [tan30, -1.], n), 0.),  # -x tan(30°) + y >= 0
         HalfSpace(sparsevec([x, y], [tan30, 1.], n), 0.),   # -x tan(30°) - y >= 0
        ]
-    property_rendezvous = SafeStatesProperty(HPolytope([octagon; cone]))
+    property_rendezvous = is_contained_in(HPolytope([octagon; cone]))
     # safety property in "aborting"
     target = HPolytope([
         HalfSpace(sparsevec([x], [-1.], n), 0.2),  # x >= -0.2
@@ -182,7 +183,7 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
         HalfSpace(sparsevec([y], [-1.], n), 0.2),  # y >= -0.2
         HalfSpace(sparsevec([y], [1.], n), 0.2),   # y <= 0.2
        ])
-    property_aborting = BadStatesProperty(target)
+    property_aborting = is_disjoint_from(target)
     # safety properties
     property = Dict{Int, Property}(2 => property_rendezvous,
                                    3 => property_aborting)

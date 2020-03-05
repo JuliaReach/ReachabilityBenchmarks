@@ -1,4 +1,4 @@
-using LazySets, Reachability, SparseArrays
+using LazySets, MathematicalPredicates, Reachability, SparseArrays
 
 function mna1_specification()
     # initial set: xᵢ ∈ [0.001, 0.0015] if i ≤ 2 and xᵢ = 0 otherwise
@@ -6,7 +6,7 @@ function mna1_specification()
                         high=[fill(0.0015, 2); zeros(576)])
 
     # safety property: x1 ≤ 0.5
-    property = SafeStatesProperty(HalfSpace(sparsevec([1], [1.0], 578), 0.5))
+    property = is_contained_in(HalfSpace(sparsevec([1], [1.0], 578), 0.5))
 
     # time horizon: 20 time units
     time_horizon = 20.0

@@ -1,10 +1,10 @@
-# ========================
+# ==================================
 # Motor
 #
-# system type: LTI system
+# system type: continuous LTI system
 # state dimension: 8
 # input dimension: 2
-# ========================
+# ==================================
 using ReachabilityBenchmarks, MathematicalSystems, LazySets, SparseArrays
 
 function motor_model()
@@ -18,11 +18,14 @@ function motor_model()
     # input matrix
     B = sparse([4, 8], [1, 2], [-1.0, -1.0])
 
+    # state domain
+    X = Universe(8)
+
     # input domain
     U = Hyperrectangle([0.23, 0.3], [0.07, 0.1])
 
     # continuous LTI system
-    S = ConstrainedLinearControlContinuousSystem(A, B, nothing, U)
+    S = @system(x' = Ax + Bu, x ∈ X, u ∈ U)
 
     return S
 end

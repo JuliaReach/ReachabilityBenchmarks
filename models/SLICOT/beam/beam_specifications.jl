@@ -1,4 +1,4 @@
-using LazySets, MathematicalPredicates, Reachability, SparseArrays
+using LazySets, MathematicalPredicates, SparseArrays
 
 function beam_specification()
     # initial set: xᵢ = 0 if i ≤ 300 and xᵢ ∈ [0.0015, 0.002] otherwise
@@ -12,7 +12,7 @@ function beam_specification()
     time_horizon = 20.0
 
     # specification
-    O = Options(:T => time_horizon, :property => property)
+    O = Dict(:T => time_horizon, :property => property)
 
     return X0, O
 end

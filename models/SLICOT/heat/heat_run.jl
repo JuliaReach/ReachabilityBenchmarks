@@ -5,6 +5,7 @@ include(@relpath "heat_specifications.jl")
 
 S = heat_model()
 X0, options = heat_specification()
+options = Dict(options)
 
 # initial value problem
 problem = InitialValueProblem(S, X0)

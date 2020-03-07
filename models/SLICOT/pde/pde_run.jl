@@ -5,6 +5,7 @@ include(@relpath "pde_specifications.jl")
 
 S = pde_model()
 X0, options = pde_specification()
+options = Dict(options)
 
 # initial value problem
 problem = InitialValueProblem(S, X0)

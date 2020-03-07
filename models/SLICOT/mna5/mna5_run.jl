@@ -5,6 +5,7 @@ include(@relpath "mna5_specifications.jl")
 
 S = mna5_model()
 X0, options = mna5_specification()
+options = Dict(options)
 
 # initial value problem
 problem = InitialValueProblem(S, X0)

@@ -5,6 +5,7 @@ include(@relpath "cdplayer_specifications.jl")
 
 S = cdplayer_model()
 X0, options = cdplayer_specification()
+options = Dict(options)
 
 # initial value problem
 problem = InitialValueProblem(S, X0)

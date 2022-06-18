@@ -39,7 +39,7 @@ function gearbox()
     guard_bloating = sqrt(eps(Float64))
 
     # discrete structure (graph)
-    automaton = LightAutomaton(2)
+    automaton = GraphAutomaton(2)
     add_transition!(automaton, 1, 1, 1)
     add_transition!(automaton, 1, 1, 2)
     add_transition!(automaton, 1, 2, 3)

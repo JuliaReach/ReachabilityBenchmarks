@@ -27,7 +27,7 @@ end
 
 function bouncingBallNonlinear_model()
     # hybrid automaton with state variables x, v
-    HA = LightAutomaton(2)
+    HA = GraphAutomaton(2)
 
     # mode 1 ("down")
     X = HPolyhedron([HalfSpace([-1.0, 0.0], 0.0),   # x ≥ 0

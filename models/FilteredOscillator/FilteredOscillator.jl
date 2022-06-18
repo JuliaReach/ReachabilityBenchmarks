@@ -40,7 +40,7 @@ function filtered_oscillator(n0::Int=4,
     z = zeros(n1)
 
     # transition graph (automaton)
-    a = LightAutomaton(4)
+    a = GraphAutomaton(4)
     add_transition!(a, 3, 4, 1)
     add_transition!(a, 4, 2, 2)
     add_transition!(a, 2, 1, 3)

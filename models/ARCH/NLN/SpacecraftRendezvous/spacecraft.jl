@@ -26,7 +26,7 @@ function spacecraft_rendezvous(;T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
     t_abort = 120.0
 
     # discrete structure (graph)
-    automaton = LightAutomaton(3)
+    automaton = GraphAutomaton(3)
 
     # mode 1 ("approaching")
     𝐹 = spacecraft_approaching!

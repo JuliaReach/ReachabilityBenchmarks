@@ -21,7 +21,7 @@ function linearSwitching_model()
     ε = 1e-6  # auxiliary bloating of guards for ensuring intersection
 
     # hybrid automaton
-    HA = LightAutomaton(5)
+    HA = GraphAutomaton(5)
 
     # SpaceEx model
     file = @relpath "SpaceEx/model.xml"

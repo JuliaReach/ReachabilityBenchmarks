@@ -164,7 +164,7 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
     end
 
     # hybrid automaton
-    automaton = LightAutomaton(4)
+    automaton = GraphAutomaton(4)
 
     # negAngle
     A, b = get_dynamics(kₛ, -α, u)

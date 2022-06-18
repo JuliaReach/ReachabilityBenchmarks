@@ -48,7 +48,7 @@ function spacecraft(; abort_time::Union{Float64, Vector{Float64}}=-1.)
     end
 
     # discrete structure (graph)
-    automaton = LightAutomaton(aborting ? 3 : 2)
+    automaton = GraphAutomaton(aborting ? 3 : 2)
 
     # common vector of affine dynamics
     b = sparsevec([t], [1.], n)

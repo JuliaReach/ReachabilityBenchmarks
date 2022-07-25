@@ -91,10 +91,10 @@ function quadrotor(; T=5.0,
     τψ = 0                         # heading is uncontrolled
 
     # differential equations for the quadrotor
-    ẋ₁ = cos(x₈)*cos(x₉)*x₄ + (sin(x₇)*sin(x₈)*cos(x₉) - cos(x₇)*sin(x₉))*x₅
-         + (cos(x₇)*sin(x₈)*cos(x₉) + sin(x₇)*sin(x₉))*x₆
-    ẋ₂ = cos(x₈)*sin(x₉)*x₄ + (sin(x₇)*sin(x₈)*sin(x₉) + cos(x₇)*cos(x₉))*x₅
-         + (cos(x₇)*sin(x₈)*sin(x₉) - sin(x₇)*cos(x₉))*x₆
+    ẋ₁ = cos(x₈)*cos(x₉)*x₄ + (sin(x₇)*sin(x₈)*cos(x₉) - cos(x₇)*sin(x₉))*x₅ +
+         (cos(x₇)*sin(x₈)*cos(x₉) + sin(x₇)*sin(x₉))*x₆
+    ẋ₂ = cos(x₈)*sin(x₉)*x₄ + (sin(x₇)*sin(x₈)*sin(x₉) + cos(x₇)*cos(x₉))*x₅ +
+         (cos(x₇)*sin(x₈)*sin(x₉) - sin(x₇)*cos(x₉))*x₆
     ẋ₃ = sin(x₈)*x₄ - sin(x₇)*cos(x₈)*x₅ - cos(x₇)*cos(x₈)*x₆
     ẋ₄ = x₁₂*x₅ - x₁₁*x₆ - g*sin(x₈)
     ẋ₅ = x₁₀*x₆ - x₁₂*x₄ + g*cos(x₈)*sin(x₇)

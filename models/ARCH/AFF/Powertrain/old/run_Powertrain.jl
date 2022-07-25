@@ -82,7 +82,6 @@ while θ <= 47
         println("$name $(n0)")
         T = 2.
         max_jumps = 4
-        end
         HS = drivetrain(θ)
         sol = get_solution(HS, θ, opD, T, max_jumps);
         if project_and_store

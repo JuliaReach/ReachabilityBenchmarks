@@ -132,7 +132,7 @@ function plot_polygon(P::Array{Matrix{Float64}, 1};
                       color="red",
                       plot_labels::Vector{String}=["", ""])
     if backend in ["pyplot_inline", "pyplot_savefig"]
-        if !isdefined(:PyPlot)
+        if !isdefined(@__MODULE__, :PyPlot)
             error("this backend requires that your script loads the PyPlot module")
         end
         eval(Expr(:using, :PyPlot))
@@ -156,7 +156,7 @@ function plot_polygon(P::Array{Matrix{Float64}, 1};
         end
 
     elseif backend in ["gadfly"]
-        if !isdefined(:Gadfly)
+        if !isdefined(@__MODULE__, :Gadfly)
             error("this backend requires that your script loads the Gadfly module")
         end
         eval(Expr(:using, :Gadfly))

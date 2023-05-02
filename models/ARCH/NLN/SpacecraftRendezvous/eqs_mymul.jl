@@ -17,9 +17,9 @@ const K₁mc = K₁/mc
 const K₂mc = K₂/mc
 
 function mymul!(v, A, x)
-    for ind = 1:length(v)
+    for ind = eachindex(v)
         v[ind] = zero(x[1])
-        for jind = 1:length(x)
+        for jind = eachindex(x)
             v[ind] += A[ind, jind] * x[jind]
         end
     end
@@ -37,7 +37,7 @@ end
 
     uxy = Array{typeof(x[1])}(undef, size(K₁mc,1))
     mymul!(uxy, K₁mc, x[1:4])
-    
+
     # x' = vx
     dx[1] = x[3]
     # y' = vy

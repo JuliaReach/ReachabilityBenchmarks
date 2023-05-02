@@ -6,7 +6,7 @@ function print_dynamics(A, b, location_name)
     println("dynamics of location $location_name:")
     for i in 1:size(A, 1)-1  # ignore the last dimension (time)
         print("x_$i' = ")
-        for j in 1:size(A, 2)
+        for j in axes(A, 2)
             if !iszero(A[i,j])
                 print("$(A[i,j]) x_$j + ")
             end

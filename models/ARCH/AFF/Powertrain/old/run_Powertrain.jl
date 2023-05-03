@@ -1,6 +1,6 @@
 using LazySets, Reachability, Polyhedra, Optim
 import LazySets.HalfSpace
-include("DriveTrain.jl");
+include("runSXDriveTrain.jl");
 
 # compatibility of julia versions
 if VERSION >= v"0.7"

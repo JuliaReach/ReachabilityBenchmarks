@@ -1,8 +1,7 @@
 # reach, 2D blocks, rectangles, fixed delta, two variables
 using Reachability
 
-reach_2D_box_two(model::String, create_plots::Bool=false) =
-    reach_2D_box_two([model], create_plots)
+reach_2D_box_two(model::String, create_plots::Bool=false) = reach_2D_box_two([model], create_plots)
 
 function reach_2D_box_two(models::Vector{String}, create_plots::Bool=false)
     # load models
@@ -47,8 +46,8 @@ function reach_2D_box_two(models::Vector{String}, create_plots::Bool=false)
         dict_raw[:vars] = [1, 2]
         dict_raw[:plot_vars] = [1, 2]
         dict_raw[:partition] = ((n % 2 == 0)
-            ? [(2*i-1:2*i) for i in 1:div(n, 2)] # even dimension
-            : vcat([(2*i-1:2*i) for i in 1:div(n, 2)], [n:n])) # odd dimension
+                                ? [((2 * i - 1):(2 * i)) for i in 1:div(n, 2)] # even dimension
+                                : vcat([((2 * i - 1):(2 * i)) for i in 1:div(n, 2)], [n:n])) # odd dimension
         dict_raw[:set_type] = Hyperrectangle
 
         for i in 1:2
@@ -58,7 +57,7 @@ function reach_2D_box_two(models::Vector{String}, create_plots::Bool=false)
                 dict[:N] = 3
             else
                 # benchmark settings
-                dict[:T] = 20.
+                dict[:T] = 20.0
                 dict[:logfile] = "$model-reach-2D-box-fixedstep-twovars.txt"
             end
             result = solve(S, Options(dict))

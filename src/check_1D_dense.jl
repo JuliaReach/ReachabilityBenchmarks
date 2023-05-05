@@ -1,8 +1,7 @@
 # check property, 1D blocks, intervals, given delta, dense time
 using Reachability
 
-check_1D_dense(model::String, delta::Float64) =
-    check_1D_dense([model], [delta])
+check_1D_dense(model::String, delta::Float64) = check_1D_dense([model], [delta])
 
 function check_1D_dense(models::Vector{String}, deltas::Vector{Float64})
     # load models
@@ -51,7 +50,7 @@ function check_1D_dense(models::Vector{String}, deltas::Vector{Float64})
                 dict[:N] = 3
             else
                 # benchmark settings
-                dict[:T] = 20.
+                dict[:T] = 20.0
                 dict[:logfile] = "$model-check-1D-dense-givenstep.txt"
             end
             result = solve(S, Options(dict))

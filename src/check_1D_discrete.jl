@@ -48,7 +48,7 @@ function check_1D_discrete(models::Vector{String})
                 dict[:N] = 3
             else
                 # benchmark settings
-                dict[:T] = 20.
+                dict[:T] = 20.0
                 dict[:logfile] = "$model-check-1D-discrete-fixedstep.txt"
             end
             result = solve(S, Options(dict))

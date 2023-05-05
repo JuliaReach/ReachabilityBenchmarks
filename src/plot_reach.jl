@@ -19,7 +19,7 @@ function plot_reach(result::AbstractSolution, name::String="plot")
     # GR plotting backend does not support subindices like x₁ in savefig
     is_gr = Plots.backend() == Plots.GRBackend()
     @timing begin
-        plot(result, use_subindices=!is_gr)
+        plot(result; use_subindices=!is_gr)
         savefig("$name.png")
     end
 end

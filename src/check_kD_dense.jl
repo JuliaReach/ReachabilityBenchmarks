@@ -1,8 +1,7 @@
 # check property, kD blocks, intervals, given delta, dense time
 using Reachability
 
-check_kD_dense(model::String, delta::Float64) =
-    check_kD_dense([model], [delta])
+check_kD_dense(model::String, delta::Float64) = check_kD_dense([model], [delta])
 
 function check_kD_dense(models::Vector{String}, deltas::Vector{Float64})
     # load models
@@ -48,7 +47,7 @@ function check_kD_dense(models::Vector{String}, deltas::Vector{Float64})
                 dict[:N] = 3
             else
                 # benchmark settings
-                dict[:T] = 20.
+                dict[:T] = 20.0
                 dict[:logfile] = "$model-check-kD-dense-givenstep.txt"
             end
             result = solve(S, Options(dict))

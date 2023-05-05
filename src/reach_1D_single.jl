@@ -1,8 +1,7 @@
 # reach, 1D blocks, intervals, fixed delta, single variable
 using Reachability
 
-reach_1D_single(model::String, create_plots::Bool=false) =
-    reach_1D_single([model], create_plots)
+reach_1D_single(model::String, create_plots::Bool=false) = reach_1D_single([model], create_plots)
 
 function reach_1D_single(models::Vector{String}, create_plots::Bool=false)
     # load models
@@ -54,7 +53,7 @@ function reach_1D_single(models::Vector{String}, create_plots::Bool=false)
                 dict[:N] = 3
             else
                 # benchmark settings
-                dict[:T] = 20.
+                dict[:T] = 20.0
                 dict[:logfile] = "$model-reach-1D-fixedstep-onevar.txt"
             end
             result = solve(S, Options(dict))

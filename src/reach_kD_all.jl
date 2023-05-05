@@ -1,8 +1,7 @@
 # reach, varying block size, fixed delta, all variables
 using Reachability
 
-reach_kD_all(model::String, create_plots::Bool=false) =
-    reach_kD_all([model], create_plots)
+reach_kD_all(model::String, create_plots::Bool=false) = reach_kD_all([model], create_plots)
 
 function reach_kD_all(models::Vector{String}, create_plots::Bool=false)
     # load models
@@ -44,7 +43,7 @@ function reach_kD_all(models::Vector{String}, create_plots::Bool=false)
         property = options_raw[:property]
         if !(property isa LinearConstraintProperty)
             println("cannot construct output function from properties of " *
-                "type $(typeof(property))... skipping model")
+                    "type $(typeof(property))... skipping model")
             break
         end
         projection_matrix = reshape(property.clauses[1].atoms[1].a, (1, n))
@@ -70,8 +69,8 @@ function reach_kD_all(models::Vector{String}, create_plots::Bool=false)
             if m >= n
                 m = n
             end
-            uniform = [m*i-(m-1):m*i for i in 1:div(n, m)]
-            partitions[k] = n%m == 0 ? uniform : vcat(uniform, [div(n, m) *m+1:n])
+            uniform = [(m * i - (m - 1)):(m * i) for i in 1:div(n, m)]
+            partitions[k] = n % m == 0 ? uniform : vcat(uniform, [(div(n, m) * m + 1):n])
             if m == n
                 break
             end
@@ -85,10 +84,10 @@ function reach_kD_all(models::Vector{String}, create_plots::Bool=false)
                 dict_raw[:partition] = partitions[1]
             else
                 # benchmark settings
-                k = i == length(partitions) + 1 ? n : 2^(i-2)
+                k = i == length(partitions) + 1 ? n : 2^(i - 2)
                 dict[:N] = 20
                 dict[:logfile] = "$model-reach-$(k)D-varying-fixedstep-allvars.txt"
-                dict_raw[:partition] = partitions[i-1]
+                dict_raw[:partition] = partitions[i - 1]
             end
             result = solve(S, Options(dict))
             if create_plots && i > 1

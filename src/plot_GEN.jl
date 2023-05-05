@@ -69,35 +69,35 @@ function read_gen(filename::String)
     new_polygon = true
     open(filename) do f
         for line in eachline(f)
-          if !isempty(line)
-              push!(Mi, map(x -> parse(Float64, x), split(line)))
-              new_polygon = true
-          elseif isempty(line) && new_polygon
-              push!(P, VPolygon(Mi))
-              Mi = Vector{Vector{Float64}}()
-              new_polygon = false
-          end
+            if !isempty(line)
+                push!(Mi, map(x -> parse(Float64, x), split(line)))
+                new_polygon = true
+            elseif isempty(line) && new_polygon
+                push!(P, VPolygon(Mi))
+                Mi = Vector{Vector{Float64}}()
+                new_polygon = false
+            end
         end
     end
     return P
 end
 
-function read_gen_old(filename::String)::Array{Matrix{Float64}, 1}
-    Mi = Array{Vector{Float64}, 1}()
-    P = Array{Matrix{Float64}, 1}()
+function read_gen_old(filename::String)::Array{Matrix{Float64},1}
+    Mi = Array{Vector{Float64},1}()
+    P = Array{Matrix{Float64},1}()
     # detects when we finished reading a new polygon, needed because polygons
     # may be separated by more than one end-of-line
     new_polygon = true
     open(filename) do f
         for line in eachline(f)
-          if !isempty(line)
-              push!(Mi, map(x -> parse(Float64, x), split(line)))
-              new_polygon = true
-          elseif isempty(line) && new_polygon
-              push!(P, hcat(Mi...))
-              Mi = Array{Vector{Float64}, 1}()
-              new_polygon = false
-          end
+            if !isempty(line)
+                push!(Mi, map(x -> parse(Float64, x), split(line)))
+                new_polygon = true
+            elseif isempty(line) && new_polygon
+                push!(P, hcat(Mi...))
+                Mi = Array{Vector{Float64},1}()
+                new_polygon = false
+            end
         end
     end
     return P
@@ -125,7 +125,7 @@ INPUT:
 - ``color``       -- (optional, default: ``'red'``) the color of the plotting lines
 - ``plot_labels`` -- (optional, default: ``['', '']``) the labels of the axes
 """
-function plot_polygon(P::Array{Matrix{Float64}, 1};
+function plot_polygon(P::Array{Matrix{Float64},1};
                       backend="pyplot_savefig",
                       name="plot.png",
                       gridlines=false,
@@ -148,10 +148,10 @@ function plot_polygon(P::Array{Matrix{Float64}, 1};
         for pi in P
             xcoords = pi[1, :]
             ycoords = pi[2, :]
-            PyPlot.plot(xcoords, ycoords, color=color, linewidth=0.6)
+            PyPlot.plot(xcoords, ycoords; color=color, linewidth=0.6)
         end
         if backend == "pyplot_savefig"
-            PyPlot.savefig(name, bbox_inches="tight")
+            PyPlot.savefig(name; bbox_inches="tight")
             PyPlot.close(fig)
         end
 
@@ -166,7 +166,9 @@ function plot_polygon(P::Array{Matrix{Float64}, 1};
         for pi in P
             xcoords = pi[1, :]
             ycoords = pi[2, :]
-            push!(layers_array, Gadfly.layer(x=xcoords, y=ycoords, Geom.polygon(preserve_order=false, fill=true)))
+            push!(layers_array,
+                  Gadfly.layer(; x=xcoords, y=ycoords,
+                               Geom.polygon(; preserve_order=false, fill=true)))
         end
         Gadfly.plot(layers_array...)
 
@@ -198,7 +200,7 @@ function plot_all(path::String=".")
     files = filter(x -> contains(x, ".txt"), readdir(path))
     for f in files
         println("Plotting ", f)
-        plot_polygon(read_gen(f), name=f * ".png", gridlines=true)
+        plot_polygon(read_gen(f); name=f * ".png", gridlines=true)
     end
 end
 

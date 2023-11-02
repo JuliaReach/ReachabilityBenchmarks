@@ -108,7 +108,7 @@ end
 
 Plot one or more polygons given as an array of matrices.
 
-INPUT:
+### Input
 
 - ``P`` -- a polygon, given as a list of matrices, where the first row is for
            the x coordinates and the second row for the y coordinates
@@ -184,12 +184,12 @@ end
 
 Plot all txt files (in gen format) of a specified folder.
 
-INPUT:
+### Input
 
 - ``path`` -- (optional, default: ``'.'``, the current directory) this is the
               directory where the data files are located
 
-OUTUPT:
+### Output
 
 One or more files with the extension ``.txt.png``.
 

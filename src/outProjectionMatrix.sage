@@ -18,7 +18,7 @@ The filename extension should be ``'.sage'``.
     where:
 
      - ``n``             -- is an integer with the dimension of the system
-     - ``input.sage``    -- is the file which conatins the linear combination
+     - ``input.sage``    -- is the file which contains the linear combination
      - ``output_format`` -- can be either ``txt`` or ``MAT``
 
 3. The result is recovered in the file ``'out'``, whose filename extension is

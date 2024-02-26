@@ -8,7 +8,7 @@ function projectile_specification()
     time_horizon = 20.0
 
     # specification
-    O = Dict{Symbol, Any}(:T => time_horizon)
+    O = Dict{Symbol,Any}(:T => time_horizon)
 
     return X0, O
 end

@@ -1,13 +1,12 @@
 using Reachability, MathematicalSystems, MathematicalPredicates, HybridSystems,
       SparseArrays
 
-
 function print_dynamics(A, b, location_name)
     println("dynamics of location $location_name:")
-    for i in 1:size(A, 1)-1  # ignore the last dimension (time)
+    for i in 1:(size(A, 1) - 1)  # ignore the last dimension (time)
         print("x_$i' = ")
         for j in axes(A, 2)
-            if !iszero(A[i,j])
+            if !iszero(A[i, j])
                 print("$(A[i,j]) x_$j + ")
             end
         end
@@ -73,7 +72,7 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
     γ = 12.0 # gearbox ratio (dimensionless)
     u = 5.0 # requested engine torque
     # moments of inertia [kg m²]
-    Jₗ = 140.
+    Jₗ = 140.0
     Jₘ = 0.3
     Jᵢ = 100.0  # TODO the paper says 0.01, the SpaceEx model uses 100
     # viscous friction constants [Nm s/rad]
@@ -116,7 +115,7 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
         A[2, 2] = (-k_D / Jₘ - 1.0) / τ_eng
         A[2, 3] = k_I * γ / τ_eng
         A[2, 4] = k_P * γ / τ_eng
-        A[2, 7] = (-k_P + k_D * bₘ /Jₘ) / τ_eng
+        A[2, 7] = (-k_P + k_D * bₘ / Jₘ) / τ_eng
         A[2, 8] = -k_I * γ / τ_eng
 
         A[3, 4] = 1.0
@@ -125,29 +124,29 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
 
         A[6, 5] = -kᵢ / Jₗ
         A[6, 6] = -bₗ / Jₗ
-        A[6, 2*θ+6] = kᵢ / Jₗ
+        A[6, 2 * θ + 6] = kᵢ / Jₗ
 
         A[7, 1] = -kₛ / (Jₘ * γ)
         A[7, 2] = 1.0 / Jₘ
         A[7, 7] = -bₘ / Jₘ
 
         i = 8
-        while i < n-1
-            A[i, i+1] = 1.0
+        while i < n - 1
+            A[i, i + 1] = 1.0
 
             if i == 8
                 # x9 has special dynamics
-                A[i+1, 1] = kₛ / Jᵢ
-                A[i+1, i] = -kᵢ / Jᵢ
+                A[i + 1, 1] = kₛ / Jᵢ
+                A[i + 1, i] = -kᵢ / Jᵢ
             else
-                A[i+1, i-2] = kᵢ / Jᵢ
-                A[i+1, i] = -2. * kᵢ / Jᵢ
+                A[i + 1, i - 2] = kᵢ / Jᵢ
+                A[i + 1, i] = -2.0 * kᵢ / Jᵢ
             end
-            A[i+1, i+1] = -bᵢ / Jᵢ
+            A[i + 1, i + 1] = -bᵢ / Jᵢ
 
             # wrap-around to x5 in the last step
-            j = (i == n-2) ? 5 : i+2
-            A[i+1, j] = kᵢ / Jᵢ
+            j = (i == n - 2) ? 5 : i + 2
+            A[i + 1, j] = kᵢ / Jᵢ
 
             i += 2
         end
@@ -168,16 +167,16 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
 
     # negAngle
     A, b = get_dynamics(kₛ, -α, u)
-    X = HalfSpace(sparsevec([1], [1.], n), -α)  # x1 <= -α
+    X = HalfSpace(sparsevec([1], [1.0], n), -α)  # x1 <= -α
     m_negAngle = CACS(A, b, X)
     if display_dynamics
         print_dynamics(A, b, "negAngle")
     end
 
     # deadzone
-    A, b = get_dynamics(0., -α, u)
-    X = HPolyhedron([HalfSpace(sparsevec([1], [-1.], n), α),  # x1 >= -α
-                     HalfSpace(sparsevec([1], [1.], n), α)])  # x1 <= α
+    A, b = get_dynamics(0.0, -α, u)
+    X = HPolyhedron([HalfSpace(sparsevec([1], [-1.0], n), α),  # x1 >= -α
+                     HalfSpace(sparsevec([1], [1.0], n), α)])  # x1 <= α
     m_deadzone = CACS(A, b, X)
     if display_dynamics
         print_dynamics(A, b, "deadzone")
@@ -185,7 +184,7 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
 
     # posAngle
     A, b = get_dynamics(kₛ, α, u)
-    X = HalfSpace(sparsevec([1], [-1.], n), -α + guard_bloating)  # x1 >= α - ε
+    X = HalfSpace(sparsevec([1], [-1.0], n), -α + guard_bloating)  # x1 >= α - ε
     m_posAngle = CACS(A, b, X)
     if display_dynamics
         print_dynamics(A, b, "posAngle")
@@ -193,7 +192,7 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
 
     # negAngleInit
     A, b = get_dynamics(kₛ, -α, -u)
-    X = HalfSpace(sparsevec([n], [1.], n), t_init)  # t <= t_init
+    X = HalfSpace(sparsevec([n], [1.0], n), t_init)  # t <= t_init
     m_negAngleInit = CACS(A, b, X)
     if display_dynamics
         print_dynamics(A, b, "negAngleInit")
@@ -204,28 +203,28 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
 
     # transition negAngleInit -> negAngle
     add_transition!(automaton, 4, 1, 1)
-    guard = HalfSpace(sparsevec([n], [-1.], n), -t_init + guard_bloating)  # t >= t_init - ε
+    guard = HalfSpace(sparsevec([n], [-1.0], n), -t_init + guard_bloating)  # t >= t_init - ε
     r_41 = ConstrainedIdentityMap(n, guard)
 
     # transition negAngle -> deadzone
     add_transition!(automaton, 1, 2, 2)
-    guard = HalfSpace(sparsevec([1], [-1.], n), α)  # x1 >= -α
+    guard = HalfSpace(sparsevec([1], [-1.0], n), α)  # x1 >= -α
     r_12 = ConstrainedIdentityMap(n, guard)
 
     # transition deadzone -> posAngle
     add_transition!(automaton, 2, 3, 3)
-    guard = HalfSpace(sparsevec([1], [-1.], n), -α)  # x1 >= α
+    guard = HalfSpace(sparsevec([1], [-1.0], n), -α)  # x1 >= α
     r_23 = ConstrainedIdentityMap(n, guard)
 
     # TODO the SpaceEx model does not contain the following transitions
-#     # transition deadzone -> negAngle
-#     add_transition!(automaton, 2, 1, 4)
-#     guard = HalfSpace(sparsevec([1], [1.], n), -α)  # x1 <= -α
-#     r_21 = ConstrainedIdentityMap(n, guard)
-#     # transition posAngle -> deadzone
-#     add_transition!(automaton, 3, 2, 5)
-#     guard = HalfSpace(sparsevec([1], [1.], n), α)  # x1 <= α
-#     r_32 = ConstrainedIdentityMap(n, guard)
+    #     # transition deadzone -> negAngle
+    #     add_transition!(automaton, 2, 1, 4)
+    #     guard = HalfSpace(sparsevec([1], [1.], n), -α)  # x1 <= -α
+    #     r_21 = ConstrainedIdentityMap(n, guard)
+    #     # transition posAngle -> deadzone
+    #     add_transition!(automaton, 3, 2, 5)
+    #     guard = HalfSpace(sparsevec([1], [1.], n), α)  # x1 <= α
+    #     r_32 = ConstrainedIdentityMap(n, guard)
 
     # transition annotations
     resetmaps = [r_41, r_12, r_23]
@@ -238,15 +237,15 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
     # initial condition in mode 1
     c = Vector{Float64}(undef, n)
     g = Vector{Float64}(undef, n)
-    c[1:7] = [-0.0432, -11., 0., 30., 0., 30., 360.]
-    g[1:7] = [0.0056, 4.67, 0., 10., 0., 10., 120.]
+    c[1:7] = [-0.0432, -11.0, 0.0, 30.0, 0.0, 30.0, 360.0]
+    g[1:7] = [0.0056, 4.67, 0.0, 10.0, 0.0, 10.0, 120.0]
     i = 8
     while i < n
         c[i] = -0.0013
         g[i] = 0.0006
         i += 1
-        c[i] = 30.
-        g[i] = 10.
+        c[i] = 30.0
+        g[i] = 10.0
         i += 1
     end
     c[n] = 0.0
@@ -260,12 +259,12 @@ function powertrain(θ::Int=1; X0_scale::Float64=1.0)
     system = InitialValueProblem(ℋ, initial_condition)
 
     # safety property
-    property_2 = is_disjoint_from(HalfSpace(sparsevec([1], [1.], n), -α))  # x1 <= -α
-    property_3 = is_disjoint_from(HalfSpace(sparsevec([1], [1.], n), α))   # x1 <= α
+    property_2 = is_disjoint_from(HalfSpace(sparsevec([1], [1.0], n), -α))  # x1 <= -α
+    property_3 = is_disjoint_from(HalfSpace(sparsevec([1], [1.0], n), α))   # x1 <= α
     property = Dict(2 => property_2, 3 => property_3)
 
     # default options
-    options = Options(:T=>2.0, :property=>property)
+    options = Options(:T => 2.0, :property => property)
 
     return (system, options)
 end
@@ -276,5 +275,5 @@ function run_powertrain(system, options)
     options[:mode] = "check"
     options[:plot_vars] = [1, 3]
 
-    solve(system, options, opC, opD)
+    return solve(system, options, opC, opD)
 end

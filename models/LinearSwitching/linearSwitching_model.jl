@@ -25,7 +25,7 @@ function linearSwitching_model()
 
     # SpaceEx model
     file = @relpath "SpaceEx/model.xml"
-    model = readsxmodel(file, raw_dict=true)
+    model = readsxmodel(file; raw_dict=true)
     variables = convert.(Basic, [f.args[1].args[1] for f in model["flows"][1]])
     inputs = [convert(Basic, :u)]
     load_dynamics(loc) = _get_coeffs(model["flows"][loc], n, m, variables, inputs)

@@ -21,20 +21,20 @@ X0 = BallInf(zeros(n), 0.0001)
 # ==============================
 # Time-varying input
 # ==============================
-U = Hyperrectangle(low=[0.0, 0.8, 0.9], high=[0.1, 1., 1.])
+U = Hyperrectangle(; low=[0.0, 0.8, 0.9], high=[0.1, 1.0, 1.0])
 S = ConstrainedLinearControlContinuousSystem(A, B, nothing, U)
 iss_TV = InitialValueProblem(S, X0)
 
 # specifications for time-varying input
 ISU01 = is_contained_in(HPolyhedron([HalfSpace(Cvec, 0.0005),
-                                   HalfSpace(-Cvec, 0.0005)]))
+                                     HalfSpace(-Cvec, 0.0005)]))
 ISS01 = is_contained_in(HPolyhedron([HalfSpace(Cvec, 0.0007),
-                                   HalfSpace(-Cvec, 0.0007)]))
+                                     HalfSpace(-Cvec, 0.0007)]))
 
 # ==============================
 # Constant input
 # ==============================
-using Reachability:add_dimension
+using Reachability: add_dimension
 A = sparse(read(file, "A"))
 Aext = add_dimension(A, 3)
 Aext[1:270, 271:273] = B
@@ -46,6 +46,6 @@ Cvec = C[1, :]
 
 # specifications for constant input
 ISU02 = is_contained_in(HPolyhedron([HalfSpace(Cvec, 0.00017),
-                                   HalfSpace(-Cvec, 0.00017)]))
+                                     HalfSpace(-Cvec, 0.00017)]))
 ISS02 = is_contained_in(HPolyhedron([HalfSpace(Cvec, 0.0005),
-                                   HalfSpace(-Cvec, 0.0005)]))
+                                     HalfSpace(-Cvec, 0.0005)]))

@@ -29,22 +29,22 @@ include("building_GLGM06.jl")
 # Create plots
 # ==============================================================================
 
-function plot_dashed_line!(v, time_horizon=20.)
-    plot!(x->x, x->v, 0.0, time_horizon, line=2, color="red", linestyle=:dash,
-          legend=nothing)
+function plot_dashed_line!(v, time_horizon=20.0)
+    return plot!(x -> x, x -> v, 0.0, time_horizon; line=2, color="red", linestyle=:dash,
+                 legend=nothing)
 end
 
 plot_vars = (0, 25)
 
-res = solve(build_TV, alg=algo_dense, T=time_horizon)
+res = solve(build_TV; alg=algo_dense, T=time_horizon)
 
-plot(res,
+plot(res;
      vars=plot_vars,
      tickfont=font(30, "Times"), guidefontsize=45,
      xlab=L"t",
      ylab=L"x_{25}",
-     xtick=[0., 0.5, 1.], ytick=[-6e-3, -3e-3, 0., 3e-3, 6e-3],
-     xlims=(0., 1.), ylims=(-9e-3, 6e-3),
+     xtick=[0.0, 0.5, 1.0], ytick=[-6e-3, -3e-3, 0.0, 3e-3, 6e-3],
+     xlims=(0.0, 1.0), ylims=(-9e-3, 6e-3),
      bottom_margin=0mm, left_margin=1mm, right_margin=6mm, top_margin=3mm,
      size=(1000, 1000))
 plot_dashed_line!(4e-3)

@@ -20,7 +20,7 @@ function pde_model()
     X = Universe(84)
 
     # input domain
-    U = BallInf([0.75], .25)
+    U = BallInf([0.75], 0.25)
 
     # continuous LTI system
     S = @system(x' = Ax + Bu, x ∈ X, u ∈ U)

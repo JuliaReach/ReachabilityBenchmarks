@@ -11,8 +11,8 @@ options = Options(options)
 problem = InitialValueProblem(S, X0)
 
 # reachability algorithm
-algorithm_continuous = BFFPS19(:δ => 1e-4, :partition=>[1:2, 3:3, 4:4, 5:5])
-algorithm_hybrid = DecomposedDiscretePost(:out_vars=>[1, 2], :clustering=>:none)
+algorithm_continuous = BFFPS19(:δ => 1e-4, :partition => [1:2, 3:3, 4:4, 5:5])
+algorithm_hybrid = DecomposedDiscretePost(:out_vars => [1, 2], :clustering => :none)
 
 # compute flowpipe
 options[:mode] = "reach"

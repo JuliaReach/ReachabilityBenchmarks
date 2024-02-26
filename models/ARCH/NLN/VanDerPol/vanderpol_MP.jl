@@ -19,9 +19,8 @@ Construct the Van der Pol model using MultivariatePolynomials.
 The tuple `(𝑃, 𝑂)` where `𝑃` is an initial-value problem and `𝑂` are the options.
 """
 function vanderpol_MP(; T=7.0,
-                        X0=Hyperrectangle(low=[1.25, 2.35], high=[1.55, 2.45]),
-                        variables=@polyvar x₁ x₂)
-
+                      X0=Hyperrectangle(; low=[1.25, 2.35], high=[1.55, 2.45]),
+                      variables=@polyvar x₁ x₂)
     𝑂 = Options()
     x₁, x₂ = variables
     𝑂[:variables] = variables
@@ -40,7 +39,7 @@ function vanderpol_MP(; T=7.0,
     𝑂[:plot_vars] = [1, 2]
 
     # safety property
-    𝑂[:property] = is_contained_in(HalfSpace([0., 1.], 2.75))
+    𝑂[:property] = is_contained_in(HalfSpace([0.0, 1.0], 2.75))
 
     return (𝑃, 𝑂)
 end

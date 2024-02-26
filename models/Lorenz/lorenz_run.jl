@@ -11,8 +11,8 @@ options = Options(options)
 problem = InitialValueProblem(S, X0)
 
 # reachability algorithm
-algorithm_reach = TMJets(:abs_tol=>1e-27, :orderT=>10, :orderQ=>2,
-                         :max_steps=>50_000)
+algorithm_reach = TMJets(:abs_tol => 1e-27, :orderT => 10, :orderQ => 2,
+                         :max_steps => 50_000)
 
 # compute flowpipe
 options[:mode] = "reach"

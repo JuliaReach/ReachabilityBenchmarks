@@ -2,7 +2,7 @@ using LazySets, MathematicalPredicates, SparseArrays
 
 function mna1_specification()
     # initial set: xᵢ ∈ [0.001, 0.0015] if i ≤ 2 and xᵢ = 0 otherwise
-    X0 = Hyperrectangle(low=[fill(0.001, 2); zeros(576)],
+    X0 = Hyperrectangle(; low=[fill(0.001, 2); zeros(576)],
                         high=[fill(0.0015, 2); zeros(576)])
 
     # safety property: x1 ≤ 0.5

@@ -47,23 +47,23 @@ function gearbox()
     # mode 1 ("free")
     A = zeros(n, n)
     b = zeros(n)
-    A[px, vx] = 1.
-    A[py, vy] = 1.
+    A[px, vx] = 1.0
+    A[py, vy] = 1.0
     b[vx] = Fs / ms
-    b[vy] = - (Rs * Tf) / Jg₂
-    b[t] = 1.
-    invariant = HalfSpace(sparsevec([px], [1.], n), Δp)
+    b[vy] = -(Rs * Tf) / Jg₂
+    b[t] = 1.0
+    invariant = HalfSpace(sparsevec([px], [1.0], n), Δp)
     # TODO The SpaceEx model adds more constraints, possibly to help with the
     # guard intersection:
     invariant = HPolyhedron([invariant,
-        HalfSpace(sparsevec([px, py], [tan(θ), 1.], n), 0.),    # py <= -px * tan(θ)
-        HalfSpace(sparsevec([px, py], [tan(θ), -1.], n), 0.)])  # py >= px * tan(θ)
+                             HalfSpace(sparsevec([px, py], [tan(θ), 1.0], n), 0.0),    # py <= -px * tan(θ)
+                             HalfSpace(sparsevec([px, py], [tan(θ), -1.0], n), 0.0)])  # py >= px * tan(θ)
     m_1 = CACS(A, b, invariant)
 
     # mode 2 ("meshed")
     A = zeros(n, n)
     b = zeros(n)
-    b[t] = 1.
+    b[t] = 1.0
     invariant = Universe(n)
     m_2 = CACS(A, b, invariant)
 
@@ -73,44 +73,40 @@ function gearbox()
     # common assignment matrix (requires individual modifications)
     A_template = zeros(n, n)
     for i in 3:6
-        A_template[i, i] = 1.
+        A_template[i, i] = 1.0
     end
     denominator = ms * cos(θ)^2 + mg₂ * sin(θ)^2
     A_template[vx, vx] = (ms * cos(θ)^2 - mg₂ * ζ * sin(θ)^2) / denominator
-    A_template[vx, vy] = (-(ζ + 1.) * mg₂ * sin(θ) * cos(θ)) / denominator
-    A_template[vy, vx] = (-(ζ + 1.) * ms * sin(θ) * cos(θ)) / denominator
+    A_template[vx, vy] = (-(ζ + 1.0) * mg₂ * sin(θ) * cos(θ)) / denominator
+    A_template[vy, vx] = (-(ζ + 1.0) * ms * sin(θ) * cos(θ)) / denominator
     A_template[vy, vy] = (mg₂ * sin(θ)^2 - ms * ζ * cos(θ)^2) / denominator
-    A_template[𝐼, vx] = ((ζ + 1.) * ms * mg₂ * sin(θ)) / denominator
-    A_template[𝐼, vy] = ((ζ + 1.) * ms * mg₂ * cos(θ)) / denominator
+    A_template[𝐼, vx] = ((ζ + 1.0) * ms * mg₂ * sin(θ)) / denominator
+    A_template[𝐼, vy] = ((ζ + 1.0) * ms * mg₂ * cos(θ)) / denominator
 
     # transition l1 -> l1
     # TODO what happened to the term '2nb' and the whole second constraint in the paper?
-    guard = HPolyhedron([
-        HalfSpace(sparsevec([px, py], [-tan(θ), -1.], n), 0.),  # py >= -px * tan(θ)
-        HalfSpace(sparsevec([vx, vy], [-sin(θ), -cos(θ)], n), 0.)  # vx * sin(θ) + vy * cos(θ) >= 0
-        ])
+    guard = HPolyhedron([HalfSpace(sparsevec([px, py], [-tan(θ), -1.0], n), 0.0),  # py >= -px * tan(θ)
+                         HalfSpace(sparsevec([vx, vy], [-sin(θ), -cos(θ)], n), 0.0)])  # vx * sin(θ) + vy * cos(θ) >= 0
     A = copy(A_template)
     t1 = ConstrainedLinearMap(A, guard)
 
     # transition l1 -> l1
     # TODO same remark as with the other guard
-    guard = HPolyhedron([
-        HalfSpace(sparsevec([px, py], [-tan(θ), 1.], n), 0.),  # py <= px * tan(θ)
-        HalfSpace(sparsevec([vx, vy], [-sin(θ), cos(θ)], n), 0.)  # vx * sin(θ) - vy * cos(θ) >= 0
-        ])
+    guard = HPolyhedron([HalfSpace(sparsevec([px, py], [-tan(θ), 1.0], n), 0.0),  # py <= px * tan(θ)
+                         HalfSpace(sparsevec([vx, vy], [-sin(θ), cos(θ)], n), 0.0)])  # vx * sin(θ) - vy * cos(θ) >= 0
     A = copy(A_template)
-    A[vx, vy] *= -1.
-    A[vy, vx] *= -1.
-    A[𝐼, vy] *= -1.
+    A[vx, vy] *= -1.0
+    A[vy, vx] *= -1.0
+    A[𝐼, vy] *= -1.0
     t2 = ConstrainedLinearMap(A, guard)
 
     # transition l1 -> l2
-    guard = HalfSpace(sparsevec([px], [-1.], n), -Δp + guard_bloating)  # px >= Δp - ε
+    guard = HalfSpace(sparsevec([px], [-1.0], n), -Δp + guard_bloating)  # px >= Δp - ε
     A = copy(A_template)
-    A[vx, vx] = 0.
-    A[vx, vy] = 0.
-    A[vy, vx] = 0.
-    A[vy, vy] = 0.
+    A[vx, vx] = 0.0
+    A[vx, vy] = 0.0
+    A[vy, vx] = 0.0
+    A[vy, vy] = 0.0
     A[𝐼, vx] = A[𝐼, vy] = ms
     t3 = ConstrainedLinearMap(A, guard)
     # TODO The SpaceEx model uses four transitions for this one, possibly to
@@ -133,21 +129,21 @@ function gearbox()
     ℋ = HybridSystem(automaton, modes, resetmaps, switchings)
 
     # initial condition in mode 1
-    X0 = Hyperrectangle([0., 0., -0.0167, 0.003,  0., 0.],
-                        [0., 0.,  0.0001, 0.0001, 0., 0.])
+    X0 = Hyperrectangle([0.0, 0.0, -0.0167, 0.003, 0.0, 0.0],
+                        [0.0, 0.0, 0.0001, 0.0001, 0.0, 0.0])
     initial_condition = [(1, X0)]
 
     system = InitialValueProblem(ℋ, initial_condition)
 
     # safety property
-    cond_free = is_contained_in(HalfSpace([0., 0., 0., 0., 0., 1.], 0.2))    # t <= 0.2
-    cond_global = is_contained_in(HalfSpace([0., 0., 0., 0., 1., 0.], 20.))  # I <= 20
+    cond_free = is_contained_in(HalfSpace([0.0, 0.0, 0.0, 0.0, 0.0, 1.0], 0.2))    # t <= 0.2
+    cond_global = is_contained_in(HalfSpace([0.0, 0.0, 0.0, 0.0, 1.0, 0.0], 20.0))  # I <= 20
     property_free = Conjunction([cond_free, cond_global])
     property_meshed = cond_global
     property = Dict(1 => property_free, 2 => property_meshed)
 
     # default options
-    options = Options(:T=>0.5, :property=>property)
+    options = Options(:T => 0.5, :property => property)
 
     return (system, options)
 end
@@ -160,5 +156,5 @@ function run_gearbox(system, options)
     options[:plot_vars] = [3, 4]
     options[:project_reachset] = true
 
-    solve(system, options, opC, opD)
+    return solve(system, options, opC, opD)
 end

@@ -15,13 +15,13 @@ using HybridSystems, MathematicalSystems, LazySets, TaylorIntegration
 
 @taylorize function flow_down!(dx, x, params, t)
     dx[1] = x[2]
-    dx[2] = -9.8 + 0.1*(x[2])^2
+    dx[2] = -9.8 + 0.1 * (x[2])^2
     return dx
 end
 
 @taylorize function flow_up!(dx, x, params, t)
     dx[1] = x[2]
-    dx[2] = -9.8 - 0.1*(x[2])^2
+    dx[2] = -9.8 - 0.1 * (x[2])^2
     return dx
 end
 
@@ -31,13 +31,13 @@ function bouncingBallNonlinear_model()
 
     # mode 1 ("down")
     X = HPolyhedron([HalfSpace([-1.0, 0.0], 0.0),   # x ≥ 0
-                     HalfSpace([ 0.0, 1.0], 0.0)])  # v ≤ 0
-    m1 = @system(x' = flow_down!(x), dim: 2, x ∈ X)
+                     HalfSpace([0.0, 1.0], 0.0)])  # v ≤ 0
+    m1 = @system(x' = flow_down!(x), dim:2, x ∈ X)
 
     # mode 2 ("up")
     X = HPolyhedron([HalfSpace([-1.0, 0.0], 0.0),   # x ≥ 0
                      HalfSpace([0.0, -1.0], 0.0)])  # v ≥ 0
-    m2 = @system(x' = flow_up!(x), dim: 2, x ∈ X)
+    m2 = @system(x' = flow_up!(x), dim:2, x ∈ X)
 
     # α transition down → up
     add_transition!(HA, 1, 2, 1)

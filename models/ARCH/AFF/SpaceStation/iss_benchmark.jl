@@ -14,7 +14,7 @@ include("iss_BFFPSV18.jl")
 tune!(SUITE)
 
 # run the benchmarks
-results = run(SUITE; verbose=true)
+results = BenchmarkTools.run(SUITE; verbose=true)
 
 # return the sample with the smallest time value in each test
 println("minimum: ", minimum(results))

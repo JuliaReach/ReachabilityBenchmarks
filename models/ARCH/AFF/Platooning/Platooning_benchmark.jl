@@ -74,7 +74,7 @@ SUITE["Platooning"]["PLAN01_UNB50", "discrete"] = @benchmarkable solve($PLAN01_U
 tune!(SUITE)
 
 # run the benchmarks
-results = run(SUITE; verbose=false)
+results = BenchmarkTools.run(SUITE; verbose=false)
 
 # return the sample with the smallest time value in each test
 println("minimum: ", minimum(results))

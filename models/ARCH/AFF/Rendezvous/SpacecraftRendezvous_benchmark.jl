@@ -131,7 +131,7 @@ SUITE["Spacecraft"]["SRU02-SR02", "discrete"] = @benchmarkable solve($SRU02, $op
 tune!(SUITE)
 
 # run the benchmarks
-results = run(SUITE; verbose=false)
+results = BenchmarkTools.run(SUITE; verbose=false)
 
 # return the sample with the smallest time value in each test
 println("minimum: ", minimum(results))

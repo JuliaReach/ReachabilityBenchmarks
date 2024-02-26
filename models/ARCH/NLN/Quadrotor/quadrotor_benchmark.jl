@@ -28,7 +28,7 @@ SUITE["Quadrotor"]["Specification"] = @benchmarkable solve($𝑃, $𝑂, op=TMJe
 tune!(SUITE)
 
 # run the benchmarks
-results = run(SUITE; verbose=true)
+results = BenchmarkTools.run(SUITE; verbose=true)
 
 # return the sample with the smallest time value in each test
 println("minimum time for each benchmark:\n", minimum(results))

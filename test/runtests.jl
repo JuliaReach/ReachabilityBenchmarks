@@ -4,3 +4,5 @@ using Test, ReachabilityBenchmarks
     file = @relpath "my_data.dat"
     @test file == joinpath(@__DIR__, "my_data.dat")
 end
+
+include("Aqua.jl")

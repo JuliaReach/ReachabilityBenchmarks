@@ -1,7 +1,7 @@
 using Reachability, MathematicalSystems, LazySets, TaylorIntegration
 using Reachability: solve
 
-# Paremeters
+# parameters
 const μ = 3.986e14 * 60^2
 const r = 42164.0e3
 const r2 = r^2

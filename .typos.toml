@@ -1,0 +1,9 @@
+[default.extend-words]
+# do not correct the following strings:
+fom = "fom"
+PLAD = "PLAD"
+nd = "nd"
+
+[files]
+# do not check the following files:
+extend-exclude = ["*.ipynb"]

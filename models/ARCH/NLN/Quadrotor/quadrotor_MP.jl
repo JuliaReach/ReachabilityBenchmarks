@@ -22,7 +22,7 @@ Construct the Quadrotor model.
 - `X0`                -- (optional, default: position is uncertain in all directions
                           within `[-0.4, 0.4]m` and velocity is uncertain in all directions
                           within `[-0.4, 0.4]m/s`) set of initial states
-- `variables`         -- (optional, default: `PolyVar` variables) the set of polynomal
+- `variables`         -- (optional, default: `PolyVar` variables) the set of polynomial
                           variables that are used in the equations
 - `controller_inputs` -- (optional, default: `(1.0, 0.0, 0.0)`) tuple with
                          the controller inputs `u₁`, `u₂` and `u₃` which
@@ -37,8 +37,8 @@ The tuple `(𝑃, 𝑂)` where `𝑃` is an initial-value problem and `𝑂` are
 
  Physical variables:
  
--  x₁ : interitial (north) position
--  x₂ : intertial (east) position
+-  x₁ : inertial (north) position
+-  x₂ : inertial (east) position
 -  x₃ : altitude
 -  x₄ : longitudinal velocity
 -  x₅ : lateral velocity

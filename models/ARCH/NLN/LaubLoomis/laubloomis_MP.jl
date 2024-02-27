@@ -33,11 +33,10 @@ Construct the Laub-Loomis model.
 The tuple `(𝑃, 𝑂)` where `𝑃` is an initial-value problem and `𝑂` are the options.
 """
 function laubloomis(; T=20.0,
-                      W=0.01,
-                      X0=BallInf([1.2, 1.05, 1.5, 2.4, 1.0, 0.1, 0.45], W),
-                      unsafe_bound=4.5,
-                      variables=@polyvar x₁ x₂ x₃ x₄ x₅ x₆ x₇)
-
+                    W=0.01,
+                    X0=BallInf([1.2, 1.05, 1.5, 2.4, 1.0, 0.1, 0.45], W),
+                    unsafe_bound=4.5,
+                    variables=@polyvar x₁ x₂ x₃ x₄ x₅ x₆ x₇)
     𝑂 = Options()
 
     # unrwap the variables
@@ -48,11 +47,11 @@ function laubloomis(; T=20.0,
     # instantiate the polynomial system
     f = [1.4x₃ - 0.9x₁,
          2.5x₅ - 1.5x₂,
-         0.6x₇ - 0.8x₂*x₃,
-         2 - 1.3x₃*x₄,
-         0.7x₁ - x₄*x₅,
+         0.6x₇ - 0.8x₂ * x₃,
+         2 - 1.3x₃ * x₄,
+         0.7x₁ - x₄ * x₅,
          0.3x₁ - 3.1x₆,
-         1.8x₆ - 1.6x₂*x₇]
+         1.8x₆ - 1.6x₂ * x₇]
 
     𝐹 = PolynomialContinuousSystem(f)
 
@@ -66,7 +65,7 @@ function laubloomis(; T=20.0,
     𝑂[:plot_vars] = [0, 4]
 
     # safety property
-    𝑂[:property] = is_contained_in(HalfSpace([0, 0, 0, -1., 0, 0, 0], -unsafe_bound))
+    𝑂[:property] = is_contained_in(HalfSpace([0, 0, 0, -1.0, 0, 0, 0], -unsafe_bound))
     # @set x₄ ≥ 0.01, vars=(x₁, x₂, x₃, x₄, x₅, x₆, x₇)
     return (𝑃, 𝑂)
 end

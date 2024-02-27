@@ -6,15 +6,15 @@ include("building.jl")
 
 # dense-time options
 δ_dense = 0.003
-algo_dense = GLGM06(δ=δ_dense)
+algo_dense = GLGM06(; δ=δ_dense)
 
 # discrete-time options
 approx_model = "nobloating"
 δ_discrete = 0.01
-algo_discrete = GLGM06(δ=δ_discrete, approx_model=approx_model)
+algo_discrete = GLGM06(; δ=δ_discrete, approx_model=approx_model)
 
 # single run
-sol_BLDF01_dense = solve(build_TV, alg=algo_dense, T=time_horizon)
+sol_BLDF01_dense = solve(build_TV; alg=algo_dense, T=time_horizon)
 # sol_BLDF01_discrete = solve(build_TV, alg=algo_discrete, T=time_horizon)
 # 
 # # benchmark

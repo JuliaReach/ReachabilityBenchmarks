@@ -24,5 +24,5 @@ solution.options[:plot_vars] = [1, 2]
 solution_proj = project(solution)
 
 # plot projection
-plot(solution_proj, xlab="x", ylab="v")
+plot(solution_proj; xlab="x", ylab="v")
 savefig("bouncingBallNonlinear")

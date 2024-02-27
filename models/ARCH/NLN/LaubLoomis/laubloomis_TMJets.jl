@@ -6,13 +6,13 @@ using TaylorModels: validated_integ
 # Equations of motion
 # We write the function such that the operations are either unary or binary:
 @taylorize function laubloomis!(dx, x, params, t)
-    dx[1] = 1.4*x[3] - 0.9*x[1]
-    dx[2] = 2.5*x[5] - 1.5*x[2]
-    dx[3] = 0.6*x[7] - 0.8*(x[2]*x[3])
-    dx[4] = 2 - 1.3*(x[3]*x[4])
-    dx[5] = 0.7*x[1] - (x[4]*x[5])
-    dx[6] = 0.3*x[1] - 3.1*x[6]
-    dx[7] = 1.8*x[6] - 1.6*(x[2]*x[7])
+    dx[1] = 1.4 * x[3] - 0.9 * x[1]
+    dx[2] = 2.5 * x[5] - 1.5 * x[2]
+    dx[3] = 0.6 * x[7] - 0.8 * (x[2] * x[3])
+    dx[4] = 2 - 1.3 * (x[3] * x[4])
+    dx[5] = 0.7 * x[1] - (x[4] * x[5])
+    dx[6] = 0.3 * x[1] - 3.1 * x[6]
+    dx[7] = 1.8 * x[6] - 1.6 * (x[2] * x[7])
     return dx
 end
 
@@ -36,21 +36,21 @@ Build and run the Laub-Loomis model.
 - `property` -- (optional, default: `(t,x) -> x[4] < 4.5`) safe states property
 """
 function laubloomis_TMJets(; t0=0.0, T=20.0, W=0.01, abs_tol=1e-10,
-                             orderT=7, orderQ=2, maxsteps=1000,
-                             property=(t,x) -> x[4] < 4.5)
+                           orderT=7, orderQ=2, maxsteps=1000,
+                           property=(t, x) -> x[4] < 4.5)
 
     # center of initial conditions
     q0 = [1.2, 1.05, 1.5, 2.4, 1.0, 0.1, 0.45]
 
     # initial box (around `q0`) of the initial conditions
-    δq0 = IntervalBox(-W..W, 7)
+    δq0 = IntervalBox(-W .. W, 7)
 
     # set variables
-    set_variables("δ", numvars=length(q0), order=2orderQ)
+    set_variables("δ"; numvars=length(q0), order=2orderQ)
 
     # TODO: wrap as a Reachability algorithm
     tTM, xTM = validated_integ(laubloomis!, q0, δq0, t0, T, orderQ, orderT,
-                               abs_tol, maxsteps=maxsteps,
+                               abs_tol; maxsteps=maxsteps,
                                check_property=property)
     return tTM, xTM
 end

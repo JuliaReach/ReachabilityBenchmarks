@@ -2,7 +2,7 @@ using LazySets, MathematicalPredicates, SparseArrays
 
 function beam_specification()
     # initial set: xᵢ = 0 if i ≤ 300 and xᵢ ∈ [0.0015, 0.002] otherwise
-    X0 = Hyperrectangle(low=[zeros(300); fill(0.0015, 48)],
+    X0 = Hyperrectangle(; low=[zeros(300); fill(0.0015, 48)],
                         high=[zeros(300); fill(0.002, 48)])
 
     # safety property: x89 ≤ 2100

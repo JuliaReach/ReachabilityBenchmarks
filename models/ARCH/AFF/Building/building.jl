@@ -10,18 +10,18 @@ using ReachabilityBenchmarks, Reachability, MathematicalSystems, SX,
 # Load model
 # ==============================
 file = @relpath "SX/Building_more_decimals.xml"
-H = readsxmodel(file, ST=ConstrainedLinearControlContinuousSystem)
+H = readsxmodel(file; ST=ConstrainedLinearControlContinuousSystem)
 
 # ===================
 # Time-varying input
 # ===================
 
-n = size(H.modes[1].A, 1)-1 # the sx model has "time" as a state variable
+n = size(H.modes[1].A, 1) - 1 # the sx model has "time" as a state variable
 @assert n == 48
-A = H.modes[1].A[1:n, 1:n] 
+A = H.modes[1].A[1:n, 1:n]
 B = hcat(H.modes[1].B[1:n, 1])
 X = nothing
-U = Hyperrectangle(low=[0.8], high=[1.0])
+U = Hyperrectangle(; low=[0.8], high=[1.0])
 S = ConstrainedLinearControlContinuousSystem(A, B, X, U)
 
 # specify initial states
@@ -45,4 +45,4 @@ X0 = X0 × U
 build_CONST = InitialValueProblem(S, X0)
 
 # specifications
-pBLDC01 = is_contained_in(HalfSpace(sparsevec([25], [1.0], n+1), 0.0051))  # x25 <= 0.0051
+pBLDC01 = is_contained_in(HalfSpace(sparsevec([25], [1.0], n + 1), 0.0051))  # x25 <= 0.0051

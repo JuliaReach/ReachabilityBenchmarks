@@ -10,14 +10,14 @@ function vanderpol_XFZ18(; k=6)
     @polyvar x₁ x₂
 
     # define the set of initial states X₀ = {x: V₀(x) <= 0}
-    V₀ = (x₁ - 1.4)^2 + (x₂ - 2.4)^2  - 0.15
+    V₀ = (x₁ - 1.4)^2 + (x₂ - 2.4)^2 - 0.15
     X0 = @set V₀ <= 0
 
-    (𝑃, 𝑂) = vanderpol(X0=X0, variables = (x₁, x₂))
+    (𝑃, 𝑂) = vanderpol(; X0=X0, variables=(x₁, x₂))
 
     # algorithm-specific options
     𝑂_XFZ18 = Options()
-    
+
     # constraints Y = {x: g(x) >= 0} compact search space Y x [0, T]
     g = 25 - x₁^2 - x₂^2
     𝑂_XFZ18[:search_space] = @set g >= 0

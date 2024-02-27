@@ -2,7 +2,7 @@ using LazySets, MathematicalPredicates, SparseArrays
 
 function heat_specification()
     # initial set: xᵢ ∈ [0.6, 0.625] for i ≤ 2 and xᵢ = 0 for i > 2
-    X0 = Hyperrectangle(low=[fill(0.6, 2); zeros(198)],
+    X0 = Hyperrectangle(; low=[fill(0.6, 2); zeros(198)],
                         high=[fill(0.625, 2); zeros(198)])
 
     # safety property: x133 ≤ 0.1

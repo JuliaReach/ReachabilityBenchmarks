@@ -11,7 +11,7 @@ options = Options(options)
 problem = InitialValueProblem(S, X0)
 
 # partition with 2D blocks
-partition = [2*i-1:2*i for i in 1:2]
+partition = [(2 * i - 1):(2 * i) for i in 1:2]
 
 # reachability algorithms
 algorithm_reach = BFFPSV18(:δ => 0.5, :vars => [1, 3], :partition => partition)

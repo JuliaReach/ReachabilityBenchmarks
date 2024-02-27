@@ -5,7 +5,7 @@ function building_specification()
     # - xᵢ ∈ [0.0002, 0.00025] for i ∈ [1, 10]
     # - xᵢ ∈ [-0.0001, 0.0001] for i = 25
     # - xᵢ = 0 for all other i
-    X0 = Hyperrectangle(low=[fill(0.0002, 10); zeros(14); -0.0001; zeros(23)],
+    X0 = Hyperrectangle(; low=[fill(0.0002, 10); zeros(14); -0.0001; zeros(23)],
                         high=[fill(0.00025, 10); zeros(14); 0.0001; zeros(23)])
 
     # safety property: x25 ≤ 6e-3

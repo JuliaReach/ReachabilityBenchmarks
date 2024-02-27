@@ -22,19 +22,19 @@ using TaylorModels: validated_integ
 - `property` -- (optional, default: `(t,x)->x[2] <= 2.75`) safe states property
 """
 function vanderpol_TMJets(; t0=0.0, T=7.0, abs_tol=1e-10, orderT=10, orderQ=2,
-                            maxsteps=500, property=(t,x)->x[2] <= 2.75)
+                          maxsteps=500, property=(t, x) -> x[2] <= 2.75)
 
     # Initial conditions as mid-point of provided intervals
     q0 = [1.4, 2.4]
 
     # initial box (around `q0`) of the initial conditions
-    δq0 = IntervalBox(-0.15..0.15, -0.05..0.05)
+    δq0 = IntervalBox(-0.15 .. 0.15, -0.05 .. 0.05)
 
     # returns a TaylorN vector, each entry corresponding to an indep variable
-    set_variables("δ", numvars=length(q0), order=2*orderQ)
+    set_variables("δ"; numvars=length(q0), order=2 * orderQ)
 
     tTM, xTM = validated_integ(vanderPol!, q0, δq0, t0, T, orderQ, orderT,
-                               abs_tol, maxsteps=maxsteps,
+                               abs_tol; maxsteps=maxsteps,
                                check_property=property)
     return tTM, xTM
 end

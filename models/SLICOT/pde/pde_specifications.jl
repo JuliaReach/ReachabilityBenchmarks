@@ -5,7 +5,7 @@ function pde_specification()
     # xᵢ = 0 for i ≤ 64
     # xᵢ ∈ [0.001, 0.0015] for i ∈ [65, 80]
     # xᵢ ∈ [-0.002, -0.0015] for i > 80
-    X0 = Hyperrectangle(low=[zeros(64); fill(0.001, 16); fill(-0.002, 4)],
+    X0 = Hyperrectangle(; low=[zeros(64); fill(0.001, 16); fill(-0.002, 4)],
                         high=[zeros(64); fill(0.0015, 16); fill(-0.0015, 4)])
 
     # safety property: y ≤ 12 for linear combination y (defined in out.mat)

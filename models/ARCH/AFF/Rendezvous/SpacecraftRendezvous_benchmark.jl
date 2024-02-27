@@ -6,17 +6,17 @@ SUITE["Spacecraft"] = BenchmarkGroup()
 
 include("SpacecraftRendezvous.jl")
 
-SRNA01, options = spacecraft(abort_time=-1.)
-SRA01, _ = spacecraft(abort_time=120.)
-SRA02, _ = spacecraft(abort_time=[120., 125.])
-SRA03, _ = spacecraft(abort_time=[120., 145.])
-SRA04, _ = spacecraft(abort_time=240.)
-SRA05, _ = spacecraft(abort_time=[235., 240.])
-SRA06, _ = spacecraft(abort_time=[230., 240.])
-SRA07, _ = spacecraft(abort_time=[50., 150.])
-SRA08, _ = spacecraft(abort_time=[0., 240.])
-SRU01, _ = spacecraft(abort_time=260.)
-SRU02, _ = spacecraft(abort_time=[0., 260.])
+SRNA01, options = spacecraft(; abort_time=-1.0)
+SRA01, _ = spacecraft(; abort_time=120.0)
+SRA02, _ = spacecraft(; abort_time=[120.0, 125.0])
+SRA03, _ = spacecraft(; abort_time=[120.0, 145.0])
+SRA04, _ = spacecraft(; abort_time=240.0)
+SRA05, _ = spacecraft(; abort_time=[235.0, 240.0])
+SRA06, _ = spacecraft(; abort_time=[230.0, 240.0])
+SRA07, _ = spacecraft(; abort_time=[50.0, 150.0])
+SRA08, _ = spacecraft(; abort_time=[0.0, 240.0])
+SRU01, _ = spacecraft(; abort_time=260.0)
+SRU02, _ = spacecraft(; abort_time=[0.0, 260.0])
 
 # ==============================================================================
 # Decomposition-based approach
@@ -78,14 +78,14 @@ res = solve(SRU02, options, opC_discrete, opD)
 @assert !res.satisfied
 
 # benchmark
-SUITE["Spacecraft"]["SRNA01-SR02", "dense"] =
-    @benchmarkable solve($SRNA01, $options, $opC_dense, $opD)
-SUITE["Spacecraft"]["SRNA01-SR02", "discrete"] =
-    @benchmarkable solve($SRNA01, $options, $opC_discrete, $opD)
-SUITE["Spacecraft"]["SRA01-SR02", "dense"] =
-    @benchmarkable solve($SRA01, $options, $opC_dense, $opD)
-SUITE["Spacecraft"]["SRA01-SR02", "discrete"] =
-    @benchmarkable solve($SRA01, $options, $opC_discrete, $opD)
+SUITE["Spacecraft"]["SRNA01-SR02", "dense"] = @benchmarkable solve($SRNA01, $options, $opC_dense,
+                                                                   $opD)
+SUITE["Spacecraft"]["SRNA01-SR02", "discrete"] = @benchmarkable solve($SRNA01, $options,
+                                                                      $opC_discrete, $opD)
+SUITE["Spacecraft"]["SRA01-SR02", "dense"] = @benchmarkable solve($SRA01, $options, $opC_dense,
+                                                                  $opD)
+SUITE["Spacecraft"]["SRA01-SR02", "discrete"] = @benchmarkable solve($SRA01, $options,
+                                                                     $opC_discrete, $opD)
 # SUITE["Spacecraft"]["SRA02-SR02", "dense"] =
 #     @benchmarkable solve($SRA02, $options, $opC_dense, $opD)
 # SUITE["Spacecraft"]["SRA02-SR02", "discrete"] =
@@ -114,14 +114,14 @@ SUITE["Spacecraft"]["SRA01-SR02", "discrete"] =
 #     @benchmarkable solve($SRA08, $options, $opC_dense, $opD)
 # SUITE["Spacecraft"]["SRA08-SR02", "discrete"] =
 #     @benchmarkable solve($SRA08, $options, $opC_discrete, $opD)
-SUITE["Spacecraft"]["SRU01-SR02", "dense"] =
-    @benchmarkable solve($SRU01, $options, $opC_dense, $opD)
-SUITE["Spacecraft"]["SRU01-SR02", "discrete"] =
-    @benchmarkable solve($SRU01, $options, $opC_discrete, $opD)
-SUITE["Spacecraft"]["SRU02-SR02", "dense"] =
-    @benchmarkable solve($SRU02, $options, $opC_dense, $opD)
-SUITE["Spacecraft"]["SRU02-SR02", "discrete"] =
-    @benchmarkable solve($SRU02, $options, $opC_discrete, $opD)
+SUITE["Spacecraft"]["SRU01-SR02", "dense"] = @benchmarkable solve($SRU01, $options, $opC_dense,
+                                                                  $opD)
+SUITE["Spacecraft"]["SRU01-SR02", "discrete"] = @benchmarkable solve($SRU01, $options,
+                                                                     $opC_discrete, $opD)
+SUITE["Spacecraft"]["SRU02-SR02", "dense"] = @benchmarkable solve($SRU02, $options, $opC_dense,
+                                                                  $opD)
+SUITE["Spacecraft"]["SRU02-SR02", "discrete"] = @benchmarkable solve($SRU02, $options,
+                                                                     $opC_discrete, $opD)
 
 # ==============================================================================
 # Execute benchmarks and save benchmark results
@@ -131,7 +131,7 @@ SUITE["Spacecraft"]["SRU02-SR02", "discrete"] =
 tune!(SUITE)
 
 # run the benchmarks
-results = run(SUITE, verbose=false)
+results = BenchmarkTools.run(SUITE; verbose=false)
 
 # return the sample with the smallest time value in each test
 println("minimum: ", minimum(results))
@@ -147,23 +147,23 @@ options[:mode] = "reach"
 options[:plot_vars] = [1, 2]
 options[:project_reachset] = true
 res = solve(SRNA01, options, opC_dense, opD)
-plot(res,
+plot(res;
      tickfont=font(30, "Times"), guidefontsize=45,
      xlab=L"s_x\raisebox{-1mm}{\textcolor{white}{.}}",
      ylab=L"s_y\raisebox{-2mm}{\textcolor{white}{\rule{1mm}{4mm}}}",
-     xtick=[-1000., -500., 0.], ytick=[-400., -300., -200., -100., 0., 100.],
-     xlims=(-1000., 0.), ylims=(-500., 100.),
+     xtick=[-1000.0, -500.0, 0.0], ytick=[-400.0, -300.0, -200.0, -100.0, 0.0, 100.0],
+     xlims=(-1000.0, 0.0), ylims=(-500.0, 100.0),
      bottom_margin=10mm, left_margin=10mm, top_margin=3mm,
      size=(1000, 1000))
 savefig(@relpath "SRNA01_SR02.png")
 
 res = solve(SRA01, options, opC_dense, opD)
-plot(res,
+plot(res;
      tickfont=font(30, "Times"), guidefontsize=45,
      xlab=L"s_x\raisebox{-1mm}{\textcolor{white}{.}}",
      ylab=L"s_y\raisebox{-2mm}{\textcolor{white}{\rule{1mm}{4mm}}}",
-     xtick=[-1000., -500., 0.], ytick=[-400., -300., -200., -100., 0., 100.],
-     xlims=(-1000., 400.), ylims=(-500., 100.),
+     xtick=[-1000.0, -500.0, 0.0], ytick=[-400.0, -300.0, -200.0, -100.0, 0.0, 100.0],
+     xlims=(-1000.0, 400.0), ylims=(-500.0, 100.0),
      bottom_margin=10mm, left_margin=10mm, top_margin=3mm,
      size=(1000, 1000))
 savefig(@relpath "SRA01_SR02.png")

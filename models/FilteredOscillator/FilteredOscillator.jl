@@ -32,9 +32,8 @@ In location `ℓ₄` we add the invariant constraint `k ≤ 2.1`.
 Thus location `ℓ₄` can only be entered once.
 """
 function filtered_oscillator(n0::Int=4,
-                             time_horizon::Float64=99.,
+                             time_horizon::Float64=99.0,
                              one_loop_iteration::Bool=false)
-
     n1 = (one_loop_iteration ? n0 + 1 : n0)
     n = n1 + 2
     z = zeros(n1)
@@ -48,10 +47,10 @@ function filtered_oscillator(n0::Int=4,
 
     # common flow
     A = zeros(n, n)
-    A[1,1], A[2,2] = -2., -1.
-    A[3,1], A[3,3] = 5., -5.
-    for i = 4 : n-1
-        A[i,i-1], A[i,i] = 5., -5.
+    A[1, 1], A[2, 2] = -2.0, -1.0
+    A[3, 1], A[3, 3] = 5.0, -5.0
+    for i in 4:(n - 1)
+        A[i, i - 1], A[i, i] = 5.0, -5.0
     end
 
     # modes
@@ -80,7 +79,7 @@ function filtered_oscillator(n0::Int=4,
                      HalfSpace([-1.0; 0.0; z], 0.0)])  # x >= 0
     if one_loop_iteration
         # k <= 2 (2.1 to avoid numerical issues)
-        addconstraint!(X, HalfSpace([zeros(n-1); 1.], 2.1))
+        addconstraint!(X, HalfSpace([zeros(n - 1); 1.0], 2.1))
     end
     m_4 = CACS(A, b, X)
 
@@ -94,7 +93,7 @@ function filtered_oscillator(n0::Int=4,
                           HalfSpace([0.714286; 1.0; z], 0.0)])  # 0.714286*x + y <= 0
     if one_loop_iteration
         A_trans_34 = Matrix(1.0I, n, n)
-        A_trans_34[n, n] = 2.  # k' = k * 2
+        A_trans_34[n, n] = 2.0  # k' = k * 2
         r1 = ConstrainedLinearMap(A_trans_34, X_l3l4)
     else
         r1 = ConstrainedIdentityMap(n, X_l3l4)
@@ -132,7 +131,7 @@ function filtered_oscillator(n0::Int=4,
         low[end] = 1.0
         high[end] = 1.0
     end
-    X0 = Hyperrectangle(low=low, high=high)
+    X0 = Hyperrectangle(; low=low, high=high)
 
     problem = InitialValueProblem(HS, [(3, X0)])
 
@@ -140,11 +139,11 @@ function filtered_oscillator(n0::Int=4,
     border = HPolyhedron([HalfSpace([0.0; -1.0; z], -0.5)])  # y >= 0.5
     property = is_disjoint_from(border)
 
-    options = Options(:T=>time_horizon, :mode=>"reach", :property=>property,
-                      :verbosity=>0)
+    options = Options(:T => time_horizon, :mode => "reach", :property => property,
+                      :verbosity => 0)
 
-    solver_options = Options(:vars=>1:n, :δ=>0.01, :plot_vars=>[1, 2],
-                             :ε_proj=>0.001, :project_reachset=>false)
+    solver_options = Options(:vars => 1:n, :δ => 0.01, :plot_vars => [1, 2],
+                             :ε_proj => 0.001, :project_reachset => false)
 
     return (problem, options, solver_options)
 end
@@ -170,7 +169,8 @@ The overapproximation used is octagonal directions.
 function get_projection(sol, projected_dims)
     n = sol.options[:n] # system's dimension
     oa = x -> overapproximate(x, OctDirections(n))
-    sol_oa = ReachSolution([ReachSet(CartesianProductArray([oa(rs.X)]), rs.t_start, rs.t_end) for rs in sol.Xk], sol.options)
+    sol_oa = ReachSolution([ReachSet(CartesianProductArray([oa(rs.X)]), rs.t_start, rs.t_end)
+                            for rs in sol.Xk], sol.options)
     sol_proj = ReachSolution(project_reach(sol_oa.Xk, projected_dims, n, sol.options), sol.options)
     return sol_proj
 end

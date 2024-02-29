@@ -1,6 +1,21 @@
 # ReachabilityBenchmarks
 
-This is a benchmark suite for reach set computations. It includes the [SLICOT](http://slicot.org/20-site/126-benchmark-examples-for-model-reduction) models, which reflect real world applications with dimensions ranging from several dozens to over 10.000. 
+| **Status** | **Community** | **License** |
+|:----------:|:-------------:|:-----------:|
+| [![CI][ci-img]][ci-url] [![codecov][cov-img]][cov-url] [![aqua][aqua-img]][aqua-url] | [![zulip][chat-img]][chat-url] | [![license][lic-img]][lic-url] |
+
+[ci-img]: https://github.com/JuliaReach/ReachabilityBenchmarks/workflows/CI/badge.svg
+[ci-url]: https://github.com/JuliaReach/ReachabilityBenchmarks/actions/workflows/test-master.yml
+[cov-img]: https://codecov.io/github/JuliaReach/ReachabilityBenchmarks/coverage.svg
+[cov-url]: https://app.codecov.io/github/JuliaReach/ReachabilityBenchmarks
+[aqua-img]: https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg
+[aqua-url]: https://github.com/JuliaTesting/Aqua.jl
+[chat-img]: https://img.shields.io/badge/zulip-join_chat-brightgreen.svg
+[chat-url]: https://julialang.zulipchat.com/#narrow/stream/278609-juliareach
+[lic-img]: https://img.shields.io/github/license/mashape/apistatus.svg
+[lic-url]: https://github.com/JuliaReach/ReachabilityBenchmarks/blob/master/LICENSE
+
+This is a benchmark suite for reachability computations. It includes the [SLICOT](http://slicot.org/20-site/126-benchmark-examples-for-model-reduction) models, which reflect real world applications with dimensions ranging from several dozens to over 10.000.
 
 ## Installation
 

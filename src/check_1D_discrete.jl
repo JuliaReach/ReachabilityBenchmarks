@@ -51,7 +51,7 @@ function check_1D_discrete(models::Vector{String})
                 dict[:T] = 20.0
                 dict[:logfile] = "$model-check-1D-discrete-fixedstep.txt"
             end
-            result = solve(S, Options(dict))
+            solve(S, Options(dict))
         end
         println()
     end

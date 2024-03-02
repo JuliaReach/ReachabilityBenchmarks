@@ -35,7 +35,6 @@ function check_kD_dense(models::Vector{String}, deltas::Vector{Float64})
         S, options_raw = func(:mode => "check")
 
         # options
-        n = MathematicalSystems.statedim(S)
         dict_raw = options_raw.dict
         dict_raw[:verbosity] = "info"
         dict_raw[:δ] = delta
@@ -50,7 +49,7 @@ function check_kD_dense(models::Vector{String}, deltas::Vector{Float64})
                 dict[:T] = 20.0
                 dict[:logfile] = "$model-check-kD-dense-givenstep.txt"
             end
-            result = solve(S, Options(dict))
+            solve(S, Options(dict))
         end
         println()
     end

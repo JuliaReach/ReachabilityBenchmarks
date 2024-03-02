@@ -53,7 +53,7 @@ function check_1D_dense(models::Vector{String}, deltas::Vector{Float64})
                 dict[:T] = 20.0
                 dict[:logfile] = "$model-check-1D-dense-givenstep.txt"
             end
-            result = solve(S, Options(dict))
+            solve(S, Options(dict))
         end
         println()
     end

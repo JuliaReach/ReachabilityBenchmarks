@@ -31,7 +31,6 @@ function check_kD_discrete(models::Vector{String})
         S, options_raw = func(:mode => "check")
 
         # options
-        n = MathematicalSystems.statedim(S)
         dict_raw = options_raw.dict
         dict_raw[:verbosity] = "info"
         dict_raw[:δ] = 5e-3
@@ -48,7 +47,7 @@ function check_kD_discrete(models::Vector{String})
                 dict[:T] = 20.0
                 dict[:logfile] = "$model-check-kD-discrete-fixedstep.txt"
             end
-            result = solve(S, Options(dict))
+            solve(S, Options(dict))
         end
         println()
     end

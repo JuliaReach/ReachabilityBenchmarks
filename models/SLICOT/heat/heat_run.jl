@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "heat_model.jl")
-include(@relpath "heat_specifications.jl")
+include(@current_path "heat_model.jl")
+include(@current_path "heat_specifications.jl")
 
 S = heat_model()
 X0, options = heat_specification()

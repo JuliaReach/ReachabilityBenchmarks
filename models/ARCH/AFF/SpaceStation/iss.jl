@@ -9,7 +9,7 @@ using ReachabilityBenchmarks, MAT, Reachability, MathematicalSystems,
 # ==============================
 # Load model
 # ==============================
-file = matopen(@relpath "iss.mat")
+file = matopen(@current_path "iss.mat")
 A = sparse(read(file, "A"))
 B = read(file, "B")
 C = Matrix(read(file, "C")[3, :]')

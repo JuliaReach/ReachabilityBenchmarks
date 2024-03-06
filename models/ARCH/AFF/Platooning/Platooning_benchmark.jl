@@ -103,7 +103,7 @@ plot(res;
      bottom_margin=6mm, left_margin=2mm,
      size=(1000, 1000))
 plot_dashed_line!(-42.0)
-savefig(@relpath "PLAD01_BND42.png")
+savefig(@current_path "PLAD01_BND42.png")
 
 options_PLAN01_UNB50[:mode] = "reach"
 options_PLAN01_UNB50[:plot_vars] = [0, 1]
@@ -118,4 +118,4 @@ plot(res;
      bottom_margin=6mm, left_margin=2mm,
      size=(1000, 1000))
 plot_dashed_line!(-50.0, time_horizon)
-savefig(@relpath "PLAN01_UNB50.png")
+savefig(@current_path "PLAN01_UNB50.png")

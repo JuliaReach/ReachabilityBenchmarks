@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "lorenz_model.jl")
-include(@relpath "lorenz_specifications.jl")
+include(@current_path "lorenz_model.jl")
+include(@current_path "lorenz_specifications.jl")
 
 S = lorenz_model()
 X0, options = lorenz_specification()

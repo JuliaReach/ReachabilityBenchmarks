@@ -7,7 +7,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, MAT, SparseArrays
 
 function mna5_model()
-    file = matopen(@relpath "mna5.mat")
+    file = matopen(@current_path "mna5.mat")
 
     # system matrix
     A = sparse(read(file, "A"))

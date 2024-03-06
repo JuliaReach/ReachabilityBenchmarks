@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "building_model.jl")
-include(@relpath "building_specifications.jl")
+include(@current_path "building_model.jl")
+include(@current_path "building_specifications.jl")
 
 S = building_model()
 X0, options = building_specification()

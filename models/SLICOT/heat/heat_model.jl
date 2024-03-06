@@ -8,7 +8,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, LazySets, MAT, SparseArrays
 
 function heat_model()
-    file = matopen(@relpath "heat.mat")
+    file = matopen(@current_path "heat.mat")
 
     # system matrix
     A = read(file, "A")

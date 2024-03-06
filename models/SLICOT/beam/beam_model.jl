@@ -8,7 +8,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, LazySets, MAT
 
 function beam_model()
-    file = matopen(@relpath "beam.mat")
+    file = matopen(@current_path "beam.mat")
 
     # system matrix
     A = read(file, "A")

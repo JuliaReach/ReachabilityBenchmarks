@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "crane_model.jl")
-include(@relpath "crane_specifications.jl")
+include(@current_path "crane_model.jl")
+include(@current_path "crane_specifications.jl")
 
 S = crane_model()
 X0, options = crane_specification()

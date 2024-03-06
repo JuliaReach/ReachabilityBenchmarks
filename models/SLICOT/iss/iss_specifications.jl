@@ -5,7 +5,7 @@ function iss_specification()
     X0 = BallInf(zeros(270), 1e-4)
 
     # safety property: y ≤ 7e-4 for linear combination y (defined in out.mat)
-    y = read(matopen(@relpath "out.mat"), "M")[1, :]
+    y = read(matopen(@current_path "out.mat"), "M")[1, :]
     property = is_contained_in(HalfSpace(y, 7e-4))
 
     # time horizon: 20 time units

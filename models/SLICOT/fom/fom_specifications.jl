@@ -5,7 +5,7 @@ function fom_specification()
     X0 = Hyperrectangle(zeros(1006), [fill(0.0001, 400); zeros(606)])
 
     # safety property: y ≤ 185 for linear combination y (defined in out.mat)
-    y = read(matopen(@relpath "out.mat"), "M")[1, :]
+    y = read(matopen(@current_path "out.mat"), "M")[1, :]
     property = is_contained_in(HalfSpace(y, 185.0))
 
     # time horizon: 20 time units

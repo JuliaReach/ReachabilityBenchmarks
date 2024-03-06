@@ -8,7 +8,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, LazySets, MAT
 
 function iss_model()
-    file = matopen(@relpath "iss.mat")
+    file = matopen(@current_path "iss.mat")
 
     # system matrix
     A = read(file, "A")

@@ -9,9 +9,9 @@ function check_1D_dense(models::Vector{String}, deltas::Vector{Float64})
     for model in models
         if !isdefined(Main, Symbol(model))
             if !models_loaded
-                model_library = include(@relpath "model_library.jl")
+                model_library = include(@current_path "model_library.jl")
             end
-            path = (@relpath "../") * model_library[model]
+            path = (@current_path "../") * model_library[model]
             include(path)
             models_loaded = true
         end

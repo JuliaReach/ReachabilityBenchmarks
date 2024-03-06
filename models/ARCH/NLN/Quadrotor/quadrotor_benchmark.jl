@@ -57,4 +57,4 @@ plot!(x -> x, x -> 0.98, 0.0, 5.0; line=2, color="red", linestyle=:dash, legend=
 plot!(x -> x, x -> 1.02, 0.0, 5.0; line=2, color="red", linestyle=:dash, legend=nothing)
 plot!(x -> x, x -> 0.9, 0.0, 5.0; line=2, color="red", linestyle=:dash, legend=nothing)
 
-savefig(@relpath "quadrotor.png")
+savefig(@current_path "quadrotor.png")

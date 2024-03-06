@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "mna1_model.jl")
-include(@relpath "mna1_specifications.jl")
+include(@current_path "mna1_model.jl")
+include(@current_path "mna1_specifications.jl")
 
 S = mna1_model()
 X0, options = mna1_specification()

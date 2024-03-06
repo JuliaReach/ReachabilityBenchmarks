@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "helicopter_model.jl")
-include(@relpath "helicopter_specifications.jl")
+include(@current_path "helicopter_model.jl")
+include(@current_path "helicopter_specifications.jl")
 
 S = helicopter_model()
 X0, options = helicopter_specification()

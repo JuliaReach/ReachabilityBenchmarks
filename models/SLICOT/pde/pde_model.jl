@@ -8,7 +8,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, LazySets, MAT
 
 function pde_model()
-    file = matopen(@relpath "pde.mat")
+    file = matopen(@current_path "pde.mat")
 
     # system matrix
     A = float(read(file, "A"))  # the matrix has Int entries

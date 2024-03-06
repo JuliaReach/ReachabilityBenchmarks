@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "projectile_model.jl")
-include(@relpath "projectile_specifications.jl")
+include(@current_path "projectile_model.jl")
+include(@current_path "projectile_specifications.jl")
 
 S = projectile_model()
 X0, options = projectile_specification()

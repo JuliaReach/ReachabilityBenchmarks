@@ -8,7 +8,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, LazySets, MAT
 
 function fom_model()
-    file = matopen(@relpath "fom.mat")
+    file = matopen(@current_path "fom.mat")
 
     # system matrix
     A = float(read(file, "A"))  # the matrix has Int entries

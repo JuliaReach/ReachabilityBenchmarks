@@ -101,7 +101,7 @@ plot(sol_case_1;
      size=(1000, 1000), linecolor="blue")
 
 plot!(x -> x, x -> 4.5, 0.0, 20.0; line=2, color="red", linestyle=:dash, legend=nothing)
-savefig(@relpath "laubloomis_case_1.png")
+savefig(@current_path "laubloomis_case_1.png")
 
 plot(sol_case_2;
      tickfont=font(30, "Times"), guidefontsize=45,
@@ -114,7 +114,7 @@ plot(sol_case_2;
      size=(1000, 1000), linecolor="blue")
 
 plot!(x -> x, x -> 5.0, 0.0, 20.0; line=2, color="red", linestyle=:dash, legend=nothing)
-savefig(@relpath "laubloomis_case_2.png")
+savefig(@current_path "laubloomis_case_2.png")
 
 plot(sol_case_3;
      tickfont=font(30, "Times"), guidefontsize=45,
@@ -127,7 +127,7 @@ plot(sol_case_3;
      size=(1000, 1000), linecolor="blue")
 
 plot!(x -> x, x -> 5.0, 0.0, 20.0; line=2, color="red", linestyle=:dash, legend=nothing)
-savefig(@relpath "laubloomis_case_3.png")
+savefig(@current_path "laubloomis_case_3.png")
 
 plot(sol_case_1; color="red")
 
@@ -145,4 +145,4 @@ plot!(sol_case_3; alpha=0.2,
 
 plot!(x -> x, x -> 5.0, 0.0, 20.0; line=2, color="red", linestyle=:dash, legend=nothing)
 plot!(x -> x, x -> 4.5, 0.0, 20.0; line=2, color="red", linestyle=:dash, legend=nothing)
-savefig(@relpath "laubloomis_case_all.png")
+savefig(@current_path "laubloomis_case_all.png")

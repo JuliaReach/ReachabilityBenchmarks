@@ -8,7 +8,7 @@
 # transitions: 5
 #
 # The model is taken from [1].
-# 
+#
 # [1] https://ths.rwth-aachen.de/research/projects/hypro/5-dimensional-switching-linear-system/
 # ==============================================================================
 using HybridSystems, MathematicalSystems, LazySets, SymEngine
@@ -24,7 +24,7 @@ function linearSwitching_model()
     HA = GraphAutomaton(5)
 
     # SpaceEx model
-    file = @relpath "SpaceEx/model.xml"
+    file = @current_path "SpaceEx/model.xml"
     model = readsxmodel(file; raw_dict=true)
     variables = convert.(Basic, [f.args[1].args[1] for f in model["flows"][1]])
     inputs = [convert(Basic, :u)]

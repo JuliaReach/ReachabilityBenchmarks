@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "linearSwitching_model.jl")
-include(@relpath "linearSwitching_specifications.jl")
+include(@current_path "linearSwitching_model.jl")
+include(@current_path "linearSwitching_specifications.jl")
 
 S = linearSwitching_model()
 X0, options = linearSwitching_specification()

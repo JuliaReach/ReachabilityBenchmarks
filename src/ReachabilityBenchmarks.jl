@@ -1,13 +1,7 @@
 module ReachabilityBenchmarks
 
-# ========
-# Exports
-# ========
-export @relpath
+using ReachabilityBase.CurrentPath: @current_path
 
-# ================================
-# Input/Output functionality
-# ================================
-include("io.jl")
+export @current_path
 
-end
+end  # module

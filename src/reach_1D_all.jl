@@ -9,16 +9,16 @@ function reach_1D_all(models::Vector{String}, create_plots::Bool=false)
     for model in models
         if !isdefined(Main, Symbol(model))
             if !models_loaded
-                model_library = include(@relpath "model_library.jl")
+                model_library = include(@current_path "model_library.jl")
             end
-            path = (@relpath "../") * model_library[model]
+            path = (@current_path "../") * model_library[model]
             include(path)
             models_loaded = true
         end
     end
     plots_loaded = false
     if create_plots && !isdefined(Main, :plot_reach)
-        include(@relpath "plot_reach.jl")
+        include(@current_path "plot_reach.jl")
         plots_loaded = true
     end
     if models_loaded

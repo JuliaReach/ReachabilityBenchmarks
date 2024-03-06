@@ -15,25 +15,25 @@ models = String["motor",
                 "mna5"]
 
 # load models and benchmark scripts
-model_library = include(@relpath "model_library.jl")
+model_library = include(@current_path "model_library.jl")
 for model in models
-    path = (@relpath "../") * model_library[model]
+    path = (@current_path "../") * model_library[model]
     include(path)
 end
-include(@relpath "reach_1D_single.jl")
-include(@relpath "reach_1D_all.jl")
-include(@relpath "reach_2D_box_two.jl")
-include(@relpath "reach_2D_eps_two.jl")
-include(@relpath "reach_kD_all.jl")
-include(@relpath "check_1D_discrete.jl")
-include(@relpath "check_kD_discrete.jl")
-include(@relpath "check_1D_dense.jl")
-include(@relpath "check_kD_dense.jl")
+include(@current_path "reach_1D_single.jl")
+include(@current_path "reach_1D_all.jl")
+include(@current_path "reach_2D_box_two.jl")
+include(@current_path "reach_2D_eps_two.jl")
+include(@current_path "reach_kD_all.jl")
+include(@current_path "check_1D_discrete.jl")
+include(@current_path "check_kD_discrete.jl")
+include(@current_path "check_1D_dense.jl")
+include(@current_path "check_kD_dense.jl")
 
 # create plots (option)?
 create_plots = true
 if create_plots
-    include(@relpath "plot_reach.jl")
+    include(@current_path "plot_reach.jl")
 end
 
 # run benchmarks

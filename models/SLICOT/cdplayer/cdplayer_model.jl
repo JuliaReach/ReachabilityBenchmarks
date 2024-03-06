@@ -8,7 +8,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, LazySets, MAT
 
 function cdplayer_model()
-    file = matopen(@relpath "cdplayer.mat")
+    file = matopen(@current_path "cdplayer.mat")
 
     # system matrix
     A = read(file, "A")

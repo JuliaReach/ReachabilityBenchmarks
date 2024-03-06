@@ -8,7 +8,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, LazySets, MAT
 
 function building_model()
-    file = matopen(@relpath "building.mat")
+    file = matopen(@current_path "building.mat")
 
     # system matrix
     A = read(file, "A")

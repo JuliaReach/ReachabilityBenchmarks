@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "cdplayer_model.jl")
-include(@relpath "cdplayer_specifications.jl")
+include(@current_path "cdplayer_model.jl")
+include(@current_path "cdplayer_specifications.jl")
 
 S = cdplayer_model()
 X0, options = cdplayer_specification()

@@ -15,13 +15,13 @@ include("building_GLGM06.jl")
 
 # # tune parameters
 # tune!(SUITE)
-# 
+#
 # # run the benchmarks
 # results = run(SUITE, verbose=false)
-# 
+#
 # # return the sample with the smallest time value in each test
 # println("minimum: ", minimum(results))
-# 
+#
 # # return the median for each test
 # println("median: ", median(results))
 
@@ -49,7 +49,7 @@ plot(res;
      size=(1000, 1000))
 plot_dashed_line!(4e-3)
 plot_dashed_line!(5.1e-3)
-savefig(@relpath "BLDF01_time_horizon_1.png")
+savefig(@current_path "BLDF01_time_horizon_1.png")
 
 # plot(res,
 #      vars=plot_vars,
@@ -62,10 +62,10 @@ savefig(@relpath "BLDF01_time_horizon_1.png")
 #      size=(1000, 1000))
 # plot_dashed_line!(4e-3)
 # plot_dashed_line!(5.1e-3)
-# savefig(@relpath "BLDF01_time_horizon_20.png")
-# 
+# savefig(@current_path "BLDF01_time_horizon_20.png")
+#
 # res = solve(build_CONST, algo=algo_dense, T=time_horizon)
-# 
+#
 # plot(res,
 #      vars=plot_vars,
 #      tickfont=font(30, "Times"), guidefontsize=45,
@@ -77,8 +77,8 @@ savefig(@relpath "BLDF01_time_horizon_1.png")
 #      size=(1000, 1000))
 # plot_dashed_line!(4e-3)
 # plot_dashed_line!(5.1e-3)
-# savefig(@relpath "BLDC01_time_horizon_1.png")
-# 
+# savefig(@current_path "BLDC01_time_horizon_1.png")
+#
 # plot(res,
 #      vars=plot_vars,
 #      tickfont=font(30, "Times"), guidefontsize=45,
@@ -90,4 +90,4 @@ savefig(@relpath "BLDF01_time_horizon_1.png")
 #      size=(1000, 1000))
 # plot_dashed_line!(4e-3)
 # plot_dashed_line!(5.1e-3)
-# savefig(@relpath "BLDC01_time_horizon_20.png")
+# savefig(@current_path "BLDC01_time_horizon_20.png")

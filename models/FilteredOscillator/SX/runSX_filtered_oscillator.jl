@@ -1,9 +1,13 @@
-# Drive train example
+# Filtered oscillator
 # ============================
 
+using ReachabilityBenchmarks
 using HybridSystems, MathematicalSystems, LazySets, Plots
-import SX: is_halfspace, is_hyperplane, convert, parse_sxmath
-import LazySets.HalfSpace
+import Polyhedra
+using SpaceExParser: is_halfspace, is_hyperplane, convert, parse_sxmath, Basic, readsxmodel
+
+AFFINE_SYSTEM = ConstrainedLinearControlContinuousSystem
+HS = readsxmodel(@current_path "filtered_oscillator_flattened.xml"; ST=AFFINE_SYSTEM)
 
 expr_p = parse_sxmath("0.2<=x & x<=0.3 & -0.1<=y & y<=0.1 & z==0 & x1==0 & x2==0 & x3==0")
 #expr = [x,y,x1,x2,x3,z]
@@ -17,18 +21,13 @@ for expr_i in expr_p
     end
 end
 
-AFFINE_SYSTEM = ConstrainedLinearControlContinuousSystem
-HS = readsxmodel("models/SpaceEx/FilteredOscillator/filtered_oscillator_flattened.xml";
-                 ST=AFFINE_SYSTEM)
+prob = InitialValueProblem(HS, x0sets)
 
 # calculate reachable states up to time T
-prob = InitialValueProblem(HS, x0sets)
 input_options = Options(:mode => "reach");
-
-problem_options = Options(:vars => 1:system_dimension, :T => 5.0, :δ => 0.05,
-                          :plot_vars => [1, 2], :max_jumps => 1, :verbosity => 1, :init_loc => 3);
+problem_options = Options(:vars => 1:system_dimension, :T => 5.0, :δ => 0.05, :plot_vars => [1, 2],
+                          :max_jumps => 1, :verbosity => 1, :init_loc => 3);
 options_input = merge(problem_options, input_options)
-using Polyhedra
 sol = solve(prob, options_input);
 
 plot(sol; indices=1:2:length(sol.Xk))

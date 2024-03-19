@@ -24,7 +24,7 @@ function check_kD_dense(models::Vector{String}, deltas::Vector{Float64})
     println("-- benchmark suite 'check_kD_dense' --")
 
     @assert length(models) == length(deltas) "the input lengths must be equal"
-    for i in 1:length(models)
+    for i in eachindex(models)
         model = models[i]
         delta = deltas[i]
 

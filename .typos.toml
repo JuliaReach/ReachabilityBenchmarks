@@ -6,4 +6,4 @@ nd = "nd"
 
 [files]
 # do not check the following files:
-extend-exclude = ["*.ipynb"]
+extend-exclude = ["*.ipynb", "*.xml"]

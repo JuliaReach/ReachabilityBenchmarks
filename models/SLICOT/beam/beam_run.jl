@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "beam_model.jl")
-include(@relpath "beam_specifications.jl")
+include(@current_path "beam_model.jl")
+include(@current_path "beam_specifications.jl")
 
 S = beam_model()
 X0, options = beam_specification()

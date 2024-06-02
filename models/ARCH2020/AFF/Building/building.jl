@@ -9,7 +9,7 @@ using ReachabilityBenchmarks, ReachabilityAnalysis, MathematicalSystems, SX,
 # ==============================
 # Load model
 # ==============================
-file = @relpath "SpaceEx/Building_more_decimals.xml"
+file = @current_path "SpaceEx/Building_more_decimals.xml"
 H = readsxmodel(file; ST=ConstrainedLinearControlContinuousSystem)
 
 # ===================

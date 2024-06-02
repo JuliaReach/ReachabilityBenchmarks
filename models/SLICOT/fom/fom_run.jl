@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "fom_model.jl")
-include(@relpath "fom_specifications.jl")
+include(@current_path "fom_model.jl")
+include(@current_path "fom_specifications.jl")
 
 S = fom_model()
 X0, options = fom_specification()

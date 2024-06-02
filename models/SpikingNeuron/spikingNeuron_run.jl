@@ -1,8 +1,8 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability,
       TaylorIntegration, Plots
 
-include(@relpath "spikingNeuron_model.jl")
-include(@relpath "spikingNeuron_specifications.jl")
+include(@current_path "spikingNeuron_model.jl")
+include(@current_path "spikingNeuron_specifications.jl")
 
 S = spikingNeuron_model()
 X0, options = spikingNeuron_specification()

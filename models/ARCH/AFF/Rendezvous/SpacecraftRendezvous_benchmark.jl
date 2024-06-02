@@ -155,7 +155,7 @@ plot(res;
      xlims=(-1000.0, 0.0), ylims=(-500.0, 100.0),
      bottom_margin=10mm, left_margin=10mm, top_margin=3mm,
      size=(1000, 1000))
-savefig(@relpath "SRNA01_SR02.png")
+savefig(@current_path "SRNA01_SR02.png")
 
 res = solve(SRA01, options, opC_dense, opD)
 plot(res;
@@ -166,4 +166,4 @@ plot(res;
      xlims=(-1000.0, 400.0), ylims=(-500.0, 100.0),
      bottom_margin=10mm, left_margin=10mm, top_margin=3mm,
      size=(1000, 1000))
-savefig(@relpath "SRA01_SR02.png")
+savefig(@current_path "SRA01_SR02.png")

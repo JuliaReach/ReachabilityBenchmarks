@@ -1,8 +1,8 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability,
       TaylorIntegration, Plots
 
-include(@relpath "bouncingBallNonlinear_model.jl")
-include(@relpath "bouncingBallNonlinear_specifications.jl")
+include(@current_path "bouncingBallNonlinear_model.jl")
+include(@current_path "bouncingBallNonlinear_specifications.jl")
 
 S = bouncingBallNonlinear_model()
 X0, options = bouncingBallNonlinear_specification()

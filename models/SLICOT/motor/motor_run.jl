@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "motor_model.jl")
-include(@relpath "motor_specifications.jl")
+include(@current_path "motor_model.jl")
+include(@current_path "motor_specifications.jl")
 
 S = motor_model()
 X0, options = motor_specification()

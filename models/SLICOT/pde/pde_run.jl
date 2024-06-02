@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "pde_model.jl")
-include(@relpath "pde_specifications.jl")
+include(@current_path "pde_model.jl")
+include(@current_path "pde_specifications.jl")
 
 S = pde_model()
 X0, options = pde_specification()

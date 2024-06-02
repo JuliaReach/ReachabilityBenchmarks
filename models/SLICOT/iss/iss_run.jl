@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "iss_model.jl")
-include(@relpath "iss_specifications.jl")
+include(@current_path "iss_model.jl")
+include(@current_path "iss_specifications.jl")
 
 S = iss_model()
 X0, options = iss_specification()

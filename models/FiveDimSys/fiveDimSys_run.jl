@@ -1,7 +1,7 @@
 using ReachabilityBenchmarks, MathematicalSystems, Reachability, Plots
 
-include(@relpath "fiveDimSys_model.jl")
-include(@relpath "fiveDimSys_specifications.jl")
+include(@current_path "fiveDimSys_model.jl")
+include(@current_path "fiveDimSys_specifications.jl")
 
 S = fiveDimSys_model()
 X0, options = fiveDimSys_specification()

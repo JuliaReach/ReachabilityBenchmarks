@@ -49,7 +49,7 @@ plot(res;
      size=(1000, 1000))
 plot_dashed_line!(4e-3)
 plot_dashed_line!(5.1e-3)
-savefig(@relpath "BLDF01_time_horizon_1.png")
+savefig(@current_path "BLDF01_time_horizon_1.png")
 
 plot(res;
      tickfont=font(30, "Times"), guidefontsize=45,
@@ -61,7 +61,7 @@ plot(res;
      size=(1000, 1000))
 plot_dashed_line!(4e-3)
 plot_dashed_line!(5.1e-3)
-savefig(@relpath "BLDF01_time_horizon_20.png")
+savefig(@current_path "BLDF01_time_horizon_20.png")
 
 𝑂_BLDC01[:mode] = "reach"
 𝑂_BLDC01[:plot_vars] = [0, 25]
@@ -78,7 +78,7 @@ plot(res;
      size=(1000, 1000))
 plot_dashed_line!(4e-3)
 plot_dashed_line!(5.1e-3)
-savefig(@relpath "BLDC01_time_horizon_1.png")
+savefig(@current_path "BLDC01_time_horizon_1.png")
 
 plot(res;
      tickfont=font(30, "Times"), guidefontsize=45,
@@ -90,4 +90,4 @@ plot(res;
      size=(1000, 1000))
 plot_dashed_line!(4e-3)
 plot_dashed_line!(5.1e-3)
-savefig(@relpath "BLDC01_time_horizon_20.png")
+savefig(@current_path "BLDC01_time_horizon_20.png")

@@ -4,7 +4,7 @@
 using ReachabilityBenchmarks
 using HybridSystems, MathematicalSystems, LazySets, Plots
 import Polyhedra
-using SpaceExParser: is_halfspace, is_hyperplane, convert, parse_sxmath, Basic, readsxmodel
+using SpaceExParser: parse_sxmath, Basic, readsxmodel
 
 HS = readsxmodel(@current_path "drivetrain_theta1_5percent_flat_manually.xml")
 
@@ -25,10 +25,10 @@ expr = [x1, x2, x3, x4, x5, x6, x7, x8, x9, t]
 x0sets = []
 vars = Basic[:x1, :x2, :x3, :x4, :x5, :x6, :x7, :x8, :x9, :t]
 for expr_i in expr_p
-    if is_halfspace(expr_i)
-        push!(x0sets, convert(HalfSpace, expr_i; vars=vars))
-    elseif is_hyperplane(expr_i)
-        push!(x0sets, convert(Hyperplane, expr_i; vars=vars))
+    if LazySets.is_halfspace(expr_i)
+        push!(x0sets, LazySets.convert(HalfSpace, expr_i; vars=vars))
+    elseif LazySets.is_hyperplane(expr_i)
+        push!(x0sets, LazySets.convert(Hyperplane, expr_i; vars=vars))
     end
 end
 

@@ -4,7 +4,7 @@
 |:----------:|:-------------:|:-----------:|
 | [![CI][ci-img]][ci-url] [![codecov][cov-img]][cov-url] [![aqua][aqua-img]][aqua-url] | [![zulip][chat-img]][chat-url] | [![license][lic-img]][lic-url] |
 
-[ci-img]: https://github.com/JuliaReach/ReachabilityBenchmarks/workflows/CI/badge.svg
+[ci-img]: https://github.com/JuliaReach/ReachabilityBenchmarks/actions/workflows/test-master.yml/badge.svg
 [ci-url]: https://github.com/JuliaReach/ReachabilityBenchmarks/actions/workflows/test-master.yml
 [cov-img]: https://codecov.io/github/JuliaReach/ReachabilityBenchmarks/coverage.svg
 [cov-url]: https://app.codecov.io/github/JuliaReach/ReachabilityBenchmarks

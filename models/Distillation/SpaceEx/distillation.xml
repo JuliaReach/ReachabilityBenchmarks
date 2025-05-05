@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" version="0.2" math="SpaceEx">
+  <component id="comp">
+    <param name="x1" type="real" local="false" d1="1" d2="1" dynamics="any"/>
+    <param name="x2" type="real" local="false" d1="1" d2="1" dynamics="any"/>
+    <param name="x3" type="real" local="false" d1="1" d2="1" dynamics="any"/>
+    <param name="x4" type="real" local="false" d1="1" d2="1" dynamics="any"/>
+    <param name="x5" type="real" local="false" d1="1" d2="1" dynamics="any"/>
+    <param name="x6" type="real" local="false" d1="1" d2="1" dynamics="any"/>
+    <param name="x7" type="real" local="false" d1="1" d2="1" dynamics="any"/>
+    <param name="x8" type="real" local="false" d1="1" d2="1" dynamics="any"/>
+    <param name="u1" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="false"/>
+    <param name="u2" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="false"/>
+    <location id="1" name="loc" x="458.0" y="148.0" width="618.0" height="224.0">
+      <invariant>
+        x1 &gt;= -1000 &amp; x1 &lt;= 1000 &amp;
+        x2 &gt;= -1000 &amp; x2 &lt;= 1000 &amp;
+        x3 &gt;= -1000 &amp; x3 &lt;= 1000 &amp;
+        x4 &gt;= -1000 &amp; x4 &lt;= 1000 &amp;
+        x5 &gt;= -1000 &amp; x5 &lt;= 1000 &amp;
+        x6 &gt;= -1000 &amp; x6 &lt;= 1000 &amp;
+        x7 &gt;= -1000 &amp; x7 &lt;= 1000 &amp;
+        x8 &gt;= -1000 &amp; x8 &lt;= 1000 &amp;
+        u1 &gt;= 0 &amp; u1 &lt;= 1 &amp;
+	u2 &gt;= 0 &amp; u2 &lt;= 1
+      </invariant>
+      <flow>
+        x1' == -0.5774 * x1 + 3.0567 * x2 + 0.0073 * x3 - 0.8121 * x4 + 0.3034 * x5 - 0.3035 * x6 + 0.0072 * x7 - 0.1542 * x8 - 0.0335 * u1 - 0.1228  * u2 &amp;
+        x2' == -2.7290 * x1 - 0.7147 * x2 - 0.343 * x3 + 1.5321 * x4 + 0.6643 * x5 + 0.2896 * x6 - 0.0013 * x7 + 0.0926 * x8 - 0.4534 * u1 - 0.0711 * u2 &amp;
+        x3' == -0.3891 * x3 - 0.9956 * x4 + 0.0182 * x5 + 0.0235 * x6 + 0.0049 * x7 + 0.0506 * x8 - 0.8005 * u1 - 0.2612 * u2 &amp;
+        x4' == 1.3640 * x3 - 1.3363 * x4 - 0.9037 * x5 - 0.4686 * x6 - 0.0009 * x7 - 0.1887 * x8 + 0.5497 * u1 - 0.1344 * u2 &amp;
+        x5' == -0.7357 * x5 - 0.2275 * x6 - 0.0082 * x7 - 0.0021 * x8 + 1.2886 * u1 - 0.0504 * u2 &amp;
+        x6' == -0.2259 * x6 + 0.0021 * x7 - 0.0457 * x8 + 0.3132 * u1 - 0.2249 * u2 &amp;
+        x7' == -0.0052 * x7 + 0.0024 * x8 + 0.7117 * u1 - 0.6994 * u2 &amp;
+        x8' == -0.0755 * x8 + 0.0599 * u1 - 0.3014 * u2 &amp;
+        u1' == 0 * x1 &amp;
+        u2' == 0 * x1
+      </flow>
+    </location>
+  </component>
+</sspaceex>

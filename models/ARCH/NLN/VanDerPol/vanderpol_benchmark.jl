@@ -59,7 +59,7 @@ end
 sol_2 = compute_μ2(; n=nsplits_x, validate=true)
 
 # benchmark
-SUITE["VanDerPol"]["μ = 2: x[2] <= 4.0"] = @benchmarkable compute_μ2(n=$nsplits_x, validate=false)
+SUITE["VanDerPol"]["μ = 2: x[2] <= 4.0"] = @benchmarkable compute_μ2(n=($nsplits_x), validate=false)
 
 # ==============================================================================
 # Execute benchmarks and save benchmark results

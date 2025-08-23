@@ -116,11 +116,11 @@ function spacecraft_rendezvous(; T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
     =#
 
     property_rendezvous = (t, x) -> (x[3] <= cx) && (x[3] + x[4] <= cx + cy) && (x[4] <= cx) &&
-                                        (-x[3] + x[4] <= cx + cy) && (x[3] >= -cx) &&
-                                        (-x[3] - x[4] <= cx + cy) &&
-                                        (x[4] >= -cx) && (x[3] - x[4] <= cx + cy) &&
-                                        (x[1] >= -100) &&
-                                        (-x[1] * tan30 + x[2] >= 0) && (-x[1] * tan30 - x[2] >= 0)
+                                    (-x[3] + x[4] <= cx + cy) && (x[3] >= -cx) &&
+                                    (-x[3] - x[4] <= cx + cy) &&
+                                    (x[4] >= -cx) && (x[3] - x[4] <= cx + cy) &&
+                                    (x[1] >= -100) &&
+                                    (-x[1] * tan30 + x[2] >= 0) && (-x[1] * tan30 - x[2] >= 0)
 
     # safety property in "Passive"
     #=

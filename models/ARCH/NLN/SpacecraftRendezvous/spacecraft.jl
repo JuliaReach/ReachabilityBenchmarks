@@ -95,8 +95,7 @@ function spacecraft_rendezvous(; T=200.0, orderT=10, orderQ=2, abs_tol=1e-10,
     cx = velocity * cos(π / 8)  # x-coordinate of the octagon's first (ENE) corner
     cy = velocity * sin(π / 8)  # y-coordinate of the octagon's first (ENE) corner
 
-    tan30 = tan(π / 6)
-    #=
+    tan30 = tan(π / 6) #=
     octagon = [
         HalfSpace(sparsevec([vx], [1.], n), cx),                 # vx <= cx
         HalfSpace(sparsevec([vx, vy], [1., 1.], n), cy + cx),    # vx + vy <= cy + cx
